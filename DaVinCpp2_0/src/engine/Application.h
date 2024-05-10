@@ -1,16 +1,19 @@
 #pragma once
 
-class Application
+namespace davincpp
 {
-public:
-	Application() = default;
+	class Application
+	{
+	public:
+		Application() = default;
 
-	void onLoad();
-	void onUpdate();
-	void onRender();
-	void onShutdown();
-	bool shouldShutdown();
+		void onLoad();
+		void onUpdate();
+		void onRender();
+		void onShutdown();
+		bool shouldShutdown();
 
-private:
-	bool m_ShutDown = false;
-};
+	private:
+		bool m_ShutDown = false;
+	};
+}

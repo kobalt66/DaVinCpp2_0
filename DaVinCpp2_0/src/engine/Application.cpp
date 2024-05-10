@@ -1,28 +1,31 @@
 #include "Application.h"
 #include <string>
-#include <iostream>
+#include "Console.h"
 
-void Application::onLoad()
+namespace davincpp
 {
+	void Application::onLoad()
+	{
+		Console::log("Loading application...");
+	}
 
-}
+	void Application::onRender()
+	{
 
-void Application::onRender()
-{
+	}
 
-}
+	void Application::onUpdate()
+	{
 
-void Application::onUpdate()
-{
+	}
 
-}
+	void Application::onShutdown()
+	{
+		Console::wrn("Shutting application down...");
+	}
 
-void Application::onShutdown()
-{
-
-}
-
-bool Application::shouldShutdown()
-{
-	return m_ShutDown;
+	bool Application::shouldShutdown()
+	{
+		return m_ShutDown;
+	}
 }

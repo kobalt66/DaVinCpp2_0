@@ -26,5 +26,15 @@
     <ClInclude Include="src\engine\Application.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Console.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\color-console\color.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libraries\color-console\LICENSE" />
+    <None Include="libraries\color-console\README.md" />
   </ItemGroup>
 </Project>
