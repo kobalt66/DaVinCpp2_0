@@ -1,11 +1,12 @@
 #include <iostream>
 #include "src/engine/Application.h"
+#include <sstream>
 
 int main()
 {
-	Application app;
+	davincpp::Application app;
 	app.onLoad();
-	
+
 	while (!app.shouldShutdown()) {
 		app.onUpdate();
 		app.onRender();
