@@ -29,6 +29,13 @@ namespace davincpp
 			newline();
 		}
 
+		template<class... Args> static void openglErr(Args... args)
+		{
+			std::cout << dye::black_on_red(OPENGL_ERR_PREFIX);
+			(std::cout << ... << dye::black_on_red(args));
+			newline();
+		}
+
 		template<class... Args> static void wrn(Args... args)
 		{
 			std::cout << dye::yellow(WRN_PREFIX);
@@ -50,8 +57,9 @@ namespace davincpp
 		}
 
 	public:
-		static constexpr const char* LOG_PREFIX = "[Log]     | ";
-		static constexpr const char* ERR_PREFIX = "[Error]   | ";
-		static constexpr const char* WRN_PREFIX = "[Warning] | ";
+		static constexpr const char* LOG_PREFIX			= "[Log]     | ";
+		static constexpr const char* ERR_PREFIX			= "[Error]   | ";
+		static constexpr const char* OPENGL_ERR_PREFIX	= "[OpenGL]  | ";
+		static constexpr const char* WRN_PREFIX			= "[Warning] | ";
 	};
 }
