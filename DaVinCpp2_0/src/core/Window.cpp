@@ -15,13 +15,17 @@ namespace davincpp
 
 	void Window::onSetup()
 	{
-		if (!glfwInit()) {
+		if (glfwInit() == -1) {
 			Console::err("Failed to initialize glfw!");
 			throw std::runtime_error("[GLFW]");
 		}
 
-		glfwWindowHint(GLFW_VERSION_MINOR, 4);
-		glfwWindowHint(GLFW_VERSION_MINOR, 4);
+		glfwSetErrorCallback([](int code, const char* msg) {
+			Console::openglErr("[GLFW] (", code, ") ", msg);
+			});
+
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		m_WindowPtr = glfwCreateWindow((int)m_Width, (int)m_Height, m_Title.data(), nullptr, nullptr);

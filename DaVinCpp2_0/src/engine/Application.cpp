@@ -7,8 +7,8 @@ namespace davincpp
 	void Application::onLoad()
 	{
 		Console::log("Loading application...");
-
 		m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
+		m_Window->onSetup();
 	}
 
 	void Application::onRender()

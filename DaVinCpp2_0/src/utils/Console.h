@@ -2,7 +2,6 @@
 
 #include <xstring>
 #include <iostream>
-#include <color-console/color.hpp>
 
 namespace davincpp 
 {
@@ -11,35 +10,45 @@ namespace davincpp
 	public:
 		template<class... Args> static void raw(Args... args)
 		{
-			(std::cout << ... << dye::grey(args));
+			std::cout << "\x1B[90m";
+			(std::cout << ... << args);
+			std::cout << "\033[0m";
 			newline();
 		}
 
 		template<class... Args> static void log(Args... args)
 		{
-			std::cout << dye::aqua(LOG_PREFIX);
-			(std::cout << ... << dye::aqua(args));
+			std::cout << "\x1B[36m";
+			std::cout << LOG_PREFIX;
+			(std::cout << ... << args);
+			std::cout << "\033[0m";
 			newline();
 		}
 
 		template<class... Args> static void err(Args... args)
 		{
-			std::cout << dye::red(ERR_PREFIX);
-			(std::cout << ... << dye::red(args));
+			std::cout << "\x1B[91m";
+			std::cout << ERR_PREFIX;
+			(std::cout << ... << args);
+			std::cout << "\033[0m";
 			newline();
 		}
 
 		template<class... Args> static void openglErr(Args... args)
 		{
-			std::cout << dye::black_on_red(OPENGL_ERR_PREFIX);
-			(std::cout << ... << dye::black_on_red(args));
+			std::cout << "\x1B[95m";
+			std::cout << OPENGL_ERR_PREFIX;
+			(std::cout << ... << args);
+			std::cout << "\033[0m";
 			newline();
 		}
 
 		template<class... Args> static void wrn(Args... args)
 		{
-			std::cout << dye::yellow(WRN_PREFIX);
-			(std::cout << ... << dye::yellow(args));
+			std::cout << "\x1B[93m";
+			std::cout << WRN_PREFIX;
+			(std::cout << ... << args);
+			std::cout << "\033[0m";
 			newline();
 		}
 
