@@ -3,10 +3,10 @@
 namespace davincpp
 {
 	Texture::Texture(
-		GLenum wrapS = GL_CLAMP_TO_EDGE,
-		GLenum wrapT = GL_CLAMP_TO_EDGE,
-		GLenum minFilter = GL_NEAREST,
-		GLenum maxFilter = GL_NEAREST
+		GLenum wrapS,
+		GLenum wrapT,
+		GLenum minFilter,
+		GLenum maxFilter
 	)
 	{
 		GLCall(glGenTextures(1, &m_TextureID));

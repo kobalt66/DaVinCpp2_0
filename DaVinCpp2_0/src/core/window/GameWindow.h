@@ -29,6 +29,9 @@ namespace davincpp
 		uint32_t m_PixelSizeX, m_PixelSizeY;
 		uint32_t m_BytesPerPixel;
 
+		float* m_Vertices;
+		uint32_t* m_Indices;
+
 		Texture m_FrameTexture;
 		Mesh<float> m_Mesh;
 		std::unique_ptr<Shader> m_WindowShader;

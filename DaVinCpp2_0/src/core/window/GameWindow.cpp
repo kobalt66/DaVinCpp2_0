@@ -3,14 +3,26 @@
 namespace davincpp
 {
 	GameWindow::GameWindow(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel)
+		: m_PixelSizeX(pixelSizeX), m_PixelSizeY(pixelSizeY), m_BytesPerPixel(bytesPerPixel)
 	{
+		m_Vertices = new float[]{
+			-0.5f, -0.5f,
+			 0.5f, -0.5f,
+			 0.5f,	0.5f,
+			-0.5f,  0.5f,
+		};
+
+		m_Indices = new uint32_t[]{ 0, 1, 2, 2, 3, 0 };
+
 		m_WindowShader = std::make_unique<Shader>(VertexAttribute(0, 2, GL_FLOAT, 0));
-		m_Mesh = Mesh<float>(m_WindowShader.get());
+		m_Mesh = Mesh<float>(m_Vertices, m_Indices, m_WindowShader.get());
 	}
 
 	GameWindow::~GameWindow()
 	{
 		delete[] m_FrameBuffer;
+		delete[] m_Vertices;
+		delete[] m_Indices;
 	}
 
 

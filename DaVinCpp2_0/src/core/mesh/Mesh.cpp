@@ -3,17 +3,8 @@
 
 namespace davincpp
 {
-	template<class T> Mesh<T>::Mesh(Shader* shader)
+	template<class T> Mesh<T>::Mesh(T* vertices, uint32_t* indices, Shader* shader)
 	{
-		T* vertices = {
-			-0.5f, -0.5f,
-			 0.5f, -0.5f,
-			 0.5f,	0.5f,
-			-0.5f,  0.5f,
-		};
-
-		uint32_t indices[] = { 0, 1, 2, 2, 3, 0 };
-
 		m_Vao.bind();
 		m_Vbo.bind();
 		m_Ibo.bind();
@@ -48,4 +39,8 @@ namespace davincpp
 
 		GLCall(glDrawElements(GL_TRIANGLES, m_Ibo.getIndicesCount(), GL_UNSIGNED_INT, nullptr));
 	}
+
+
+
+	template class Mesh<float>;
 }

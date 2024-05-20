@@ -42,4 +42,8 @@ namespace davincpp
 		GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
 		m_Usage = usage;
 	}
+
+
+
+	template void Vbo::bindData<float>(float* data, size_t size, GLenum usage);
 }

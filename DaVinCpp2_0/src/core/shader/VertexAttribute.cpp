@@ -17,4 +17,8 @@ namespace davincpp
 	{
 		return m_UnitCount;
 	}
+
+
+
+	template void VertexAttribute::setAttribute<float>(int totalSize) const;
 }
