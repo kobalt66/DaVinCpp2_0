@@ -2,8 +2,13 @@
 
 namespace davincpp
 {
-	GameWindow::GameWindow(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel)
-		: m_PixelSizeX(pixelSizeX), m_PixelSizeY(pixelSizeY), m_BytesPerPixel(bytesPerPixel)
+	GameWindow::GameWindow(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel) 
+	  : m_Width(0),
+		m_Height(0),
+		m_FrameBuffer(nullptr),
+		m_PixelSizeX(pixelSizeX), 
+		m_PixelSizeY(pixelSizeY), 
+		m_BytesPerPixel(bytesPerPixel)
 	{
 		m_Vertices = new float[]{
 			-0.5f, -0.5f,
@@ -28,7 +33,7 @@ namespace davincpp
 
 	void GameWindow::onClear()
 	{
-		memset(m_FrameBuffer, 0, m_Width * m_Height * m_BytesPerPixel + m_BytesPerPixel);
+		memset(m_FrameBuffer, 0, static_cast<size_t>(m_Width * m_Height * m_BytesPerPixel + m_BytesPerPixel));
 	}
 	
 	void GameWindow::onRender()
@@ -97,7 +102,7 @@ namespace davincpp
 
 	inline bool GameWindow::isPixelInBoundry(int pixelX, int pixelY) const
 	{
-		return pixelX > 0 && pixelX < m_Width && pixelY > 0 && pixelY < m_Height;
+		return pixelX > 0 && pixelX < static_cast<int>(m_Width) && pixelY > 0 && pixelY < static_cast<int>(m_Height);
 	}
 
 	inline uint32_t GameWindow::getPixelIndex(int pixelX, int pixelY) const

@@ -5,7 +5,7 @@
 
 namespace davincpp
 {
-	std::string_view FileSystem::readFile(std::string_view path)
+	std::string FileSystem::readFile(std::string_view path)
 	{
 		if (!exists(path)) {
 			Console::err("The file at '", path, "' doesn't exist!");
@@ -17,6 +17,10 @@ namespace davincpp
 			Console::err("Something went wrong while trying to access the target file at '", path, "'!");
 			throw system_error();
 		}
+
+		std::stringstream buffer;
+		buffer << fileStream.rdbuf();
+		return buffer.str();
 	}
 	
 	bool FileSystem::exists(std::string_view path)
