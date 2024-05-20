@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include "opengl.h"
+#include <opengl.h>
 
 namespace davincpp
 {
@@ -17,8 +17,8 @@ namespace davincpp
 
 		void setVsync(bool vsync);
 		void updateViewport();
-		glm::ivec2 getMousePos();
-		bool shouldClose();
+		glm::ivec2 getMousePos() const;
+		bool shouldClose() const;
 
 	private:
 		uint32_t m_Width, m_Height;

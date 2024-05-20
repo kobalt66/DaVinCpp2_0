@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core;$(SolutionDir)DaVinCpp2_0\src\core\window</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core;$(SolutionDir)DaVinCpp2_0\src\core\window</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,8 +139,18 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="libraries\glm\detail\glm.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\core\Window.cpp" />
+    <ClCompile Include="src\core\buffer\Ibo.cpp" />
+    <ClCompile Include="src\core\buffer\Vao.cpp" />
+    <ClCompile Include="src\core\buffer\Vbo.cpp" />
+    <ClCompile Include="src\core\mesh\Mesh.cpp" />
+    <ClCompile Include="src\core\shader\Shader.cpp" />
+    <ClCompile Include="src\core\shader\ShaderProfile.cpp" />
+    <ClCompile Include="src\core\shader\VertexAttribute.cpp" />
+    <ClCompile Include="src\core\texture\Texture.cpp" />
+    <ClCompile Include="src\core\window\GameWindow.cpp" />
+    <ClCompile Include="src\core\window\Window.cpp" />
     <ClCompile Include="src\engine\Application.cpp" />
+    <ClCompile Include="src\utils\FileSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libraries\color-console\color.hpp" />
@@ -432,10 +442,21 @@
     <ClInclude Include="libraries\KHR\khrplatform.h" />
     <ClInclude Include="libraries\stb\stb_image.h" />
     <ClInclude Include="libraries\stb\stb_image_write.h" />
+    <ClInclude Include="src\core\buffer\Ibo.h" />
+    <ClInclude Include="src\core\buffer\Vao.h" />
+    <ClInclude Include="src\core\buffer\Vbo.h" />
+    <ClInclude Include="src\core\mesh\Mesh.h" />
     <ClInclude Include="src\core\opengl.h" />
-    <ClInclude Include="src\core\Window.h" />
+    <ClInclude Include="src\core\shader\Shader.h" />
+    <ClInclude Include="src\core\shader\ShaderProfile.h" />
+    <ClInclude Include="src\core\shader\VertexAttribute.h" />
+    <ClInclude Include="src\core\texture\Texture.h" />
+    <ClInclude Include="src\core\window\GameWindow.h" />
+    <ClInclude Include="src\core\window\Window.h" />
     <ClInclude Include="src\engine\Application.h" />
     <ClInclude Include="src\utils\Console.h" />
+    <ClInclude Include="src\utils\DaVinCppExceptions.h" />
+    <ClInclude Include="src\utils\FileSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libraries\color-console\LICENSE" />
@@ -576,6 +597,8 @@
     <None Include="libraries\glm\gtx\vector_angle.inl" />
     <None Include="libraries\glm\gtx\vector_query.inl" />
     <None Include="libraries\glm\gtx\wrap.inl" />
+    <None Include="src\data\shader\fragment.shader" />
+    <None Include="src\data\shader\vertex.shader" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="libraries\glfw3.lib" />

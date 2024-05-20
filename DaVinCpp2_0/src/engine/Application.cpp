@@ -1,6 +1,5 @@
 #include "Application.h"
 #include <string>
-#include <Console.h>
 
 namespace davincpp
 {
