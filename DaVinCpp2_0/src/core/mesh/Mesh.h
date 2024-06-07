@@ -10,8 +10,8 @@ namespace davincpp
 	{
 	public:
 		Mesh() = default;
-		Mesh(T* vertices, uint32_t* indices, Shader* shader);
 		
+		void createMesh(T* vertices, uint32_t* indices, const Shader& shader);
 		void bind();
 		void unbind();
 

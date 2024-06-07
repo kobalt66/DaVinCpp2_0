@@ -2,18 +2,18 @@
 
 namespace davincpp
 {
-	Vao::Vao()
-	{
-		GLCall(glGenVertexArrays(1, &m_ID));
-		bind();
-	}
-
 	Vao::~Vao()
 	{
 		unbind();
 		GLCall(glDeleteVertexArrays(1, &m_ID));
 	}
 
+
+	void Vao::generate()
+	{
+		GLCall(glGenVertexArrays(1, &m_ID));
+		bind();
+	}
 
 	void Vao::bind()
 	{

@@ -17,7 +17,7 @@ namespace davincpp
 		void bind();
 		void unbind();
 
-		void updateTexture(GLbyte* pixelBuffer, uint32_t textureWidth, uint32_t textureHeight);
+		void updateTexture(std::shared_ptr<GLubyte[]> pixelBuffer, uint32_t textureWidth, uint32_t textureHeight);
 		uint32_t getTextureID() const;
 
 	private:

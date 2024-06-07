@@ -5,16 +5,11 @@
 #include <glm/glm.hpp>
 #include <Console.h>
 
-#define GLCall(x) { clear_opengl_errors(); \
+#define GLCall(x) {\
     x;\
     while (GLenum error = glGetError()) { \
-        __debugbreak(); \
         Console::openglErr("(", error, "): ", #x, " ", __FILE__, " : ", __LINE__, ")"); \
+        __debugbreak(); \
         exit(1); \
     } \
-}
-
-static void clear_opengl_errors()
-{
-    while (glGetError() != GL_NO_ERROR);
 }

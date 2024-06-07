@@ -8,9 +8,10 @@ namespace davincpp
 	class Vbo
 	{
 	public:
-		Vbo();
+		Vbo() = default;
 		~Vbo();
 
+		void generate();
 		void bind();
 		void unbind();
 		bool bound() const;

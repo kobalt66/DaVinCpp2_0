@@ -8,9 +8,10 @@ namespace davincpp
 	class Ibo
 	{
 	public:
-		Ibo();
+		Ibo() = default;
 		~Ibo();
 
+		void generate();
 		void bind();
 		void unbind();
 		bool bound() const;

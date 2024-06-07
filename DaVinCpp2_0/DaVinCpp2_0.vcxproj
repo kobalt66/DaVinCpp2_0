@@ -440,8 +440,6 @@
     <ClInclude Include="libraries\glm\vec4.hpp" />
     <ClInclude Include="libraries\glm\vector_relational.hpp" />
     <ClInclude Include="libraries\KHR\khrplatform.h" />
-    <ClInclude Include="libraries\stb\stb_image.h" />
-    <ClInclude Include="libraries\stb\stb_image_write.h" />
     <ClInclude Include="src\core\buffer\Ibo.h" />
     <ClInclude Include="src\core\buffer\Vao.h" />
     <ClInclude Include="src\core\buffer\Vbo.h" />

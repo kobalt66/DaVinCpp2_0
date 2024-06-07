@@ -8,6 +8,7 @@ namespace davincpp
 	class ShaderProfile
 	{
 	public:
+		ShaderProfile() = default;
 		template<class... Args> ShaderProfile(Args... args)
 		{
 			if (!(std::is_same_v<Args, VertexAttribute> && ...)) {
@@ -22,7 +23,7 @@ namespace davincpp
 			}
 		}
 
-		template<class T> void setAttributes();
+		template<class T> void setAttributes() const;
 
 	private:
 		std::vector<VertexAttribute> m_Attributes;

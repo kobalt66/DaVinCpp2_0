@@ -10,6 +10,7 @@ namespace davincpp
 		GameWindow(uint32_t pixelSizeX = 4, uint32_t pixelSizeY = 4, uint32_t bytesPerPixel = 4);
 		~GameWindow();
 
+		void onSetup();
 		void onClear();
 		void onRender();
 		void onResize(uint32_t windowSizeX, uint32_t windowSizeY);
@@ -24,8 +25,8 @@ namespace davincpp
 		inline uint32_t getPixelIndex(int pixelX, int pixelY) const;
 
 	private:
-		GLbyte* m_FrameBuffer;
-		uint32_t m_Width, m_Height;
+		std::shared_ptr<GLubyte[]> m_FrameBuffer = nullptr;
+		uint32_t m_Width = 800, m_Height = 600;
 		uint32_t m_PixelSizeX, m_PixelSizeY;
 		uint32_t m_BytesPerPixel;
 
@@ -34,7 +35,7 @@ namespace davincpp
 
 		Texture m_FrameTexture;
 		Mesh<float> m_Mesh;
-		std::unique_ptr<Shader> m_WindowShader;
+		Shader m_WindowShader;
 
 		const int R = 0;
 		const int G = 1;

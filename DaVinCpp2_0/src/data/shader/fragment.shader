@@ -7,5 +7,5 @@ in vec2 texelPos;
 
 void main()
 {
-	texelColor = texture(windowBuffer, texelPos)
+	texelColor = texture(windowBuffer, texelPos);
 }

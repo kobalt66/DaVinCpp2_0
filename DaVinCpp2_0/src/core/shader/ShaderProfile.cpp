@@ -2,7 +2,7 @@
 
 namespace davincpp
 {
-	template<class T> void ShaderProfile::setAttributes()
+	template<class T> void ShaderProfile::setAttributes() const
 	{
 		for (const VertexAttribute& vertexAttrib : m_Attributes) {
 			vertexAttrib.setAttribute<T>(m_TotalSize);
@@ -11,5 +11,5 @@ namespace davincpp
 
 
 
-	template void ShaderProfile::setAttributes<float>();
+	template void ShaderProfile::setAttributes<float>() const;
 }

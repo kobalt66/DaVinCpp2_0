@@ -5,9 +5,8 @@
 namespace davincpp
 {
 	Shader::Shader(ShaderProfile&& profile)
-	{
-		GLCall(m_ProgramID = glCreateProgram());
-	}
+		: m_Profile(profile)
+	{ }
 
 	Shader::~Shader()
 	{
@@ -18,11 +17,12 @@ namespace davincpp
 
 	void Shader::loadShader(std::string_view vertexShaderPath, std::string_view fragmentShaderPath)
 	{
-		std::string_view vertexShaderCode = FileSystem::readFile(vertexShaderPath);
-		std::string_view fragmentShaderCode = FileSystem::readFile(fragmentShaderPath);
+		GLCall(m_ProgramID = glCreateProgram());
+		std::string vertexShaderCode = FileSystem::readFile(vertexShaderPath);
+		std::string fragmentShaderCode = FileSystem::readFile(fragmentShaderPath);
 
-		int vertexShaderID = compileShader(vertexShaderCode.data(), GL_VERTEX_SHADER);
-		int fragmentShaderID = compileShader(fragmentShaderCode.data(), GL_FRAGMENT_SHADER);
+		int vertexShaderID = compileShader(vertexShaderCode.c_str(), GL_VERTEX_SHADER);
+		int fragmentShaderID = compileShader(fragmentShaderCode.c_str(), GL_FRAGMENT_SHADER);
 
 		linkShader(vertexShaderID, fragmentShaderID);
 		finalizeShader(vertexShaderID, fragmentShaderID);
@@ -45,7 +45,7 @@ namespace davincpp
 		m_Profile.setAttributes<T>();
 	}
 
-	ShaderProfile Shader::getShaderProfile() const
+	const ShaderProfile& Shader::getShaderProfile() const
 	{
 		return m_Profile;
 	}
@@ -100,6 +100,8 @@ namespace davincpp
 			"fragment"	: "UNKNOWN";
 
 		Console::openglErr("Failed to compile ", shaderTypeStr, " shader!");
+		Console::newline();
+		Console::err(message);
 		throw opengl_error();
 	}
 
@@ -122,6 +124,8 @@ namespace davincpp
 		GLCall(glGetProgramInfoLog(m_ProgramID, length, &length, message));
 
 		Console::openglErr("Failed to link shader program!");
+		Console::newline();
+		Console::err(message);
 		throw opengl_error();
 	}
 

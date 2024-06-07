@@ -13,6 +13,7 @@ namespace davincpp
 	void Application::onRender()
 	{
 		m_Window->onNewFrame();
+		m_Window->onRender();
 	}
 
 	void Application::onUpdate()

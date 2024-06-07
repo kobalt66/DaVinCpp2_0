@@ -9,7 +9,7 @@ namespace davincpp
 
 	template<class T> void VertexAttribute::setAttribute(int totalSize) const
 	{
-		GLCall(glVertexAttribPointer(m_Index, m_UnitCount, m_Type, m_Normalized, totalSize * sizeof(T), (void*)(m_Offset * sizeof(T))));
+		GLCall(glVertexAttribPointer(m_Index, m_UnitCount, m_Type, m_Normalized, static_cast<GLsizei>(totalSize * sizeof(T)), (void*)(m_Offset * sizeof(T))));
 		GLCall(glEnableVertexAttribArray(m_Index));
 	}
 

@@ -1,19 +1,19 @@
 #include "Ibo.h"
 
 namespace davincpp
-{
-	Ibo::Ibo() 
-	{
-		GLCall(glGenBuffers(1, &m_ID));
-		bind();
-	}
-	
+{	
 	Ibo::~Ibo()
 	{
 		unbind();
 		GLCall(glDeleteBuffers(1, &m_ID));
 	}
 
+
+	void Ibo::generate()
+	{
+		GLCall(glGenBuffers(1, &m_ID));
+		bind();
+	}
 
 	void Ibo::bind()
 	{

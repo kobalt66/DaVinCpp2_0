@@ -3,9 +3,7 @@
 
 namespace davincpp
 {
-	glm::ivec2 Window::m_MousePos = glm::ivec2(0);
-
-	Window::Window(uint32_t width, uint32_t height, std::string_view title)
+	Window::Window(uint32_t width, uint32_t height, const char* title)
 	{ 
 		m_Width = width;
 		m_Height = height;
@@ -27,7 +25,7 @@ namespace davincpp
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		
-		m_WindowPtr = glfwCreateWindow((int)m_Width, (int)m_Height, m_Title.data(), nullptr, nullptr);
+		m_WindowPtr = glfwCreateWindow((int)m_Width, (int)m_Height, m_Title, nullptr, nullptr);
 
 		if (m_WindowPtr == nullptr) {
 			Console::err("Failed to create window!");
@@ -46,12 +44,33 @@ namespace davincpp
 		GLCall(glEnable(GL_BLEND));
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-		glfwSetCursorPosCallback(m_WindowPtr, [](GLFWwindow* window, double xpos, double ypos) {
-			Window::m_MousePos.x = static_cast<int>(xpos);
-			Window::m_MousePos.y = static_cast<int>(ypos);
-			});
+		glfwSetWindowUserPointer(m_WindowPtr, reinterpret_cast<void*>(this));
+		glfwSetWindowSizeCallback(m_WindowPtr, Window::onResize);
+		glfwSetCursorPosCallback(m_WindowPtr, Window::onMousePosition);
+
+		m_GameWindow = std::make_unique<GameWindow>();
+		m_GameWindow->onSetup();
+
+		m_GameWindow->onResize(m_Width, m_Height);
 	}
 	
+	void Window::onResize(GLFWwindow* windowID, int width, int height)
+	{
+		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
+		window->m_Width = width;
+		window->m_Height = height;
+
+		window->m_GameWindow->onResize(width, height);
+		window->updateViewport();
+	}
+
+	void Window::onMousePosition(GLFWwindow* windowID, double xpos, double ypos)
+	{
+		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
+		window->m_MousePos.x = static_cast<int>(xpos);
+		window->m_MousePos.y = static_cast<int>(ypos);
+	}
+
 	void Window::onUpdate()
 	{
 		glfwPollEvents();
@@ -61,6 +80,12 @@ namespace davincpp
 	void Window::onNewFrame()
 	{
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		m_GameWindow->onClear();
+	}
+
+	void Window::onRender()
+	{
+		m_GameWindow->onRender();
 	}
 	
 	void Window::onShutdown()

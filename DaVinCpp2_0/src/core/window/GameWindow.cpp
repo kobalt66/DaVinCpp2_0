@@ -5,7 +5,6 @@ namespace davincpp
 	GameWindow::GameWindow(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel) 
 	  : m_Width(0),
 		m_Height(0),
-		m_FrameBuffer(nullptr),
 		m_PixelSizeX(pixelSizeX), 
 		m_PixelSizeY(pixelSizeY), 
 		m_BytesPerPixel(bytesPerPixel)
@@ -18,41 +17,55 @@ namespace davincpp
 		};
 
 		m_Indices = new uint32_t[]{ 0, 1, 2, 2, 3, 0 };
-
-		m_WindowShader = std::make_unique<Shader>(VertexAttribute(0, 2, GL_FLOAT, 0));
-		m_Mesh = Mesh<float>(m_Vertices, m_Indices, m_WindowShader.get());
 	}
 
 	GameWindow::~GameWindow()
 	{
-		delete[] m_FrameBuffer;
 		delete[] m_Vertices;
 		delete[] m_Indices;
 	}
 
 
+	void GameWindow::onSetup()
+	{
+		m_WindowShader = Shader(ShaderProfile(VertexAttribute(0, 2, GL_FLOAT, 0)));
+		m_WindowShader.loadShader("./src/data/shader/vertex.shader", "./src/data/shader/fragment.shader");
+		
+		m_Mesh = Mesh<float>();
+		m_Mesh.createMesh(m_Vertices, m_Indices, m_WindowShader);
+	}
+
 	void GameWindow::onClear()
 	{
-		memset(m_FrameBuffer, 0, static_cast<size_t>(m_Width * m_Height * m_BytesPerPixel + m_BytesPerPixel));
+		if (m_FrameBuffer == nullptr) {
+			return;
+		}
+
+		memset(m_FrameBuffer.get(), 0, static_cast<size_t>(m_Width * m_Height * m_BytesPerPixel + m_BytesPerPixel));
 	}
 	
 	void GameWindow::onRender()
 	{
 		m_FrameTexture.updateTexture(m_FrameBuffer, m_Width, m_Height);
 
+		m_FrameTexture.bind();
+		m_WindowShader.bind();
 		m_Mesh.bind();
-		m_WindowShader->bind();
-		m_WindowShader->setUniform1i("windowBuffer", static_cast<int>(m_FrameTexture.getTextureID()));
+		m_WindowShader.setUniform1i("windowBuffer", static_cast<int>(m_FrameTexture.getTextureID()));
 
 		m_Mesh.render();
 		
-		m_WindowShader->unbind();
+		m_FrameTexture.unbind();
+		m_WindowShader.unbind();
 		m_Mesh.unbind();
 	}
 	
 	void GameWindow::onResize(uint32_t windowSizeX, uint32_t windowSizeY)
 	{
-		
+		m_FrameBuffer.reset();
+		m_FrameBuffer = std::make_shared<GLubyte[]>(windowSizeX * windowSizeY * m_BytesPerPixel + m_BytesPerPixel);
+		m_Width = windowSizeX;
+		m_Height = windowSizeY;
 	}
 
 
@@ -65,12 +78,12 @@ namespace davincpp
 		uint32_t pixelIdx = getPixelIndex(pixelX, pixelY);
 
 		float alphaChl1 = color.a;
-		float alphaChl2 = static_cast<float>(m_FrameBuffer[pixelIdx + A]) / 255.0f;
+		float alphaChl2 = static_cast<float>(m_FrameBuffer.get()[pixelIdx + A]) / 255.0f;
 
-		m_FrameBuffer[pixelIdx + R] = static_cast<GLbyte>(alphaChl1 * color.r + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer[pixelIdx + R]));
-		m_FrameBuffer[pixelIdx + G] = static_cast<GLbyte>(alphaChl1 * color.g + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer[pixelIdx + G]));
-		m_FrameBuffer[pixelIdx + B] = static_cast<GLbyte>(alphaChl1 * color.b + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer[pixelIdx + B]));
-		m_FrameBuffer[pixelIdx + A] = static_cast<GLbyte>((alphaChl1 + alphaChl2 * (1 - alphaChl1)) * 255.0f);
+		m_FrameBuffer.get()[pixelIdx + R] = static_cast<GLubyte>(alphaChl1 * color.r + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + R]));
+		m_FrameBuffer.get()[pixelIdx + G] = static_cast<GLubyte>(alphaChl1 * color.g + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + G]));
+		m_FrameBuffer.get()[pixelIdx + B] = static_cast<GLubyte>(alphaChl1 * color.b + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + B]));
+		m_FrameBuffer.get()[pixelIdx + A] = static_cast<GLubyte>((alphaChl1 + alphaChl2 * (1 - alphaChl1)) * 255.0f);
 	}
 
 	void GameWindow::setPixelSize(glm::ivec2 pixelSize)
@@ -88,10 +101,10 @@ namespace davincpp
 		uint32_t pixelIdx = getPixelIndex(pixelX, pixelY);
 
 		return glm::vec4(
-			m_FrameBuffer[pixelIdx + 0],
-			m_FrameBuffer[pixelIdx + 1],
-			m_FrameBuffer[pixelIdx + 2],
-			m_FrameBuffer[pixelIdx + 3]
+			m_FrameBuffer.get()[pixelIdx + 0],
+			m_FrameBuffer.get()[pixelIdx + 1],
+			m_FrameBuffer.get()[pixelIdx + 2],
+			m_FrameBuffer.get()[pixelIdx + 3]
 		);
 	}
 

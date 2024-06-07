@@ -3,21 +3,20 @@
 
 namespace davincpp
 {
-	template<class T> Mesh<T>::Mesh(T* vertices, uint32_t* indices, Shader* shader)
+	template<class T> void Mesh<T>::createMesh(T* vertices, uint32_t* indices, const Shader& shader)
 	{
-		m_Vao.bind();
-		m_Vbo.bind();
-		m_Ibo.bind();
-		
+		m_Vao.generate();
+		m_Vbo.generate();
+		m_Ibo.generate();
+
 		m_Vbo.bindData<T>(vertices, 8);
 		m_Ibo.bindData(indices, 6);
-		shader->getShaderProfile().setAttributes<T>();
+		shader.getShaderProfile().setAttributes<T>();
 
 		m_Vao.unbind();
 		m_Vbo.unbind();
 		m_Ibo.unbind();
 	}
-
 
 	template<class T> void Mesh<T>::bind()
 	{

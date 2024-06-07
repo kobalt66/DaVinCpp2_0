@@ -39,10 +39,10 @@ namespace davincpp
 	}
 
 
-	void Texture::updateTexture(GLbyte* pixelBuffer, uint32_t textureWidth, uint32_t textureHeight)
+	void Texture::updateTexture(std::shared_ptr<GLubyte[]> pixelBuffer, uint32_t textureWidth, uint32_t textureHeight)
 	{
 		bind();
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<size_t>(textureWidth), static_cast<size_t>(textureHeight), 0, GL_RGBA, GL_UNSIGNED_INT, pixelBuffer));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuffer.get()));
 		unbind();
 	}
 

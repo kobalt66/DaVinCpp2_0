@@ -9,6 +9,7 @@ namespace davincpp
 	class Shader
 	{
 	public:
+		Shader() = default;
 		Shader(ShaderProfile&& profile);
 		~Shader();
 
@@ -18,7 +19,7 @@ namespace davincpp
 		void unbind();
 
 		template<class T> void setup();
-		ShaderProfile getShaderProfile() const;
+		const ShaderProfile& getShaderProfile() const;
 
 		void setUniform1i(std::string_view uniform, int integer);
 
@@ -32,7 +33,7 @@ namespace davincpp
 	private:
 		std::unordered_map<std::string_view, int> m_UniformLocationCache;
 
-		uint32_t m_ProgramID;
+		uint32_t m_ProgramID = 0;
 		ShaderProfile m_Profile;
 	};
 }

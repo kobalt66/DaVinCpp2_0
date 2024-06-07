@@ -2,18 +2,18 @@
 
 namespace davincpp
 {
-	Vbo::Vbo()
-	{
-		GLCall(glGenBuffers(1, &m_ID));
-		bind();
-	}
-
 	Vbo::~Vbo()
 	{
 		unbind();
 		GLCall(glDeleteBuffers(1, &m_ID));
 	}
 
+
+	void Vbo::generate()
+	{
+		GLCall(glGenBuffers(1, &m_ID));
+		bind();
+	}
 
 	void Vbo::bind()
 	{

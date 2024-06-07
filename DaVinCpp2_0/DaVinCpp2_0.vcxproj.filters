@@ -932,12 +932,6 @@
     <ClInclude Include="libraries\KHR\khrplatform.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="libraries\stb\stb_image.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="libraries\stb\stb_image_write.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\opengl.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>

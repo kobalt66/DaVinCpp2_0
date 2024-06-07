@@ -7,9 +7,10 @@ namespace davincpp
 	class Vao
 	{
 	public:
-		Vao();
+		Vao() = default;
 		~Vao();
 
+		void generate();
 		void bind();
 		void unbind();
 		bool bound() const;
