@@ -12,7 +12,6 @@ namespace davincpp
 	void Vbo::generate()
 	{
 		GLCall(glGenBuffers(1, &m_ID));
-		bind();
 	}
 
 	void Vbo::bind()
@@ -33,17 +32,17 @@ namespace davincpp
 	}
 
 
-	template<class T> void Vbo::bindData(T* data, size_t size, GLenum usage)
+	template<class T> void Vbo::bindData(const std::vector<T>& data, GLenum usage)
 	{
 		if (!bound()) {
 			bind();
 		}
 
-		GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(T), data.data(), usage));
 		m_Usage = usage;
 	}
 
 
 
-	template void Vbo::bindData<float>(float* data, size_t size, GLenum usage);
+	template void Vbo::bindData<float>(const std::vector<float>& data, GLenum usage);
 }

@@ -9,10 +9,14 @@ namespace davincpp
 		m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
 		m_Window->onSetup();
 	}
+	
+	void Application::onClear()
+	{
+		m_Window->onNewFrame();
+	}
 
 	void Application::onRender()
 	{
-		m_Window->onNewFrame();
 		m_Window->onRender();
 	}
 

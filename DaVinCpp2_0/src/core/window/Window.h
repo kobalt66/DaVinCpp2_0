@@ -29,8 +29,8 @@ namespace davincpp
 		const char* m_Title;
 
 		GLFWwindow* m_WindowPtr = nullptr;
-		std::unique_ptr<GameWindow> m_GameWindow = nullptr;
+		GameWindow m_GameWindow;
 
-		glm::ivec2 m_MousePos;
+		glm::ivec2 m_MousePos = glm::ivec2(0);
 	};
 }

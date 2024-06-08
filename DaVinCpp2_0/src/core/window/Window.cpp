@@ -4,6 +4,7 @@
 namespace davincpp
 {
 	Window::Window(uint32_t width, uint32_t height, const char* title)
+		: m_GameWindow(4, 4, 4)
 	{ 
 		m_Width = width;
 		m_Height = height;
@@ -17,9 +18,7 @@ namespace davincpp
 			throw glfw_error();
 		}
 
-		glfwSetErrorCallback([](int code, const char* msg) {
-			Console::openglErr("[GLFW] (", code, ") ", msg);
-			});
+		glfwSetErrorCallback([](int code, const char* msg) { Console::openglErr("[GLFW] (", code, ") ", msg); });
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -43,15 +42,15 @@ namespace davincpp
 
 		GLCall(glEnable(GL_BLEND));
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		GLCall(glClearColor(0, 0, 0, 0));
 
 		glfwSetWindowUserPointer(m_WindowPtr, reinterpret_cast<void*>(this));
 		glfwSetWindowSizeCallback(m_WindowPtr, Window::onResize);
 		glfwSetCursorPosCallback(m_WindowPtr, Window::onMousePosition);
 
-		m_GameWindow = std::make_unique<GameWindow>();
-		m_GameWindow->onSetup();
+		m_GameWindow.onSetup();
 
-		m_GameWindow->onResize(m_Width, m_Height);
+		m_GameWindow.onResize(m_Width, m_Height);
 	}
 	
 	void Window::onResize(GLFWwindow* windowID, int width, int height)
@@ -60,15 +59,15 @@ namespace davincpp
 		window->m_Width = width;
 		window->m_Height = height;
 
-		window->m_GameWindow->onResize(width, height);
+		window->m_GameWindow.onResize(width, height);
 		window->updateViewport();
 	}
 
 	void Window::onMousePosition(GLFWwindow* windowID, double xpos, double ypos)
 	{
 		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
-		window->m_MousePos.x = static_cast<int>(xpos);
-		window->m_MousePos.y = static_cast<int>(ypos);
+		window->m_MousePos.x = static_cast<int>(xpos / window->m_GameWindow.getPixelSize().x);
+		window->m_MousePos.y = window->m_GameWindow.getFrameSize().y - static_cast<int>(ypos / window->m_GameWindow.getPixelSize().y) - 1;
 	}
 
 	void Window::onUpdate()
@@ -79,13 +78,14 @@ namespace davincpp
 	
 	void Window::onNewFrame()
 	{
+		m_GameWindow.onClear();
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
-		m_GameWindow->onClear();
 	}
 
 	void Window::onRender()
 	{
-		m_GameWindow->onRender();
+		m_GameWindow.setPixel(m_MousePos.x, m_MousePos.y, glm::vec4(58, 252, 161, 255));
+		m_GameWindow.onRender();
 	}
 	
 	void Window::onShutdown()

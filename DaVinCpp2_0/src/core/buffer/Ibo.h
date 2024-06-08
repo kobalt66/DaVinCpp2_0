@@ -16,7 +16,7 @@ namespace davincpp
 		void unbind();
 		bool bound() const;
 		
-		void bindData(uint32_t* data, size_t size, GLenum usage = GL_STATIC_DRAW);
+		void bindData(const std::vector<uint32_t>& data, GLenum usage = GL_STATIC_DRAW);
 		int getIndicesCount();
 
 	private:

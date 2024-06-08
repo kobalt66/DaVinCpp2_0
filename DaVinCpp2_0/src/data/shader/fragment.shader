@@ -1,11 +1,11 @@
-#version 420 core
+#version 440 core
 
-out vec4 texelColor;
+layout(location = 0) out vec4 texelColor;
 
 uniform sampler2D windowBuffer;
-in vec2 texelPos;
+in vec2 texelCoords;
 
 void main()
 {
-	texelColor = texture(windowBuffer, texelPos);
+	texelColor = texture(windowBuffer, texelCoords);
 }

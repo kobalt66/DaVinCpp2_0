@@ -7,8 +7,8 @@ namespace davincpp
 	class GameWindow
 	{
 	public:
-		GameWindow(uint32_t pixelSizeX = 4, uint32_t pixelSizeY = 4, uint32_t bytesPerPixel = 4);
-		~GameWindow();
+		GameWindow() = default;
+		GameWindow(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel);
 
 		void onSetup();
 		void onClear();
@@ -20,18 +20,22 @@ namespace davincpp
 		glm::vec4 getPixel(int pixelX, int pixelY) const;
 		size_t getPixelCount() const;
 
+		glm::uvec2 getPixelSize() const;
+		glm::uvec2 getFrameSize() const;
+
 	private:
 		inline bool isPixelInBoundry(int pixelX, int pixelY) const;
 		inline uint32_t getPixelIndex(int pixelX, int pixelY) const;
 
 	private:
 		std::shared_ptr<GLubyte[]> m_FrameBuffer = nullptr;
-		uint32_t m_Width = 800, m_Height = 600;
-		uint32_t m_PixelSizeX, m_PixelSizeY;
-		uint32_t m_BytesPerPixel;
+		uint32_t m_Width = 0, m_Height = 0;
+		uint32_t m_FrameWidth = 0, m_FrameHeight = 0;
+		uint32_t m_PixelSizeX = 0, m_PixelSizeY = 0;
+		uint32_t m_BytesPerPixel = 0;
 
-		float* m_Vertices;
-		uint32_t* m_Indices;
+		std::vector<float> m_Vertices;
+		std::vector<uint32_t> m_Indices;
 
 		Texture m_FrameTexture;
 		Mesh<float> m_Mesh;

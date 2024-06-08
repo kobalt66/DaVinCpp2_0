@@ -12,7 +12,6 @@ namespace davincpp
 	void Ibo::generate()
 	{
 		GLCall(glGenBuffers(1, &m_ID));
-		bind();
 	}
 
 	void Ibo::bind()
@@ -33,14 +32,14 @@ namespace davincpp
 	}
 
 
-	void Ibo::bindData(uint32_t* data, size_t size, GLenum usage)
+	void Ibo::bindData(const std::vector<uint32_t>& data, GLenum usage)
 	{
 		if (!bound()) {
 			bind();
 		}
 
-		m_IndicesCount = static_cast<int>(size);
-		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndicesCount, data, usage));
+		m_IndicesCount = data.size();
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndicesCount * sizeof(uint32_t), data.data(), usage));
 		m_UsageType = usage;
 	}
 

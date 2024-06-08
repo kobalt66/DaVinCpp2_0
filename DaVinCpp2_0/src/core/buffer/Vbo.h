@@ -16,7 +16,7 @@ namespace davincpp
 		void unbind();
 		bool bound() const;
 
-		template<class T> void bindData(T* data, size_t size, GLenum usage = GL_STATIC_DRAW);
+		template<class T> void bindData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW);
 
 	private:
 		uint32_t m_ID	= 0;

@@ -11,8 +11,9 @@ int main()
 		app.onLoad();
 
 		while (!app.shouldShutdown()) {
-			app.onUpdate();
+			app.onClear();
 			app.onRender();
+			app.onUpdate();
 		}
 
 		app.onShutdown();

@@ -2,7 +2,17 @@
 
 namespace davincpp
 {
-	Texture::Texture(
+	Texture::Texture(uint32_t textureSlot)
+		: m_TextureSlot(textureSlot)
+	{ }
+
+	Texture::~Texture()
+	{
+		GLCall(glDeleteTextures(1, &m_TextureID));
+	}
+
+
+	void Texture::createTexture(
 		GLenum wrapS,
 		GLenum wrapT,
 		GLenum minFilter,
@@ -12,7 +22,7 @@ namespace davincpp
 		GLCall(glGenTextures(1, &m_TextureID));
 		bind();
 
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
 
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter));
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, maxFilter));
@@ -22,11 +32,17 @@ namespace davincpp
 		unbind();
 	}
 
-	Texture::~Texture()
+	void Texture::resize(uint32_t textureWidth, uint32_t textureHeight)
 	{
-		GLCall(glDeleteTextures(1, &m_TextureID));
+		bind();
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+		unbind();
 	}
 
+	void Texture::activate()
+	{
+		GLCall(glActiveTexture(m_TextureSlot));
+	}
 
 	void Texture::bind()
 	{
@@ -41,13 +57,11 @@ namespace davincpp
 
 	void Texture::updateTexture(std::shared_ptr<GLubyte[]> pixelBuffer, uint32_t textureWidth, uint32_t textureHeight)
 	{
-		bind();
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuffer.get()));
-		unbind();
+		GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuffer.get()));
 	}
 
-	uint32_t Texture::getTextureID() const
+	uint32_t Texture::getTextureSlot() const
 	{
-		return m_TextureID;
+		return m_TextureSlot;
 	}
 }

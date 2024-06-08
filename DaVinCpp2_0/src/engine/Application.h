@@ -11,6 +11,7 @@ namespace davincpp
 		Application() = default;
 
 		void onLoad();
+		void onClear();
 		void onUpdate();
 		void onRender();
 		void onShutdown();
