@@ -20,9 +20,15 @@ namespace davincpp
 		void onShutdown();
 
 		void setVsync(bool vsync);
-		void updateViewport();
+		void showCursor(bool showCursor);
+		void showFps(bool showFps);
 		glm::ivec2 getMousePos() const;
 		bool shouldClose() const;
+
+		void updateViewport();
+		void setOpenGLSettings();
+		void setOpenGLCallbacks();
+		void defineEvents();
 
 	private:
 		uint32_t m_Width, m_Height;
@@ -32,5 +38,8 @@ namespace davincpp
 		GameWindow m_GameWindow;
 
 		glm::ivec2 m_MousePos = glm::ivec2(0);
+		
+		bool m_ShowFps = false;
+		int m_FpsCount = 0;
 	};
 }

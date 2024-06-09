@@ -142,6 +142,8 @@
     <ClCompile Include="src\core\buffer\Ibo.cpp" />
     <ClCompile Include="src\core\buffer\Vao.cpp" />
     <ClCompile Include="src\core\buffer\Vbo.cpp" />
+    <ClCompile Include="src\core\events\Event.cpp" />
+    <ClCompile Include="src\core\events\EventHandler.cpp" />
     <ClCompile Include="src\core\mesh\Mesh.cpp" />
     <ClCompile Include="src\core\shader\Shader.cpp" />
     <ClCompile Include="src\core\shader\ShaderProfile.cpp" />
@@ -151,6 +153,7 @@
     <ClCompile Include="src\core\window\Window.cpp" />
     <ClCompile Include="src\engine\Application.cpp" />
     <ClCompile Include="src\utils\FileSystem.cpp" />
+    <ClCompile Include="src\utils\OpenGLUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libraries\color-console\color.hpp" />
@@ -443,6 +446,8 @@
     <ClInclude Include="src\core\buffer\Ibo.h" />
     <ClInclude Include="src\core\buffer\Vao.h" />
     <ClInclude Include="src\core\buffer\Vbo.h" />
+    <ClInclude Include="src\core\events\Event.h" />
+    <ClInclude Include="src\core\events\EventHandler.h" />
     <ClInclude Include="src\core\mesh\Mesh.h" />
     <ClInclude Include="src\core\opengl.h" />
     <ClInclude Include="src\core\shader\Shader.h" />
@@ -455,6 +460,7 @@
     <ClInclude Include="src\utils\Console.h" />
     <ClInclude Include="src\utils\DaVinCppExceptions.h" />
     <ClInclude Include="src\utils\FileSystem.h" />
+    <ClInclude Include="src\utils\OpenGLUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libraries\color-console\LICENSE" />

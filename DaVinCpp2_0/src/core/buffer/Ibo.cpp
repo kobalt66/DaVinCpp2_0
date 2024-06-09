@@ -38,7 +38,7 @@ namespace davincpp
 			bind();
 		}
 
-		m_IndicesCount = data.size();
+		m_IndicesCount = static_cast<int>(data.size());
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndicesCount * sizeof(uint32_t), data.data(), usage));
 		m_UsageType = usage;
 	}

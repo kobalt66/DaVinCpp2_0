@@ -1,10 +1,12 @@
 #include "Window.h"
 #include <DaVinCppExceptions.h>
+#include <events/EventHandler.h>
+#include <OpenGLUtils.h>
 
 namespace davincpp
 {
 	Window::Window(uint32_t width, uint32_t height, const char* title)
-		: m_GameWindow(4, 4, 4)
+		: m_GameWindow(8, 8, 4)
 	{ 
 		m_Width = width;
 		m_Height = height;
@@ -13,43 +15,22 @@ namespace davincpp
 
 	void Window::onSetup()
 	{
-		if (glfwInit() == -1) {
-			Console::err("Failed to initialize glfw!");
-			throw glfw_error();
-		}
-
-		glfwSetErrorCallback([](int code, const char* msg) { Console::openglErr("[GLFW] (", code, ") ", msg); });
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		OpenGLUtils::loadGFLW();
+		OpenGLUtils::setGLErrorCallback();
+		OpenGLUtils::setWindowHints(4, 4, GLFW_OPENGL_CORE_PROFILE);
 		
-		m_WindowPtr = glfwCreateWindow((int)m_Width, (int)m_Height, m_Title, nullptr, nullptr);
-
-		if (m_WindowPtr == nullptr) {
-			Console::err("Failed to create window!");
-			throw glfw_error();
-		}
+		m_WindowPtr = OpenGLUtils::createWindow(m_Width, m_Height, m_Title);
 
 		glfwMakeContextCurrent(m_WindowPtr);
 
-		if (gladLoadGL() == -1) {
-			Console::err("Failed to load OpenGL!");
-			throw opengl_error();
-		}
+		OpenGLUtils::loadOpenGL();
 
 		updateViewport();
-
-		GLCall(glEnable(GL_BLEND));
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-		GLCall(glClearColor(0, 0, 0, 0));
-
-		glfwSetWindowUserPointer(m_WindowPtr, reinterpret_cast<void*>(this));
-		glfwSetWindowSizeCallback(m_WindowPtr, Window::onResize);
-		glfwSetCursorPosCallback(m_WindowPtr, Window::onMousePosition);
+		setOpenGLSettings();
+		setOpenGLCallbacks();
+		defineEvents();
 
 		m_GameWindow.onSetup();
-
 		m_GameWindow.onResize(m_Width, m_Height);
 	}
 	
@@ -74,6 +55,9 @@ namespace davincpp
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(m_WindowPtr);
+		m_FpsCount++;
+
+		EventHandler::onUpdate();
 	}
 	
 	void Window::onNewFrame()
@@ -99,9 +83,14 @@ namespace davincpp
 		glfwSwapInterval((int)vsync);
 	}
 
-	void Window::updateViewport()
+	void Window::showCursor(bool showCursor)
 	{
-		GLCall(glViewport(0, 0, m_Width, m_Height));
+		glfwSetInputMode(m_WindowPtr, GLFW_CURSOR, showCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+	}
+
+	void Window::showFps(bool showFps)
+	{
+		m_ShowFps = showFps;
 	}
 
 	glm::ivec2 Window::getMousePos() const
@@ -112,5 +101,40 @@ namespace davincpp
 	bool Window::shouldClose() const
 	{
 		return glfwWindowShouldClose(m_WindowPtr);
+	}
+
+
+
+	void Window::updateViewport()
+	{
+		GLCall(glViewport(0, 0, m_Width, m_Height));
+	}
+
+	void Window::setOpenGLSettings()
+	{
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		GLCall(glClearColor(0, 0, 0, 0));
+	}
+
+	void Window::setOpenGLCallbacks()
+	{
+		glfwSetWindowUserPointer(m_WindowPtr, reinterpret_cast<void*>(this));
+		glfwSetWindowSizeCallback(m_WindowPtr, Window::onResize);
+		glfwSetCursorPosCallback(m_WindowPtr, Window::onMousePosition);
+	}
+
+	void Window::defineEvents()
+	{
+		EventHandler::addEvent(Event([&]() {
+			if (!m_ShowFps) {
+				glfwSetWindowTitle(m_WindowPtr, m_Title);
+				return;
+			}
+
+			std::string alteredWindowTitle = std::string(std::string(m_Title) + " | Fps: " + std::to_string(m_FpsCount));
+			glfwSetWindowTitle(m_WindowPtr, alteredWindowTitle.c_str());
+			m_FpsCount = 0;
+			}, sec(1), true));
 	}
 }

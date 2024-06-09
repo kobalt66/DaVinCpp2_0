@@ -8,6 +8,9 @@ namespace davincpp
 		Console::log("Loading application...");
 		m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
 		m_Window->onSetup();
+		m_Window->showCursor(false);
+		m_Window->setVsync(false);
+		m_Window->showFps(true);
 	}
 	
 	void Application::onClear()
