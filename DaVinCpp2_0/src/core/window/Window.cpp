@@ -6,7 +6,7 @@
 namespace davincpp
 {
 	Window::Window(uint32_t width, uint32_t height, const char* title)
-		: m_GameWindow(8, 8, 4)
+		: m_GameWindow()
 	{ 
 		m_Width = width;
 		m_Height = height;
@@ -47,8 +47,7 @@ namespace davincpp
 	void Window::onMousePosition(GLFWwindow* windowID, double xpos, double ypos)
 	{
 		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
-		window->m_MousePos.x = static_cast<int>(xpos / window->m_GameWindow.getPixelSize().x);
-		window->m_MousePos.y = window->m_GameWindow.getFrameSize().y - static_cast<int>(ypos / window->m_GameWindow.getPixelSize().y) - 1;
+		window->m_GameWindow.onMousePosition(xpos, ypos);
 	}
 
 	void Window::onUpdate()
@@ -68,7 +67,6 @@ namespace davincpp
 
 	void Window::onRender()
 	{
-		m_GameWindow.setPixel(m_MousePos.x, m_MousePos.y, glm::vec4(58, 252, 161, 255));
 		m_GameWindow.onRender();
 	}
 	
@@ -91,11 +89,6 @@ namespace davincpp
 	void Window::showFps(bool showFps)
 	{
 		m_ShowFps = showFps;
-	}
-
-	glm::ivec2 Window::getMousePos() const
-	{
-		return m_MousePos;
 	}
 
 	bool Window::shouldClose() const

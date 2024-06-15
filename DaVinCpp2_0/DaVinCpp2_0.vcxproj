@@ -149,6 +149,7 @@
     <ClCompile Include="src\core\shader\ShaderProfile.cpp" />
     <ClCompile Include="src\core\shader\VertexAttribute.cpp" />
     <ClCompile Include="src\core\texture\Texture.cpp" />
+    <ClCompile Include="src\core\window\FrameBuffer.cpp" />
     <ClCompile Include="src\core\window\GameWindow.cpp" />
     <ClCompile Include="src\core\window\Window.cpp" />
     <ClCompile Include="src\engine\Application.cpp" />
@@ -454,9 +455,11 @@
     <ClInclude Include="src\core\shader\ShaderProfile.h" />
     <ClInclude Include="src\core\shader\VertexAttribute.h" />
     <ClInclude Include="src\core\texture\Texture.h" />
+    <ClInclude Include="src\core\window\FrameBuffer.h" />
     <ClInclude Include="src\core\window\GameWindow.h" />
     <ClInclude Include="src\core\window\Window.h" />
     <ClInclude Include="src\engine\Application.h" />
+    <ClInclude Include="src\engine\rendering\Renderable.h" />
     <ClInclude Include="src\utils\Console.h" />
     <ClInclude Include="src\utils\DaVinCppExceptions.h" />
     <ClInclude Include="src\utils\FileSystem.h" />

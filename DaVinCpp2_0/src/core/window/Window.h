@@ -22,7 +22,6 @@ namespace davincpp
 		void setVsync(bool vsync);
 		void showCursor(bool showCursor);
 		void showFps(bool showFps);
-		glm::ivec2 getMousePos() const;
 		bool shouldClose() const;
 
 		void updateViewport();
@@ -36,8 +35,6 @@ namespace davincpp
 
 		GLFWwindow* m_WindowPtr = nullptr;
 		GameWindow m_GameWindow;
-
-		glm::ivec2 m_MousePos = glm::ivec2(0);
 		
 		bool m_ShowFps = false;
 		int m_FpsCount = 0;

@@ -2,14 +2,10 @@
 
 namespace davincpp
 {
-	GameWindow::GameWindow(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel)
+	GameWindow::GameWindow()
 		: m_Width(0),
 		m_Height(0),
-		m_FrameWidth(0),
-		m_FrameHeight(0),
-		m_PixelSizeX(pixelSizeX), 
-		m_PixelSizeY(pixelSizeY), 
-		m_BytesPerPixel(bytesPerPixel)
+		m_FrameBuffer(4, 4, 4)
 	{
 		m_Vertices.insert(m_Vertices.begin(), {
 			-1.0f, -1.0f, 0.0f, 0.0f,
@@ -36,20 +32,18 @@ namespace davincpp
 
 	void GameWindow::onClear()
 	{
-		if (m_FrameBuffer == nullptr) {
-			return;
-		}
-
-		memset(m_FrameBuffer.get(), 0, static_cast<size_t>(m_FrameWidth * m_FrameHeight * m_BytesPerPixel));
+		m_FrameBuffer.onClear();
 	}
 	
 	void GameWindow::onRender()
 	{
+		m_FrameBuffer.setPixel(m_MousePosition.x, m_MousePosition.y, glm::vec4(58, 252, 161, 255));
+
 		m_WindowShader.bind();
 		m_WindowShader.setUniform1i("windowBuffer", 0);
 
 		m_FrameTexture.bind();
-		m_FrameTexture.updateTexture(m_FrameBuffer, m_FrameWidth, m_FrameHeight);
+		m_FrameTexture.updateTexture(m_FrameBuffer.getBufferPtr(), m_FrameBuffer.getFrameSize());
 		m_FrameTexture.activate();
 
 		m_Mesh.bind();
@@ -64,78 +58,20 @@ namespace davincpp
 	{
 		m_Width = windowSizeX;
 		m_Height = windowSizeY;
-		m_FrameWidth = windowSizeX / m_PixelSizeX;
-		m_FrameHeight = windowSizeY / m_PixelSizeY;
 
-		m_FrameBuffer.reset();
-		m_FrameBuffer = std::make_shared<GLubyte[]>(m_FrameWidth * m_FrameHeight * m_BytesPerPixel);
-		m_FrameTexture.resize(m_FrameWidth, m_FrameHeight);
+		m_FrameBuffer.onResize(windowSizeX, windowSizeY);
+		m_FrameTexture.resize(m_FrameBuffer.getFrameSize());
+	}
+
+	void GameWindow::onMousePosition(double xpos, double ypos)
+	{
+		m_MousePosition.x = static_cast<int>(xpos / m_FrameBuffer.getPixelSize().x);
+		m_MousePosition.y = m_FrameBuffer.getFrameSize().y - static_cast<int>(ypos / m_FrameBuffer.getPixelSize().y) - 1;
 	}
 
 
-	void GameWindow::setPixel(int pixelX, int pixelY, glm::vec4 color)
+	glm::ivec2 GameWindow::getMousePosition() const
 	{
-		if (!isPixelInBoundry(pixelX, pixelY)) {
-			return;
-		}
-
-		uint32_t pixelIdx = getPixelIndex(pixelX, pixelY);
-
-		float alphaChl1 = color.a / 255.0f;
-		float alphaChl2 = static_cast<float>(m_FrameBuffer.get()[pixelIdx + A]) / 255.0f;
-
-		m_FrameBuffer.get()[pixelIdx + R] = static_cast<GLubyte>(alphaChl1 * color.r + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + R]));
-		m_FrameBuffer.get()[pixelIdx + G] = static_cast<GLubyte>(alphaChl1 * color.g + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + G]));
-		m_FrameBuffer.get()[pixelIdx + B] = static_cast<GLubyte>(alphaChl1 * color.b + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + B]));
-		m_FrameBuffer.get()[pixelIdx + A] = static_cast<GLubyte>((alphaChl1 + alphaChl2 * (1 - alphaChl1)) * 255.0f);
-	}
-
-	void GameWindow::setPixelSize(glm::ivec2 pixelSize)
-	{
-		m_PixelSizeX = pixelSize.x;
-		m_PixelSizeY = pixelSize.y;
-	}
-
-	glm::vec4 GameWindow::getPixel(int pixelX, int pixelY) const
-	{
-		if (!isPixelInBoundry(pixelX, pixelY)) {
-			return glm::vec4(0);
-		}
-
-		uint32_t pixelIdx = getPixelIndex(pixelX, pixelY);
-
-		return glm::vec4(
-			m_FrameBuffer.get()[pixelIdx + 0],
-			m_FrameBuffer.get()[pixelIdx + 1],
-			m_FrameBuffer.get()[pixelIdx + 2],
-			m_FrameBuffer.get()[pixelIdx + 3]
-		);
-	}
-
-	size_t GameWindow::getPixelCount() const
-	{
-		return static_cast<size_t>(m_FrameWidth * m_FrameHeight);
-	}
-
-
-	glm::uvec2 GameWindow::getPixelSize() const
-	{
-		return glm::uvec2(m_PixelSizeX, m_PixelSizeY);
-	}
-
-	glm::uvec2 GameWindow::getFrameSize() const
-	{
-		return glm::uvec2(m_FrameWidth, m_FrameHeight);
-	}
-
-
-	inline bool GameWindow::isPixelInBoundry(int pixelX, int pixelY) const
-	{
-		return pixelX >= 0 && pixelX < static_cast<int>(m_FrameWidth) && pixelY >= 0 && pixelY < static_cast<int>(m_FrameHeight);
-	}
-
-	inline uint32_t GameWindow::getPixelIndex(int pixelX, int pixelY) const
-	{
-		return (pixelY * m_FrameWidth + pixelX) * m_BytesPerPixel;
+		return m_MousePosition;
 	}
 }
