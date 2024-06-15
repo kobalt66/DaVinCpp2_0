@@ -70,8 +70,18 @@ namespace davincpp
 	}
 
 
+	glm::ivec2 GameWindow::getFrameSize() const
+	{
+		return m_FrameBuffer.getFrameSize();
+	}
+
 	glm::ivec2 GameWindow::getMousePosition() const
 	{
 		return m_MousePosition;
+	}
+
+	FrameBuffer& GameWindow::getFrameBuffer()
+	{
+		return m_FrameBuffer;
 	}
 }

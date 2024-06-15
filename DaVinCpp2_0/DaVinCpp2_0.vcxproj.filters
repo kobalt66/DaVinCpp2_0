@@ -72,6 +72,15 @@
     <ClCompile Include="src\core\window\FrameBuffer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\rendering\renderables\Renderable.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\rendering\renderables\Square.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\rendering\RenderableObjectManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Application.h">
@@ -989,10 +998,19 @@
     <ClInclude Include="src\utils\OpenGLUtils.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\rendering\Renderable.h">
+    <ClInclude Include="src\engine\rendering\renderables\Renderable.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\core\window\FrameBuffer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rendering\renderables\Square.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rendering\RenderableObjectManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Color.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

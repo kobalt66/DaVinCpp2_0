@@ -1,5 +1,7 @@
 #include "Application.h"
 #include <string>
+#include <rendering/renderables/Square.h>
+#include <Color.h>
 
 namespace davincpp
 {
@@ -11,6 +13,12 @@ namespace davincpp
 		m_Window->showCursor(false);
 		m_Window->setVsync(false);
 		m_Window->showFps(true);
+
+		m_RenderableObjectManager = std::make_unique<RenderableObjectManager>();
+
+		m_RenderableObjectManager->registerRenderableObject(
+			std::make_unique<Square>(glm::vec2(m_Window->getFrameSize() / 2), GREEN, 10, 10, true)
+		);
 	}
 	
 	void Application::onClear()
@@ -20,6 +28,7 @@ namespace davincpp
 
 	void Application::onRender()
 	{
+		m_RenderableObjectManager->onRender(m_Window->getFrameBuffer());
 		m_Window->onRender();
 	}
 

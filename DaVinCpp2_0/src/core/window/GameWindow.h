@@ -16,7 +16,9 @@ namespace davincpp
 		void onResize(uint32_t windowSizeX, uint32_t windowSizeY);
 		void onMousePosition(double xpos, double ypos);
 
+		glm::ivec2 getFrameSize() const;
 		glm::ivec2 getMousePosition() const;
+		FrameBuffer& getFrameBuffer();
 
 	private:
 		uint32_t m_Width = 0, m_Height = 0;

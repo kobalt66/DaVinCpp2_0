@@ -1,5 +1,6 @@
 #pragma once
 #include <stdexcept>
+#include <format>
 
 namespace davincpp
 {
@@ -31,5 +32,11 @@ namespace davincpp
 	{
 	public:
 		explicit event_error() : std::runtime_error("[Event] fatal error") {}
+	};
+
+	class not_implemented : public std::runtime_error
+	{
+	public:
+		explicit not_implemented(int line, const char* file) : std::runtime_error(std::format("(file: {}, line: {}) function is not implemented!", file, line).c_str()) {}
 	};
 }

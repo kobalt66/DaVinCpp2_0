@@ -13,6 +13,24 @@ namespace davincpp
 		m_Title = title;
 	}
 
+
+	void Window::onResize(GLFWwindow* windowID, int width, int height)
+	{
+		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
+		window->m_Width = width;
+		window->m_Height = height;
+
+		window->m_GameWindow.onResize(width, height);
+		window->updateViewport();
+	}
+
+	void Window::onMousePosition(GLFWwindow* windowID, double xpos, double ypos)
+	{
+		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
+		window->m_GameWindow.onMousePosition(xpos, ypos);
+	}
+
+
 	void Window::onSetup()
 	{
 		OpenGLUtils::loadGFLW();
@@ -32,22 +50,6 @@ namespace davincpp
 
 		m_GameWindow.onSetup();
 		m_GameWindow.onResize(m_Width, m_Height);
-	}
-	
-	void Window::onResize(GLFWwindow* windowID, int width, int height)
-	{
-		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
-		window->m_Width = width;
-		window->m_Height = height;
-
-		window->m_GameWindow.onResize(width, height);
-		window->updateViewport();
-	}
-
-	void Window::onMousePosition(GLFWwindow* windowID, double xpos, double ypos)
-	{
-		Window* window = static_cast<Window*>(glfwGetWindowUserPointer(windowID));
-		window->m_GameWindow.onMousePosition(xpos, ypos);
 	}
 
 	void Window::onUpdate()
@@ -129,5 +131,16 @@ namespace davincpp
 			glfwSetWindowTitle(m_WindowPtr, alteredWindowTitle.c_str());
 			m_FpsCount = 0;
 			}, sec(1), true));
+	}
+
+
+	glm::ivec2 Window::getFrameSize() const
+	{
+		return m_GameWindow.getFrameSize();
+	}
+
+	FrameBuffer& Window::getFrameBuffer()
+	{
+		return m_GameWindow.getFrameBuffer();
 	}
 }
