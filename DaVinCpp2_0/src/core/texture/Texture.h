@@ -16,12 +16,12 @@ namespace davincpp
 			GLenum minFilter = GL_NEAREST,
 			GLenum maxFilter = GL_NEAREST
 		);
-		void resize(uint32_t textureWidth, uint32_t textureHeight);
+		void resize(glm::uvec2 textureSize);
 		void activate();
 		void bind();
 		void unbind();
 
-		void updateTexture(std::shared_ptr<GLubyte[]> pixelBuffer, uint32_t textureWidth, uint32_t textureHeight);
+		void updateTexture(const std::shared_ptr<GLubyte[]> pixelBuffer, glm::uvec2 textureSize);
 		uint32_t getTextureSlot() const;
 
 	private:

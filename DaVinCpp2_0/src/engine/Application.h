@@ -1,6 +1,6 @@
 #pragma once
-
 #include <Window.h>
+#include <rendering/RenderableObjectManager.h>
 #include <memory>
 
 namespace davincpp
@@ -19,5 +19,6 @@ namespace davincpp
 
 	private:
 		std::unique_ptr<Window> m_Window = nullptr;
+		std::unique_ptr<RenderableObjectManager> m_RenderableObjectManager = nullptr;
 	};
 }

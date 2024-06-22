@@ -32,10 +32,10 @@ namespace davincpp
 		unbind();
 	}
 
-	void Texture::resize(uint32_t textureWidth, uint32_t textureHeight)
+	void Texture::resize(glm::uvec2 textureSize)
 	{
 		bind();
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureSize.x, textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
 		unbind();
 	}
 
@@ -55,9 +55,9 @@ namespace davincpp
 	}
 
 
-	void Texture::updateTexture(std::shared_ptr<GLubyte[]> pixelBuffer, uint32_t textureWidth, uint32_t textureHeight)
+	void Texture::updateTexture(const std::shared_ptr<GLubyte[]> pixelBuffer, glm::uvec2 textureSize)
 	{
-		GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuffer.get()));
+		GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureSize.x, textureSize.y, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuffer.get()));
 	}
 
 	uint32_t Texture::getTextureSlot() const

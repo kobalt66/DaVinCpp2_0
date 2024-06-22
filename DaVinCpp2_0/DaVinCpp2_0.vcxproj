@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core;$(SolutionDir)DaVinCpp2_0\src\core\window</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core;$(SolutionDir)DaVinCpp2_0\src\core\window;$(SolutionDir)DaVinCpp2_0\src\engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core;$(SolutionDir)DaVinCpp2_0\src\core\window</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DaVinCpp2_0\libraries;$(SolutionDir)DaVinCpp2_0\src\utils;$(SolutionDir)DaVinCpp2_0\src\core;$(SolutionDir)DaVinCpp2_0\src\core\window;$(SolutionDir)DaVinCpp2_0\src\engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,9 +149,16 @@
     <ClCompile Include="src\core\shader\ShaderProfile.cpp" />
     <ClCompile Include="src\core\shader\VertexAttribute.cpp" />
     <ClCompile Include="src\core\texture\Texture.cpp" />
+    <ClCompile Include="src\core\window\FrameBuffer.cpp" />
     <ClCompile Include="src\core\window\GameWindow.cpp" />
     <ClCompile Include="src\core\window\Window.cpp" />
     <ClCompile Include="src\engine\Application.cpp" />
+    <ClCompile Include="src\engine\rendering\RenderableObjectManager.cpp" />
+    <ClCompile Include="src\engine\rendering\renderables\Circle.cpp" />
+    <ClCompile Include="src\engine\rendering\renderables\Line.cpp" />
+    <ClCompile Include="src\engine\rendering\renderables\Renderable.cpp" />
+    <ClCompile Include="src\engine\rendering\renderables\Square.cpp" />
+    <ClCompile Include="src\engine\rendering\renderables\Triangle.cpp" />
     <ClCompile Include="src\utils\FileSystem.cpp" />
     <ClCompile Include="src\utils\OpenGLUtils.cpp" />
   </ItemGroup>
@@ -454,9 +461,17 @@
     <ClInclude Include="src\core\shader\ShaderProfile.h" />
     <ClInclude Include="src\core\shader\VertexAttribute.h" />
     <ClInclude Include="src\core\texture\Texture.h" />
+    <ClInclude Include="src\core\window\FrameBuffer.h" />
     <ClInclude Include="src\core\window\GameWindow.h" />
     <ClInclude Include="src\core\window\Window.h" />
     <ClInclude Include="src\engine\Application.h" />
+    <ClInclude Include="src\engine\rendering\RenderableObjectManager.h" />
+    <ClInclude Include="src\engine\rendering\renderables\Circle.h" />
+    <ClInclude Include="src\engine\rendering\renderables\Line.h" />
+    <ClInclude Include="src\engine\rendering\renderables\Renderable.h" />
+    <ClInclude Include="src\engine\rendering\renderables\Square.h" />
+    <ClInclude Include="src\engine\rendering\renderables\Triangle.h" />
+    <ClInclude Include="src\utils\Color.h" />
     <ClInclude Include="src\utils\Console.h" />
     <ClInclude Include="src\utils\DaVinCppExceptions.h" />
     <ClInclude Include="src\utils\FileSystem.h" />

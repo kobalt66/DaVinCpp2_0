@@ -9,11 +9,13 @@ namespace davincpp
 	class Window
 	{
 	public:
+		Window() = default;
 		Window(uint32_t width, uint32_t height, const char* title);
 
-		void onSetup();
 		static void onResize(GLFWwindow* windowID, int width, int height);
 		static void onMousePosition(GLFWwindow* windowID, double xpos, double ypos);
+		
+		void onSetup();
 		void onUpdate();
 		void onNewFrame();
 		void onRender();
@@ -22,7 +24,6 @@ namespace davincpp
 		void setVsync(bool vsync);
 		void showCursor(bool showCursor);
 		void showFps(bool showFps);
-		glm::ivec2 getMousePos() const;
 		bool shouldClose() const;
 
 		void updateViewport();
@@ -30,14 +31,15 @@ namespace davincpp
 		void setOpenGLCallbacks();
 		void defineEvents();
 
+		glm::ivec2 getFrameSize() const;
+		FrameBuffer& getFrameBuffer();
+
 	private:
 		uint32_t m_Width, m_Height;
 		const char* m_Title;
 
 		GLFWwindow* m_WindowPtr = nullptr;
 		GameWindow m_GameWindow;
-
-		glm::ivec2 m_MousePos = glm::ivec2(0);
 		
 		bool m_ShowFps = false;
 		int m_FpsCount = 0;
