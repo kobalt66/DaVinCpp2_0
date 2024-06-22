@@ -1,6 +1,9 @@
 #include "Application.h"
 #include <string>
 #include <rendering/renderables/Square.h>
+#include <rendering/renderables/Triangle.h>
+#include <rendering/renderables/Line.h>
+#include <rendering/renderables/Circle.h>
 #include <Color.h>
 
 namespace davincpp
@@ -17,7 +20,19 @@ namespace davincpp
 		m_RenderableObjectManager = std::make_unique<RenderableObjectManager>();
 
 		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Square>(glm::vec2(m_Window->getFrameSize() / 2), GREEN, 10, 10, true)
+			std::make_unique<Square>(glm::vec2(10, 50), GREEN, 10, 10, true)
+		);
+
+		m_RenderableObjectManager->registerRenderableObject(
+			std::make_unique<Triangle>(glm::vec2(80, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED)
+		);
+
+		m_RenderableObjectManager->registerRenderableObject(
+			std::make_unique<Line>(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE)
+		);
+
+		m_RenderableObjectManager->registerRenderableObject(
+			std::make_unique<Circle>(glm::vec2(200, 100), 100.0f, GRAY)
 		);
 	}
 	
