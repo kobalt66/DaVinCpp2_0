@@ -156,6 +156,7 @@
     <ClCompile Include="src\engine\rendering\RenderableObjectManager.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Circle.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Line.cpp" />
+    <ClCompile Include="src\engine\rendering\renderables\Polygon.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Renderable.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Square.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Triangle.cpp" />
@@ -468,6 +469,7 @@
     <ClInclude Include="src\engine\rendering\RenderableObjectManager.h" />
     <ClInclude Include="src\engine\rendering\renderables\Circle.h" />
     <ClInclude Include="src\engine\rendering\renderables\Line.h" />
+    <ClInclude Include="src\engine\rendering\renderables\Polygon.h" />
     <ClInclude Include="src\engine\rendering\renderables\Renderable.h" />
     <ClInclude Include="src\engine\rendering\renderables\Square.h" />
     <ClInclude Include="src\engine\rendering\renderables\Triangle.h" />

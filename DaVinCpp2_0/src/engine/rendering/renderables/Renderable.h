@@ -1,4 +1,5 @@
 #pragma once
+#include <DaVinCppExceptions.h>
 #include <FrameBuffer.h>
 
 namespace davincpp

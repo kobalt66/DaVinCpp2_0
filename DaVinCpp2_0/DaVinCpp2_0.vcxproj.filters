@@ -90,6 +90,9 @@
     <ClCompile Include="src\engine\rendering\renderables\Circle.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\rendering\renderables\Polygon.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Application.h">
@@ -1029,6 +1032,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\rendering\renderables\Circle.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rendering\renderables\Polygon.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
