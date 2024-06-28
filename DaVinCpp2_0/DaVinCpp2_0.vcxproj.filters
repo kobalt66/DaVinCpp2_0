@@ -45,9 +45,6 @@
     <ClCompile Include="src\core\shader\ShaderProfile.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\FileSystem.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\shader\Shader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -88,6 +85,24 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\rendering\renderables\Circle.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\rendering\Texture2D.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\DaVinCppFileSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\rendering\TextureMapper.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\stb\stb_image.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gameobjects\components\Component.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gameobjects\GameObject.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -986,9 +1001,6 @@
     <ClInclude Include="src\core\shader\Shader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\FileSystem.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\DaVinCppExceptions.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -1029,6 +1041,36 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\rendering\renderables\Circle.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rendering\Texture2D.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\stb\stb_image.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\stb\stb_image_write.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\DaVinCppMacros.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\DaVinCppTypes.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\DaVinCppFileSystem.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\rendering\TextureMapper.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\DaVinCppConstants.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gameobjects\GameObject.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gameobjects\components\Component.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

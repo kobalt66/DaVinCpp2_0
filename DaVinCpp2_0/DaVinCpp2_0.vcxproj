@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="libraries\glm\detail\glm.cpp" />
+    <ClCompile Include="libraries\stb\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\core\buffer\Ibo.cpp" />
     <ClCompile Include="src\core\buffer\Vao.cpp" />
@@ -153,13 +154,17 @@
     <ClCompile Include="src\core\window\GameWindow.cpp" />
     <ClCompile Include="src\core\window\Window.cpp" />
     <ClCompile Include="src\engine\Application.cpp" />
+    <ClCompile Include="src\engine\gameobjects\components\Component.cpp" />
+    <ClCompile Include="src\engine\gameobjects\GameObject.cpp" />
     <ClCompile Include="src\engine\rendering\RenderableObjectManager.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Circle.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Line.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Renderable.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Square.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Triangle.cpp" />
-    <ClCompile Include="src\utils\FileSystem.cpp" />
+    <ClCompile Include="src\engine\rendering\Texture2D.cpp" />
+    <ClCompile Include="src\engine\rendering\TextureMapper.cpp" />
+    <ClCompile Include="src\utils\DaVinCppFileSystem.cpp" />
     <ClCompile Include="src\utils\OpenGLUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -450,6 +455,8 @@
     <ClInclude Include="libraries\glm\vec4.hpp" />
     <ClInclude Include="libraries\glm\vector_relational.hpp" />
     <ClInclude Include="libraries\KHR\khrplatform.h" />
+    <ClInclude Include="libraries\stb\stb_image.h" />
+    <ClInclude Include="libraries\stb\stb_image_write.h" />
     <ClInclude Include="src\core\buffer\Ibo.h" />
     <ClInclude Include="src\core\buffer\Vao.h" />
     <ClInclude Include="src\core\buffer\Vbo.h" />
@@ -465,16 +472,23 @@
     <ClInclude Include="src\core\window\GameWindow.h" />
     <ClInclude Include="src\core\window\Window.h" />
     <ClInclude Include="src\engine\Application.h" />
+    <ClInclude Include="src\engine\gameobjects\components\Component.h" />
+    <ClInclude Include="src\engine\gameobjects\GameObject.h" />
     <ClInclude Include="src\engine\rendering\RenderableObjectManager.h" />
     <ClInclude Include="src\engine\rendering\renderables\Circle.h" />
     <ClInclude Include="src\engine\rendering\renderables\Line.h" />
     <ClInclude Include="src\engine\rendering\renderables\Renderable.h" />
     <ClInclude Include="src\engine\rendering\renderables\Square.h" />
     <ClInclude Include="src\engine\rendering\renderables\Triangle.h" />
+    <ClInclude Include="src\engine\rendering\Texture2D.h" />
+    <ClInclude Include="src\engine\rendering\TextureMapper.h" />
     <ClInclude Include="src\utils\Color.h" />
     <ClInclude Include="src\utils\Console.h" />
+    <ClInclude Include="src\utils\DaVinCppConstants.h" />
     <ClInclude Include="src\utils\DaVinCppExceptions.h" />
-    <ClInclude Include="src\utils\FileSystem.h" />
+    <ClInclude Include="src\utils\DaVinCppMacros.h" />
+    <ClInclude Include="src\utils\DaVinCppTypes.h" />
+    <ClInclude Include="src\utils\DaVinCppFileSystem.h" />
     <ClInclude Include="src\utils\OpenGLUtils.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 #include "Application.h"
-#include <string>
+#include <DaVinCppMacros.h>
 #include <rendering/renderables/Square.h>
 #include <rendering/renderables/Triangle.h>
 #include <rendering/renderables/Line.h>
@@ -20,7 +20,7 @@ namespace davincpp
 		m_RenderableObjectManager = std::make_unique<RenderableObjectManager>();
 
 		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Square>(glm::vec2(10, 50), GREEN, 10, 10, true)
+			std::make_unique<Square>(glm::vec2(10, 50), GREEN, 10.0f, 10.0f, true)
 		);
 
 		m_RenderableObjectManager->registerRenderableObject(
@@ -38,24 +38,24 @@ namespace davincpp
 	
 	void Application::onClear()
 	{
-		m_Window->onNewFrame();
+		ASSERT_ENGINE_CALL(m_Window->onNewFrame(), "onClear: create new frame");
 	}
 
 	void Application::onRender()
 	{
-		m_RenderableObjectManager->onRender(m_Window->getFrameBuffer());
-		m_Window->onRender();
+		ASSERT_ENGINE_CALL(m_RenderableObjectManager->onRender(m_Window->getFrameBuffer()), "onRender: rendering objects");
+		ASSERT_ENGINE_CALL(m_Window->onRender(), "onRender: rendering window");
 	}
 
 	void Application::onUpdate()
 	{
-		m_Window->onUpdate();
+		ASSERT_ENGINE_CALL(m_Window->onUpdate(), "onUpdate: update window");
 	}
 
 	void Application::onShutdown()
 	{
 		Console::wrn("Shutting application down...");
-		m_Window->onShutdown();
+		ASSERT_ENGINE_CALL(m_Window->onShutdown(), "onShutdown: shutdown window");
 	}
 
 	bool Application::shouldShutdown()

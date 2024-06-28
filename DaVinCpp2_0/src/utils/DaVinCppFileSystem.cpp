@@ -1,11 +1,11 @@
-#include "FileSystem.h"
+#include "DaVinCppFileSystem.h"
 #include <Console.h>
 #include <fstream>
 #include <DaVinCppExceptions.h>
 
 namespace davincpp
 {
-	std::string FileSystem::readFile(std::string_view path)
+	std::string DaVinCppFileSystem::readFile(std::string_view path)
 	{
 		if (!exists(path)) {
 			Console::err("The file at '", path, "' doesn't exist!");
@@ -23,7 +23,7 @@ namespace davincpp
 		return buffer.str();
 	}
 	
-	bool FileSystem::exists(std::string_view path)
+	bool DaVinCppFileSystem::exists(std::string_view path)
 	{
 		return std::filesystem::exists(path);
 	}

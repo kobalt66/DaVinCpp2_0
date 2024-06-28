@@ -1,4 +1,5 @@
 #include "FrameBuffer.h"
+#include <DaVinCppConstants.h>
 
 namespace davincpp
 {
@@ -38,13 +39,13 @@ namespace davincpp
 
 		uint32_t pixelIdx = getPixelIndex(pixelX, pixelY);
 
-		float alphaChl1 = color.a / 255.0f;
-		float alphaChl2 = static_cast<float>(m_FrameBuffer.get()[pixelIdx + A]) / 255.0f;
+		float alphaChl1 = color.a / MAX_COLOR_VALUE;
+		float alphaChl2 = static_cast<float>(m_FrameBuffer.get()[pixelIdx + A]) / MAX_COLOR_VALUE;
 
-		m_FrameBuffer.get()[pixelIdx + R] = static_cast<GLubyte>(alphaChl1 * color.r + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + R]));
-		m_FrameBuffer.get()[pixelIdx + G] = static_cast<GLubyte>(alphaChl1 * color.g + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + G]));
-		m_FrameBuffer.get()[pixelIdx + B] = static_cast<GLubyte>(alphaChl1 * color.b + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + B]));
-		m_FrameBuffer.get()[pixelIdx + A] = static_cast<GLubyte>((alphaChl1 + alphaChl2 * (1 - alphaChl1)) * 255.0f);
+		m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + R)] = static_cast<GLubyte>(alphaChl1 * color.r + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + R]));
+		m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + G)] = static_cast<GLubyte>(alphaChl1 * color.g + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + G]));
+		m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + B)] = static_cast<GLubyte>(alphaChl1 * color.b + alphaChl2 * (1.0f - alphaChl1) * static_cast<float>(m_FrameBuffer.get()[pixelIdx + B]));
+		m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + A)] = static_cast<GLubyte>((alphaChl1 + alphaChl2 * (1 - alphaChl1)) * MAX_COLOR_VALUE);
 	}
 
 	void FrameBuffer::setPixelSize(glm::ivec2 pixelSize)
@@ -53,7 +54,7 @@ namespace davincpp
 		m_PixelSizeY = pixelSize.y;
 	}
 
-	glm::vec4 FrameBuffer::getPixel(int pixelX, int pixelY) const
+	glm::vec4&& FrameBuffer::getPixel(int pixelX, int pixelY) const
 	{
 		if (!isPixelInBoundry(pixelX, pixelY)) {
 			return glm::vec4(0);
@@ -62,10 +63,10 @@ namespace davincpp
 		uint32_t pixelIdx = getPixelIndex(pixelX, pixelY);
 
 		return glm::vec4(
-			m_FrameBuffer.get()[pixelIdx + 0],
-			m_FrameBuffer.get()[pixelIdx + 1],
-			m_FrameBuffer.get()[pixelIdx + 2],
-			m_FrameBuffer.get()[pixelIdx + 3]
+			m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + R)],
+			m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + G)],
+			m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + B)],
+			m_FrameBuffer[static_cast<ptrdiff_t>(pixelIdx + A)]
 		);
 	}
 

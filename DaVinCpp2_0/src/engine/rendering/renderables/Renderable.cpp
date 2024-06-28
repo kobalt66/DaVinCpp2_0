@@ -4,7 +4,7 @@
 namespace davincpp
 {
 	Renderable::Renderable(glm::vec2 position, glm::vec4 color)
-		: m_Position(position), m_Color(color)
+		: Component(ComponentType::SURFACE), m_Position(position), m_Color(color)
 	{ }
 
 

@@ -1,14 +1,14 @@
 #pragma once
-#include <FrameBuffer.h>
+#include <gameobjects/components/Component.h>
 
 namespace davincpp
 {
-	class Renderable
+	class Renderable : public Component
 	{
 	public:
 		Renderable(glm::vec2 position, glm::vec4 color);
 
-		virtual void onRender(FrameBuffer& frameBuffer) const;
+		virtual void onRender(FrameBuffer& frameBuffer) const override;
 
 		virtual glm::vec2 getPosition();
 		virtual void setPosition(glm::vec2 position);

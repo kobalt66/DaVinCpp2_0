@@ -1,5 +1,5 @@
 #include "Shader.h"
-#include <FileSystem.h>
+#include <DaVinCppFileSystem.h>
 #include <DaVinCppExceptions.h>
 
 namespace davincpp
@@ -18,8 +18,8 @@ namespace davincpp
 	void Shader::loadShader(std::string_view vertexShaderPath, std::string_view fragmentShaderPath)
 	{
 		GLCall(m_ProgramID = glCreateProgram());
-		std::string vertexShaderCode = FileSystem::readFile(vertexShaderPath);
-		std::string fragmentShaderCode = FileSystem::readFile(fragmentShaderPath);
+		std::string vertexShaderCode = DaVinCppFileSystem::readFile(vertexShaderPath);
+		std::string fragmentShaderCode = DaVinCppFileSystem::readFile(fragmentShaderPath);
 
 		int vertexShaderID = compileShader(vertexShaderCode.c_str(), GL_VERTEX_SHADER);
 		int fragmentShaderID = compileShader(fragmentShaderCode.c_str(), GL_FRAGMENT_SHADER);

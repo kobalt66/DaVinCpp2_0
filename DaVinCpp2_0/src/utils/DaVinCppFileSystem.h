@@ -3,7 +3,7 @@
 
 namespace davincpp
 {
-	class FileSystem
+	class DaVinCppFileSystem
 	{
 	public:
 		static std::string readFile(std::string_view path);
