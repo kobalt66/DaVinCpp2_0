@@ -8,7 +8,7 @@ namespace davincpp
 	public:
 		Renderable(glm::vec2 position, glm::vec4 color);
 
-		virtual void onRender(FrameBuffer& frameBuffer) const override;
+		virtual void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 		virtual glm::vec2 getPosition();
 		virtual void setPosition(glm::vec2 position);

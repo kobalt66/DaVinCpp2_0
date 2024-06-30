@@ -14,7 +14,7 @@ namespace davincpp
 			bool centerAligned
 		);
 
-		void onRender(FrameBuffer& frameBuffer) const override;
+		void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 		void setScale(float width, float height);
 

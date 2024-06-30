@@ -7,7 +7,7 @@ namespace davincpp
 	{ }
 
 
-	void Circle::onRender(FrameBuffer& frameBuffer) const
+	void Circle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
 		if (m_Radius <= 0) {
 			return;

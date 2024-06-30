@@ -17,7 +17,7 @@ namespace davincpp
 	{ }
 
 
-	void Square::onRender(FrameBuffer& frameBuffer) const
+	void Square::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
 		glm::vec2 startPosition = m_Position;
 		glm::vec2 endPosition = startPosition + m_Scale;

@@ -75,7 +75,7 @@
     <ClCompile Include="src\engine\rendering\renderables\Square.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\rendering\RenderableObjectManager.cpp">
+    <ClCompile Include="src\engine\gameobjects\GameObjectManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\rendering\renderables\Triangle.cpp">
@@ -103,6 +103,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\gameobjects\GameObject.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\gameobjects\GameObjectStats.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1028,7 +1031,7 @@
     <ClInclude Include="src\engine\rendering\renderables\Square.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\rendering\RenderableObjectManager.h">
+    <ClInclude Include="src\engine\gameobjects\GameObjectManager.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\Color.h">
@@ -1071,6 +1074,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gameobjects\components\Component.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\gameobjects\GameObjectStats.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

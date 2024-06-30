@@ -13,7 +13,7 @@ namespace davincpp
 
 		static void flipTexturesH(bool flip);
 
-		void onLoad() override;
+		void onLoad(GameObjectStats& gameObjectStats) override;
 
 		glm::vec4&& getColorByUV(float x, float y) const;
 		glm::ivec2 getTextureSize() const;

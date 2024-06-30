@@ -8,7 +8,7 @@ namespace davincpp
 	public:
 		Circle(glm::vec2 position, float radius, glm::vec4 color);
 
-		void onRender(FrameBuffer& frameBuffer) const override;
+		void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 	private:
 		void drawLine(FrameBuffer& frameBuffer, int sx, int ex, int y) const;

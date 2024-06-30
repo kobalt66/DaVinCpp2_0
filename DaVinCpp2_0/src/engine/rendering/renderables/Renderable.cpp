@@ -8,7 +8,7 @@ namespace davincpp
 	{ }
 
 
-	void Renderable::onRender(FrameBuffer& frameBuffer) const
+	void Renderable::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
 		throw not_implemented(__LINE__, __FILE__);
 	}

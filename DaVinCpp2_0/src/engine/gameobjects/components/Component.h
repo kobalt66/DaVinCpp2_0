@@ -1,4 +1,5 @@
 #pragma once
+#include <gameobjects/GameObjectStats.h>
 #include <FrameBuffer.h>
 
 namespace davincpp
@@ -15,10 +16,10 @@ namespace davincpp
 	public:
 		Component(ComponentType uniqueType);
 
-		virtual void onLoad() { }
-		virtual void onRender(FrameBuffer& frameBuffer) const { }
-		virtual void onUpdate() { }
-		virtual void onShutdown() { }
+		virtual void onLoad(GameObjectStats& gameObjectStats) { }
+		virtual void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const { }
+		virtual void onUpdate(GameObjectStats& gameObjectStats) { }
+		virtual void onShutdown(GameObjectStats& gameObjectStats) { }
 
 		/// TODO:	Add virtual functions that allow the components to get properly rendered on the game engine's UI.
 		///			Every component has to be able to get rendered differently inside the engine's UI.

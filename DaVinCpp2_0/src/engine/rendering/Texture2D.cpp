@@ -18,7 +18,7 @@ namespace davincpp
 	}
 
 
-	void Texture2D::onLoad()
+	void Texture2D::onLoad(GameObjectStats& gameObjectStats)
 	{
 		if (!DaVinCppFileSystem::exists(m_FilePath)) {
 			throw davincpp_error(Console::fmtTxt("Failed to load texture asset: The texture file at '", m_FilePath, "' doesn't exist!"));

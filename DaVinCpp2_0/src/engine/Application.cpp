@@ -11,29 +11,39 @@ namespace davincpp
 	void Application::onLoad()
 	{
 		Console::log("Loading application...");
-		m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
-		m_Window->onSetup();
-		m_Window->showCursor(false);
-		m_Window->setVsync(false);
-		m_Window->showFps(true);
+		ASSERT_ENGINE_CALL({
+			m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
+			m_Window->onSetup();
+			m_Window->showCursor(false);
+			m_Window->setVsync(false);
+			m_Window->showFps(true);
+		}, "onLoad: creating window");
 
-		m_RenderableObjectManager = std::make_unique<RenderableObjectManager>();
+		ASSERT_ENGINE_CALL(m_GameObjectManager = std::make_unique<GameObjectManager>(), "onLoad: creating game object manager");
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Square>(glm::vec2(10, 50), GREEN, 10.0f, 10.0f, true)
-		);
+		GameObject* square = new GameObject("Square");
+		square->setComponent(new Square(glm::vec2(10, 50), GREEN, 10.0f, 10.0f, true));
+		m_GameObjectManager->registerGameObject(square);
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Triangle>(glm::vec2(80, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED)
-		);
+		GameObject* square2 = new GameObject("Square");
+		square2->setComponent(new Square(glm::vec2(20, 50), WHITE, 10.0f, 10.0f, true));
+		m_GameObjectManager->registerGameObject(square2);
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Line>(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE)
-		);
+		GameObject* square3 = new GameObject("Square");
+		square3->setComponent(new Square(glm::vec2(10, 59), glm::vec4(100.0f, 12.0f, 43.0f, 200.0f), 10.0f, 10.0f, true));
+		m_GameObjectManager->registerGameObject(square3);
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Circle>(glm::vec2(200, 100), 100.0f, GRAY)
-		);
+		GameObject* triangle = new GameObject("Triangle");
+		triangle->setComponent(new Triangle(glm::vec2(80, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED));
+		m_GameObjectManager->registerGameObject(triangle);
+
+		GameObject* line = new GameObject("Line");
+		line->setComponent(new Line(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE));
+		m_GameObjectManager->registerGameObject(line);
+
+		GameObject* circle = new GameObject("Circle");
+		circle->setComponent(new Circle(glm::vec2(200, 100), 100.0f, GRAY));
+		m_GameObjectManager->registerGameObject(circle);
 	}
 	
 	void Application::onClear()
@@ -43,7 +53,7 @@ namespace davincpp
 
 	void Application::onRender()
 	{
-		ASSERT_ENGINE_CALL(m_RenderableObjectManager->onRender(m_Window->getFrameBuffer()), "onRender: rendering objects");
+		ASSERT_ENGINE_CALL(m_GameObjectManager->onRender(m_Window->getFrameBuffer()), "onRender: rendering objects");
 		ASSERT_ENGINE_CALL(m_Window->onRender(), "onRender: rendering window");
 	}
 
@@ -56,6 +66,7 @@ namespace davincpp
 	{
 		Console::wrn("Shutting application down...");
 		ASSERT_ENGINE_CALL(m_Window->onShutdown(), "onShutdown: shutdown window");
+		ASSERT_ENGINE_CALL(m_GameObjectManager->onShutdown(), "onShutdown: sutdown game object manager");
 	}
 
 	bool Application::shouldShutdown()

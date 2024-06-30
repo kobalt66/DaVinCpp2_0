@@ -14,7 +14,7 @@ namespace davincpp
 	{ }
 
 
-	void Triangle::onRender(FrameBuffer& frameBuffer) const
+	void Triangle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
         // Source: https://web.archive.org/web/20050408192410/http://sw-shader.sourceforge.net/rasterizer.html
 

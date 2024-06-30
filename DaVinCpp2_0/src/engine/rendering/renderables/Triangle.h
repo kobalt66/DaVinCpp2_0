@@ -13,7 +13,7 @@ namespace davincpp
 			glm::vec4 color
 		);
 		
-		void onRender(FrameBuffer& frameBuffer) const override;
+		void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 	private:
 		glm::vec2 m_Position2;

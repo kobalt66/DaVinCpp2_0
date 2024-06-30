@@ -156,7 +156,8 @@
     <ClCompile Include="src\engine\Application.cpp" />
     <ClCompile Include="src\engine\gameobjects\components\Component.cpp" />
     <ClCompile Include="src\engine\gameobjects\GameObject.cpp" />
-    <ClCompile Include="src\engine\rendering\RenderableObjectManager.cpp" />
+    <ClCompile Include="src\engine\gameobjects\GameObjectStats.cpp" />
+    <ClCompile Include="src\engine\gameobjects\GameObjectManager.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Circle.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Line.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Renderable.cpp" />
@@ -474,7 +475,8 @@
     <ClInclude Include="src\engine\Application.h" />
     <ClInclude Include="src\engine\gameobjects\components\Component.h" />
     <ClInclude Include="src\engine\gameobjects\GameObject.h" />
-    <ClInclude Include="src\engine\rendering\RenderableObjectManager.h" />
+    <ClInclude Include="src\engine\gameobjects\GameObjectStats.h" />
+    <ClInclude Include="src\engine\gameobjects\GameObjectManager.h" />
     <ClInclude Include="src\engine\rendering\renderables\Circle.h" />
     <ClInclude Include="src\engine\rendering\renderables\Line.h" />
     <ClInclude Include="src\engine\rendering\renderables\Renderable.h" />
