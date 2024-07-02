@@ -7,6 +7,6 @@ namespace davincpp
 	class TextureMapper
 	{
 	public:
-		static glm::vec4&& mapTextureToSurface(const Texture2D& texture, int x, int y, float width, float height);
+		static glm::vec4&& mapTextureToSurface(std::shared_ptr<Texture2D> texture, int x, int y, float width, float height);
 	};
 }

@@ -1497,4 +1497,9 @@
   <ItemGroup>
     <Library Include="libraries\glfw3.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\data\Cursor.png">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

@@ -9,7 +9,9 @@ namespace davincpp
 	public:
 		GameObjectManager() = default;
 
+		void onLoad();
 		void onRender(FrameBuffer& frameBuffer);
+		void onUpdate();
 		void onShutdown();
 
 		void registerGameObject(GameObject* gameObject);

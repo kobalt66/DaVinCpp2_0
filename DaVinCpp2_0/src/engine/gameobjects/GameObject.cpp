@@ -1,10 +1,11 @@
 #include "GameObject.h"
 #include <DaVinCppExceptions.h>
+#include <gameobjects/GameObjectStats.h>
 
 namespace davincpp
 {
 	GameObject::GameObject(std::string objectName)
-		: m_Stats(objectName.data())
+		: m_Stats(this, objectName.data())
 	{ }
 
 
@@ -72,5 +73,15 @@ namespace davincpp
 	std::string GameObject::getName() const
 	{
 		return m_Stats.m_ObjectName;
+	}
+
+	std::weak_ptr<Component> GameObject::getRenderingSurface() const
+	{
+		return m_RenderingSurface;
+	}
+
+	std::shared_ptr<Texture2D> GameObject::getTexture() const
+	{
+		return std::dynamic_pointer_cast<Texture2D>(m_Texture.lock());
 	}
 }

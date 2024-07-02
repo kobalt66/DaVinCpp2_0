@@ -7,8 +7,8 @@
 
 namespace davincpp
 {
-	Texture2D::Texture2D(std::string_view filePath)
-		: Component(ComponentType::TEXTURE), m_FilePath(filePath.data())
+	Texture2D::Texture2D(std::string_view filePath, bool wrapToSurface)
+		: Component(ComponentType::TEXTURE), m_FilePath(filePath.data()), m_WrapToSurface(wrapToSurface)
 	{ }
 
 
@@ -54,7 +54,12 @@ namespace davincpp
 
 	glm::ivec2 Texture2D::getTextureSize() const
 	{
-		return glm::uvec2(m_Width, m_Height);
+		return glm::ivec2(m_Width, m_Height);
+	}
+
+	bool Texture2D::wrapToSurface() const
+	{
+		return m_WrapToSurface;
 	}
 
 

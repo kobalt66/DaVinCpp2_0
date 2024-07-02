@@ -1,14 +1,14 @@
 #pragma once
 #include <rendering/Texture2D.h>
-#include <gameobjects/GameObjectStats.h>
-#include <gameobjects/components/Component.h>
 
 namespace davincpp
 {
+	struct GameObjectStats;
+
 	class GameObject
 	{
 	public:
-		GameObject(std::string objectName);
+		GameObject(std::string objectName = "game object");
 
 		void setComponent(Component* component);
 		std::shared_ptr<Component> getComponent(ComponentType uniqueType) const;
@@ -19,6 +19,8 @@ namespace davincpp
 
 		void setName(const char* name);
 		std::string getName() const;
+		std::weak_ptr<Component> getRenderingSurface() const;
+		std::shared_ptr<Texture2D> getTexture() const;
 
 		/// TODO:	Add functions, like the once in the component class, that allow the gamobject to be correctly
 		///			rendered/represented in the engine's UI.

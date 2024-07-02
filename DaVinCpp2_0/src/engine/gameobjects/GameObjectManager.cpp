@@ -3,10 +3,24 @@
 
 namespace davincpp
 {
+	void GameObjectManager::onLoad()
+	{
+		for (const std::unique_ptr<GameObject>& gameObject : m_GameObjects) {
+			gameObject->onLoad();
+		}
+	}
+
 	void GameObjectManager::onRender(FrameBuffer& frameBuffer)
 	{
 		for (const std::unique_ptr<GameObject>& gameObject : m_GameObjects) {
 			gameObject->onRender(frameBuffer);
+		}
+	}
+
+	void GameObjectManager::onUpdate()
+	{
+		for (const std::unique_ptr<GameObject>& gameObject : m_GameObjects) {
+			gameObject->onUpdate();
 		}
 	}
 

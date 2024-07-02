@@ -19,6 +19,9 @@ namespace davincpp
 		void setScale(float width, float height);
 
 	private:
+		void onRenderWithTexture(std::shared_ptr<Texture2D> texture, const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
+
+	private:
 		float m_Width, m_Height;
 		glm::vec2 m_Scale;
 		bool m_CenterAligned;

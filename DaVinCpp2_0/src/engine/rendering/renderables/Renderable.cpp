@@ -8,6 +8,11 @@ namespace davincpp
 	{ }
 
 
+	void Renderable::onLoad(GameObjectStats& gameObjectStats)
+	{
+		gameObjectStats.m_Position = &m_Position;
+	}
+
 	void Renderable::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
 		throw not_implemented(__LINE__, __FILE__);
