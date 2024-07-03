@@ -1501,5 +1501,8 @@
     <Image Include="src\data\Cursor.png">
       <Filter>Ressourcendateien</Filter>
     </Image>
+    <Image Include="src\data\textures\Cursor.png">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
   </ItemGroup>
 </Project>

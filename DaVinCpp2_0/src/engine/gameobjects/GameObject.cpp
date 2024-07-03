@@ -75,13 +75,13 @@ namespace davincpp
 		return m_Stats.m_ObjectName;
 	}
 
-	std::weak_ptr<Component> GameObject::getRenderingSurface() const
-	{
-		return m_RenderingSurface;
-	}
-
 	std::shared_ptr<Texture2D> GameObject::getTexture() const
 	{
 		return std::dynamic_pointer_cast<Texture2D>(m_Texture.lock());
+	}
+
+	GameObjectStats& GameObject::getStats()
+	{
+		return m_Stats;
 	}
 }

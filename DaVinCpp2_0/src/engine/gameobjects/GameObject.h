@@ -19,8 +19,14 @@ namespace davincpp
 
 		void setName(const char* name);
 		std::string getName() const;
-		std::weak_ptr<Component> getRenderingSurface() const;
+		
+		template<class T> std::shared_ptr<T> getRenderingSurface() const
+		{
+			return std::dynamic_pointer_cast<T>(m_RenderingSurface.lock());
+		}
+
 		std::shared_ptr<Texture2D> getTexture() const;
+		GameObjectStats& getStats();
 
 		/// TODO:	Add functions, like the once in the component class, that allow the gamobject to be correctly
 		///			rendered/represented in the engine's UI.

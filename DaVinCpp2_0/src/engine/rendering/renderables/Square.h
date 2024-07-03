@@ -17,6 +17,7 @@ namespace davincpp
 		void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 		void setScale(float width, float height);
+		glm::vec2 getScale() const;
 
 	private:
 		void onRenderWithTexture(std::shared_ptr<Texture2D> texture, const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;

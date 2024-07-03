@@ -640,6 +640,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\data\Cursor.png" />
+    <Image Include="src\data\textures\Cursor.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

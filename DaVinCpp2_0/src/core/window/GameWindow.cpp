@@ -1,11 +1,15 @@
 #include "GameWindow.h"
+#include <rendering/renderables/Square.h>
+#include <Color.h>
 
 namespace davincpp
 {
 	GameWindow::GameWindow()
 		: m_Width(0),
 		m_Height(0),
-		m_FrameBuffer(4, 4, 4)
+		m_FrameBuffer(4, 4, 4),
+		m_CursorColor(CYAN),
+		m_Cursor(new GameObject("Cursor"))
 	{
 		m_Vertices.insert(m_Vertices.begin(), {
 			-1.0f, -1.0f, 0.0f, 0.0f,
@@ -28,6 +32,10 @@ namespace davincpp
 		
 		m_Mesh = Mesh<float>();
 		m_Mesh.createMesh(m_Vertices, m_Indices, m_WindowShader);
+
+		m_Cursor->setComponent(new Square(glm::vec2(0), m_CursorColor, 1.0f, 1.0f, false));
+		m_Cursor->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\textures\\Cursor.png", false));
+		m_Cursor->onLoad();
 	}
 
 	void GameWindow::onClear()
@@ -37,7 +45,7 @@ namespace davincpp
 	
 	void GameWindow::onRender()
 	{
-		m_FrameBuffer.setPixel(m_MousePosition.x, m_MousePosition.y, glm::vec4(58, 252, 161, 255));
+		m_Cursor->onRender(m_FrameBuffer);
 
 		m_WindowShader.bind();
 		m_WindowShader.setUniform1i("windowBuffer", 0);
@@ -52,6 +60,11 @@ namespace davincpp
 		m_WindowShader.unbind();
 		m_FrameTexture.unbind();
 		m_Mesh.unbind();
+	}
+
+	void GameWindow::onUpdate()
+	{
+		updateCursorPosition();
 	}
 	
 	void GameWindow::onResize(uint32_t windowSizeX, uint32_t windowSizeY)
@@ -83,5 +96,31 @@ namespace davincpp
 	FrameBuffer& GameWindow::getFrameBuffer()
 	{
 		return m_FrameBuffer;
+	}
+
+	std::shared_ptr<GameObject> GameWindow::getCursor()
+	{
+		return m_Cursor;
+	}
+
+
+	void GameWindow::updateCursorPosition()
+	{
+		int cursorTextureOffsetY = 0;
+
+		if (auto texture = m_Cursor->getTexture()) {
+			cursorTextureOffsetY = static_cast<int>(texture->getTextureSize().y) - 1;
+
+			if (texture->wrapToSurface()) {
+				if (auto square = m_Cursor->getRenderingSurface<Square>()) {
+					cursorTextureOffsetY = static_cast<int>(square->getScale().x) - 1;
+				}
+			}
+		}
+		else if (auto square = m_Cursor->getRenderingSurface<Square>()) {
+			cursorTextureOffsetY = static_cast<int>(square->getScale().x) - 1;
+		}
+
+		*m_Cursor->getStats().m_Position = m_MousePosition - glm::ivec2(0, cursorTextureOffsetY);
 	}
 }

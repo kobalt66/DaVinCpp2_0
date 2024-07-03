@@ -60,6 +60,7 @@ namespace davincpp
 		m_FpsCount++;
 
 		EventHandler::onUpdate();
+		m_GameWindow.onUpdate();
 	}
 	
 	void Window::onNewFrame()

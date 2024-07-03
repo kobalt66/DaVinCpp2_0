@@ -23,8 +23,8 @@ namespace davincpp
 		ASSERT_ENGINE_CALL(m_GameObjectManager = std::make_unique<GameObjectManager>(), "onLoad: creating game object manager");
 
 		GameObject* square = new GameObject("Square");
-		square->setComponent(new Square(glm::vec2(10), GREEN, 60.0f, 30.0f, false));
-		square->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		square->setComponent(new Square(glm::vec2(10), GREEN, 6.0f, 6.0f, false));
+		square->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", false));
 		m_GameObjectManager->registerGameObject(square);
 
 		//GameObject* square2 = new GameObject("Square");

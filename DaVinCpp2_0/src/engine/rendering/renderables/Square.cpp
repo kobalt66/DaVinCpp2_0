@@ -51,12 +51,17 @@ namespace davincpp
 		m_Scale = glm::vec2(width, height);
 	}
 
+	glm::vec2 Square::getScale() const
+	{
+		return m_Scale;
+	}
+
 
 	void Square::onRenderWithTexture(std::shared_ptr<Texture2D> texture, const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
 		glm::vec2 surfaceScale = texture->wrapToSurface() ? m_Scale : static_cast<glm::vec2>(texture->getTextureSize());
 		glm::vec2 startPosition = m_Position;
-		glm::vec2 endPosition = startPosition + surfaceScale - glm::vec2(1);
+		glm::vec2 endPosition = startPosition + surfaceScale;
 
 		if (m_CenterAligned) {
 			startPosition -= surfaceScale / 2.0f;
@@ -71,7 +76,7 @@ namespace davincpp
 				int textureSpaceX = x - static_cast<int>(m_Position.x);
 				int textureSpaceY = y - static_cast<int>(m_Position.y);
 
-				frameBuffer.setPixel(x, y, TextureMapper::mapTextureToSurface(texture, textureSpaceX, textureSpaceY, surfaceScale.x, surfaceScale.y));
+				frameBuffer.setPixel(x, y, TextureMapper::mapTextureToSurface(texture, textureSpaceX, textureSpaceY, surfaceScale.x + 1, surfaceScale.y + 1));
 			}
 		}
 	}
