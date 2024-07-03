@@ -93,9 +93,6 @@
     <ClCompile Include="src\utils\DaVinCppFileSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\rendering\TextureMapper.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="libraries\stb\stb_image.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -1062,9 +1059,6 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\DaVinCppFileSystem.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\rendering\TextureMapper.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\DaVinCppConstants.h">

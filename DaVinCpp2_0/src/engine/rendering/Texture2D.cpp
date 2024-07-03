@@ -28,10 +28,10 @@ namespace davincpp
 	}
 
 
-	glm::vec4&& Texture2D::getColorByUV(float x, float y) const
+	glm::vec4 Texture2D::getColorByUV(int pixelX, int pixelY, float width, float height) const
 	{
-		int u = static_cast<int>(std::floorf(x * m_Width)) % m_Width;
-		int v = static_cast<int>(std::floorf(y * m_Height)) % m_Height;
+		int u = static_cast<int>(std::floorf((pixelX / (width)) * m_Width)) % m_Width;
+		int v = static_cast<int>(std::floorf((pixelY / (height)) * m_Height)) % m_Height;
 
 		if (!validateUVCoordinates(u, v)) {
 			return glm::vec4(

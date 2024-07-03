@@ -15,7 +15,7 @@ namespace davincpp
 
 		void onLoad(GameObjectStats& gameObjectStats) override;
 
-		glm::vec4&& getColorByUV(float x, float y) const;
+		glm::vec4 getColorByUV(int pixelX, int pixelY, float width, float height) const;
 		glm::ivec2 getTextureSize() const;
 		bool wrapToSurface() const;
 

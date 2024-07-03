@@ -28,7 +28,7 @@ namespace davincpp
 		m_GameObjectManager->registerGameObject(square);
 
 		//GameObject* square2 = new GameObject("Square");
-		//square2->setComponent(new Square(glm::vec2(20, 50), WHITE, 10.0f, 10.0f, true));
+		//square2->setComponent(new Square(glm::vec2(200, 50), WHITE, 10.0f, 10.0f, true));
 		//m_GameObjectManager->registerGameObject(square2);
 		//
 		//GameObject* square3 = new GameObject("Square");
@@ -36,8 +36,20 @@ namespace davincpp
 		//m_GameObjectManager->registerGameObject(square3);
 		//
 		//GameObject* triangle = new GameObject("Triangle");
-		//triangle->setComponent(new Triangle(glm::vec2(80, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED));
+		//triangle->setComponent(new Triangle(glm::vec2(200, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED));
+		//triangle->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
 		//m_GameObjectManager->registerGameObject(triangle);
+
+		GameObject* triangle2 = new GameObject("Triangle");
+		triangle2->setComponent(new Triangle(glm::vec2(200, 50), glm::vec2(200, 100), glm::vec2(300, 50), RED));
+		triangle2->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		m_GameObjectManager->registerGameObject(triangle2);
+
+		GameObject* triangle3 = new GameObject("Triangle");
+		triangle3->setComponent(new Triangle(glm::vec2(200, 100), glm::vec2(250, 100), glm::vec2(350, 50), RED));
+		triangle3->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		m_GameObjectManager->registerGameObject(triangle3);
+
 		//
 		//GameObject* line = new GameObject("Line");
 		//line->setComponent(new Line(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE));

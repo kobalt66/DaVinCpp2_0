@@ -16,7 +16,7 @@ namespace davincpp
 		virtual void setPosition(glm::vec2 position);
 
 	protected:
-		virtual void onRenderWithTexture(std::shared_ptr<Texture2D> texture, const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const { }
+		glm::vec4 mapTextureByUVCoords(std::shared_ptr<Texture2D> texture, int pixelX, int pixelY, float width, float height) const;
 			 
 	protected:
 		glm::vec2 m_Position;

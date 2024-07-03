@@ -16,6 +16,7 @@ namespace davincpp
 		void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 	private:
+		glm::vec2 m_Position1;
 		glm::vec2 m_Position2;
 		glm::vec2 m_Position3;
 	};

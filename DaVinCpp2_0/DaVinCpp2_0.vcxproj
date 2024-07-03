@@ -164,7 +164,6 @@
     <ClCompile Include="src\engine\rendering\renderables\Square.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Triangle.cpp" />
     <ClCompile Include="src\engine\rendering\Texture2D.cpp" />
-    <ClCompile Include="src\engine\rendering\TextureMapper.cpp" />
     <ClCompile Include="src\utils\DaVinCppFileSystem.cpp" />
     <ClCompile Include="src\utils\OpenGLUtils.cpp" />
   </ItemGroup>
@@ -483,7 +482,6 @@
     <ClInclude Include="src\engine\rendering\renderables\Square.h" />
     <ClInclude Include="src\engine\rendering\renderables\Triangle.h" />
     <ClInclude Include="src\engine\rendering\Texture2D.h" />
-    <ClInclude Include="src\engine\rendering\TextureMapper.h" />
     <ClInclude Include="src\utils\Color.h" />
     <ClInclude Include="src\utils\Console.h" />
     <ClInclude Include="src\utils\DaVinCppConstants.h" />
