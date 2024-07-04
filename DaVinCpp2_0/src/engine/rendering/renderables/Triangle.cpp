@@ -1,28 +1,42 @@
 #include "Triangle.h"
 
+///
+/// Source for rendering code: 
+/// https://web.archive.org/web/20050408192410/http://sw-shader.sourceforge.net/rasterizer.html
+///
+
 namespace davincpp
 {
 	Triangle::Triangle(
-        glm::vec2 basePosition, 
+        glm::vec2 position1, 
         glm::vec2 position2, 
         glm::vec2 position3, 
         glm::vec4 color
     )
-		: Renderable(basePosition, color),
+		: Renderable(glm::vec2(
+                std::min(position1.x, std::min(position2.x, position3.x)),
+                std::min(position1.y, std::min(position2.y, position3.y))
+            ), color),
+        m_Position1(position1),
 		m_Position2(position2),
 		m_Position3(position3)
 	{ }
 
 
-	void Triangle::onRender(FrameBuffer& frameBuffer) const
+	void Triangle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
-        // Source: https://web.archive.org/web/20050408192410/http://sw-shader.sourceforge.net/rasterizer.html
+        glm::vec2 surfaceScale = glm::vec2(
+            std::max(m_Position1.x - m_Position.x, std::max(m_Position2.x - m_Position.x, m_Position3.x - m_Position.x)),
+            std::max(m_Position1.y - m_Position.y, std::max(m_Position2.y - m_Position.y, m_Position3.y - m_Position.y))
+        );
 
-        const int Y1 = (int)glm::round(16.0f * m_Position.y);
+        std::shared_ptr<Texture2D> texture = gameObjectStats.m_ObjectPtr->getTexture();
+
+        const int Y1 = (int)glm::round(16.0f * m_Position1.y);
         const int Y2 = (int)glm::round(16.0f * m_Position2.y);
         const int Y3 = (int)glm::round(16.0f * m_Position3.y);
 
-        const int X1 = (int)glm::round(16.0f * m_Position.x);
+        const int X1 = (int)glm::round(16.0f * m_Position1.x);
         const int X2 = (int)glm::round(16.0f * m_Position2.x);
         const int X3 = (int)glm::round(16.0f * m_Position3.x);
 
@@ -95,7 +109,7 @@ namespace davincpp
                     {
                         for (int ix = x; ix < x + q; ix++)
                         {
-                            frameBuffer.setPixel(ix, y + iy, m_Color);
+                            frameBuffer.setPixel(ix, y + iy, texture ? mapTextureByUVCoords(texture, ix, y + iy, surfaceScale.x, surfaceScale.y) : m_Color);
                         }
                     }
                 }
@@ -115,7 +129,7 @@ namespace davincpp
                         {
                             if (CX1 > 0 && CX2 > 0 && CX3 > 0)
                             {
-                                frameBuffer.setPixel(ix, iy, m_Color);   // Blue
+                                frameBuffer.setPixel(ix, iy, texture ? mapTextureByUVCoords(texture, ix, iy, surfaceScale.x, surfaceScale.y) : m_Color);
                             }
 
                             CX1 -= FDY12;

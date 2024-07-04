@@ -1,6 +1,7 @@
 #include "Window.h"
 #include <DaVinCppExceptions.h>
 #include <events/EventHandler.h>
+#include <rendering/Texture2D.h>
 #include <OpenGLUtils.h>
 
 namespace davincpp
@@ -59,6 +60,7 @@ namespace davincpp
 		m_FpsCount++;
 
 		EventHandler::onUpdate();
+		m_GameWindow.onUpdate();
 	}
 	
 	void Window::onNewFrame()
@@ -117,6 +119,11 @@ namespace davincpp
 		glfwSetWindowUserPointer(m_WindowPtr, reinterpret_cast<void*>(this));
 		glfwSetWindowSizeCallback(m_WindowPtr, Window::onResize);
 		glfwSetCursorPosCallback(m_WindowPtr, Window::onMousePosition);
+	}
+
+	void Window::flipTexturesH(bool flip) 
+	{
+		Texture2D::flipTexturesH(flip);
 	}
 
 	void Window::defineEvents()

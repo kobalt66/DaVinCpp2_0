@@ -14,7 +14,7 @@ namespace davincpp
 	{ }
 
 
-	void Line::onRender(FrameBuffer& frameBuffer) const
+	void Line::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
 		glm::ivec2 pos1 = (glm::ivec2)m_Position;
 		glm::ivec2 pos2 = (glm::ivec2)(m_Position + glm::normalize(m_Direction) * m_Length);

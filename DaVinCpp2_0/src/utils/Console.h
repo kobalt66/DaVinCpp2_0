@@ -1,6 +1,6 @@
 #pragma once
-
-#include <xstring>
+#include <string>
+#include <sstream>
 #include <iostream>
 
 namespace davincpp 
@@ -52,7 +52,16 @@ namespace davincpp
 			newline();
 		}
 
-		template<class... Args> static const char* fmtRaw(Args... args, const char* color = GRAY)
+		template<class... Args> static const std::string fmtTxt(Args... args)
+		{
+			std::stringstream output;
+			
+			(output << ... << args) << "\n";
+
+			return output.str();
+		}
+
+		template<class... Args> static std::string fmtRaw(const char* color, Args... args)
 		{
 			std::stringstream output;
 
@@ -64,7 +73,7 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-		template<class... Args> static const char* fmtLog(Args... args)
+		template<class... Args> static std::string fmtLog(Args... args)
 		{
 			std::stringstream output;
 
@@ -77,7 +86,7 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-		template<class... Args> static const char* fmtErr(Args... args)
+		template<class... Args> static std::string fmtErr(Args... args)
 		{
 			std::stringstream output;
 
@@ -90,7 +99,7 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-		template<class... Args> static const char* fmtOpenglErr(Args... args)
+		template<class... Args> static std::string fmtOpenglErr(Args... args)
 		{
 			std::stringstream output;
 
@@ -103,7 +112,7 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-		template<class... Args> static const char* fmtWrn(Args... args)
+		template<class... Args> static std::string fmtWrn(Args... args)
 		{
 			std::stringstream output;
 

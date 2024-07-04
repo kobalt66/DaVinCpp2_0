@@ -29,6 +29,7 @@ namespace davincpp
 		void updateViewport();
 		void setOpenGLSettings();
 		void setOpenGLCallbacks();
+		void flipTexturesH(bool flip);
 		void defineEvents();
 
 		glm::ivec2 getFrameSize() const;

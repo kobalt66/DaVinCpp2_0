@@ -39,4 +39,10 @@ namespace davincpp
 	public:
 		explicit not_implemented(int line, const char* file) : std::runtime_error(std::format("(file: {}, line: {}) function is not implemented!", file, line).c_str()) {}
 	};
+
+	class davincpp_error : public std::runtime_error
+	{
+	public:
+		explicit davincpp_error(std::string_view message) : std::runtime_error(message.data()) { }
+	};
 }

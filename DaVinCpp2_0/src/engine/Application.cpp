@@ -1,5 +1,5 @@
 #include "Application.h"
-#include <string>
+#include <DaVinCppMacros.h>
 #include <rendering/renderables/Square.h>
 #include <rendering/renderables/Triangle.h>
 #include <rendering/renderables/Line.h>
@@ -11,51 +11,79 @@ namespace davincpp
 	void Application::onLoad()
 	{
 		Console::log("Loading application...");
-		m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
-		m_Window->onSetup();
-		m_Window->showCursor(false);
-		m_Window->setVsync(false);
-		m_Window->showFps(true);
+		ASSERT_ENGINE_CALL({
+			m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
+			m_Window->onSetup();
+			m_Window->showCursor(false);
+			m_Window->setVsync(false);
+			m_Window->showFps(true);
+			m_Window->flipTexturesH(true);
+		}, "onLoad: creating window");
 
-		m_RenderableObjectManager = std::make_unique<RenderableObjectManager>();
+		ASSERT_ENGINE_CALL(m_GameObjectManager = std::make_unique<GameObjectManager>(), "onLoad: creating game object manager");
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Square>(glm::vec2(10, 50), GREEN, 10, 10, true)
-		);
+		GameObject* square = new GameObject("Square");
+		square->setComponent(new Square(glm::vec2(10), GREEN, 6.0f, 6.0f, false));
+		square->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", false));
+		m_GameObjectManager->registerGameObject(square);
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Triangle>(glm::vec2(80, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED)
-		);
+		//GameObject* square2 = new GameObject("Square");
+		//square2->setComponent(new Square(glm::vec2(200, 50), WHITE, 10.0f, 10.0f, true));
+		//m_GameObjectManager->registerGameObject(square2);
+		//
+		//GameObject* square3 = new GameObject("Square");
+		//square3->setComponent(new Square(glm::vec2(10, 59), glm::vec4(100.0f, 12.0f, 43.0f, 200.0f), 10.0f, 10.0f, true));
+		//m_GameObjectManager->registerGameObject(square3);
+		//
+		//GameObject* triangle = new GameObject("Triangle");
+		//triangle->setComponent(new Triangle(glm::vec2(200, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED));
+		//triangle->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		//m_GameObjectManager->registerGameObject(triangle);
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Line>(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE)
-		);
+		GameObject* triangle2 = new GameObject("Triangle");
+		triangle2->setComponent(new Triangle(glm::vec2(200, 50), glm::vec2(200, 100), glm::vec2(300, 50), RED));
+		triangle2->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		m_GameObjectManager->registerGameObject(triangle2);
 
-		m_RenderableObjectManager->registerRenderableObject(
-			std::make_unique<Circle>(glm::vec2(200, 100), 100.0f, GRAY)
-		);
+		GameObject* triangle3 = new GameObject("Triangle");
+		triangle3->setComponent(new Triangle(glm::vec2(200, 100), glm::vec2(250, 100), glm::vec2(350, 50), RED));
+		triangle3->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		m_GameObjectManager->registerGameObject(triangle3);
+
+		//GameObject* line = new GameObject("Line");
+		//line->setComponent(new Line(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE));
+		//m_GameObjectManager->registerGameObject(line);
+		//
+		GameObject* circle = new GameObject("Circle");
+		circle->setComponent(new Circle(glm::vec2(100), 24.0f, GRAY, true));
+		circle->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		m_GameObjectManager->registerGameObject(circle);
+
+		ASSERT_ENGINE_CALL(m_GameObjectManager->onLoad(), "onLoad: loading game objects");
 	}
 	
 	void Application::onClear()
 	{
-		m_Window->onNewFrame();
+		ASSERT_ENGINE_CALL(m_Window->onNewFrame(), "onClear: create new frame");
 	}
 
 	void Application::onRender()
 	{
-		m_RenderableObjectManager->onRender(m_Window->getFrameBuffer());
-		m_Window->onRender();
+		ASSERT_ENGINE_CALL(m_GameObjectManager->onRender(m_Window->getFrameBuffer()), "onRender: rendering game objects");
+		ASSERT_ENGINE_CALL(m_Window->onRender(), "onRender: rendering window");
 	}
 
 	void Application::onUpdate()
 	{
-		m_Window->onUpdate();
+		ASSERT_ENGINE_CALL(m_GameObjectManager->onUpdate(), "onUpdate: updating game objects");
+		ASSERT_ENGINE_CALL(m_Window->onUpdate(), "onUpdate: update window");
 	}
 
 	void Application::onShutdown()
 	{
 		Console::wrn("Shutting application down...");
-		m_Window->onShutdown();
+		ASSERT_ENGINE_CALL(m_GameObjectManager->onShutdown(), "onShutdown: sutdown game object manager");
+		ASSERT_ENGINE_CALL(m_Window->onShutdown(), "onShutdown: shutdown window");
 	}
 
 	bool Application::shouldShutdown()

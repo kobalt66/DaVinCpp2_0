@@ -13,7 +13,7 @@ namespace davincpp
 			glm::vec4 color
 		);
 
-		void onRender(FrameBuffer& frameBuffer) const override;
+		void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
 		void setDirection(glm::vec2 direction);
 		void setLength(float length);
