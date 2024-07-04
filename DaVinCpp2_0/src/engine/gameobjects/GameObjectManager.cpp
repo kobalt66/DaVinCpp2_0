@@ -5,28 +5,27 @@ namespace davincpp
 {
 	void GameObjectManager::onLoad()
 	{
-		for (const std::unique_ptr<GameObject>& gameObject : m_GameObjects) {
-			gameObject->onLoad();
+		for (const std::pair<std::string, std::shared_ptr<GameObject>>& gameObjectEntry : m_GameObjects) {
+			gameObjectEntry.second->onLoad();
 		}
 	}
 
 	void GameObjectManager::onRender(FrameBuffer& frameBuffer)
 	{
-		for (const std::unique_ptr<GameObject>& gameObject : m_GameObjects) {
-			gameObject->onRender(frameBuffer);
+		for (const std::pair<std::string, std::shared_ptr<GameObject>>& gameObjectEntry : m_GameObjects) {
+			gameObjectEntry.second->onRender(frameBuffer);
 		}
 	}
 
 	void GameObjectManager::onUpdate()
 	{
-		for (const std::unique_ptr<GameObject>& gameObject : m_GameObjects) {
-			gameObject->onUpdate();
+		for (const std::pair<std::string, std::shared_ptr<GameObject>>& gameObjectEntry : m_GameObjects) {
+			gameObjectEntry.second->onUpdate();
 		}
 	}
 
 	void GameObjectManager::onShutdown()
 	{
-		m_GameObjectNames.clear();
 		m_GameObjects.clear();
 	}
 
@@ -34,8 +33,16 @@ namespace davincpp
 	void GameObjectManager::registerGameObject(GameObject* gameObject)
 	{
 		validateGameObjectNaming(gameObject);
-		m_GameObjectNames.emplace_back(gameObject->getName());
-		m_GameObjects.emplace_back(gameObject);
+		m_GameObjects[gameObject->getName()]  = std::shared_ptr<GameObject>(gameObject);
+	}
+
+	std::shared_ptr<GameObject> GameObjectManager::getGameObject(std::string_view objectName)
+	{
+		if (m_GameObjects.find(objectName.data()) == m_GameObjects.end()) {
+			return nullptr;
+		}
+
+		return m_GameObjects.at(objectName.data());
 	}
 
 
@@ -45,7 +52,7 @@ namespace davincpp
 		std::string originalName = gameObject->getName();
 		std::string finalName = originalName;
 
-		while (std::find(m_GameObjectNames.begin(), m_GameObjectNames.end(), finalName) != m_GameObjectNames.end()) {
+		while (m_GameObjects.find(finalName) != m_GameObjects.end()) {
 			finalName = std::format("{} ({})", originalName, ++duplicateCount);
 		}
 

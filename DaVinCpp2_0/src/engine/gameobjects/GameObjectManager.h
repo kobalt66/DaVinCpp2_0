@@ -1,6 +1,6 @@
 #pragma once
 #include <gameobjects/GameObject.h>
-#include <vector>
+#include <unordered_map>
 
 namespace davincpp
 {
@@ -15,12 +15,12 @@ namespace davincpp
 		void onShutdown();
 
 		void registerGameObject(GameObject* gameObject);
+		std::shared_ptr<GameObject> getGameObject(std::string_view objectName);
 
 	private:
 		void validateGameObjectNaming(GameObject* gameObject);
 
 	private:
-		std::vector<std::string> m_GameObjectNames;
-		std::vector<std::unique_ptr<GameObject>> m_GameObjects;
+		std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	};
 }

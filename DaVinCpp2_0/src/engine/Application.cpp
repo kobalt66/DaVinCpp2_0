@@ -50,14 +50,14 @@ namespace davincpp
 		triangle3->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
 		m_GameObjectManager->registerGameObject(triangle3);
 
-		//
 		//GameObject* line = new GameObject("Line");
 		//line->setComponent(new Line(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE));
 		//m_GameObjectManager->registerGameObject(line);
 		//
-		//GameObject* circle = new GameObject("Circle");
-		//circle->setComponent(new Circle(glm::vec2(200, 100), 100.0f, GRAY));
-		//m_GameObjectManager->registerGameObject(circle);
+		GameObject* circle = new GameObject("Circle");
+		circle->setComponent(new Circle(glm::vec2(100), 24.0f, GRAY, true));
+		circle->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		m_GameObjectManager->registerGameObject(circle);
 
 		ASSERT_ENGINE_CALL(m_GameObjectManager->onLoad(), "onLoad: loading game objects");
 	}
