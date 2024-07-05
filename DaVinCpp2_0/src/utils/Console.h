@@ -56,7 +56,7 @@ namespace davincpp
 		{
 			std::stringstream output;
 			
-			(output << ... << args) << "\n";
+			(output << ... << args);
 
 			return output.str();
 		}
@@ -125,18 +125,16 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-		static void clear() {
-#ifdef _WIN32
-			std::system("cls");
-#else
-			std::system("clear");
-#endif
-		}
+		static void printNChar(char c, int count, const char* color);
+		static void printCenteredText(std::string_view text, const char* color, char firstChar = ' ', char lastChar = ' ');
 
-		static void newline()
-		{
-			std::cout << "\n";
-		}
+		static void clear();
+		static void newline();
+
+		static void showCursor(bool show);
+		static void setCursor(int row, int xIdx);
+		static int getConsoleWidth();
+		static int getConsoleHeight();
 
 	public:
 		static constexpr const char* LOG_PREFIX			= "[Log]     | ";
@@ -144,10 +142,19 @@ namespace davincpp
 		static constexpr const char* OPENGL_ERR_PREFIX	= "[OpenGL]  | ";
 		static constexpr const char* WRN_PREFIX			= "[Warning] | ";
 
-		static constexpr const char* RED		= "\x1B[91m";
-		static constexpr const char* GRAY		= "\x1B[90m";
-		static constexpr const char* CYAN		= "\x1B[36m";
-		static constexpr const char* MAGENTA	= "\x1B[95m";
-		static constexpr const char* YELLOW		= "\x1B[93m";
+		static constexpr const char* RED				= "\x1B[91m";
+		static constexpr const char* GRAY				= "\x1B[90m";
+		static constexpr const char* CYAN				= "\x1B[36m";
+		static constexpr const char* MAGENTA			= "\x1B[95m";
+		static constexpr const char* YELLOW				= "\x1B[93m";
+		static constexpr const char* GREEN				= "\033[32m";
+		static constexpr const char* GREEN_BG_BLACK_FG	= "\033[42;5;30m";
+
+		static constexpr const char KEY_ARROW_UP		= 72;
+		static constexpr const char KEY_ARROW_LEFT		= 75;
+		static constexpr const char KEY_ARROW_RIGHT		= 77;
+		static constexpr const char KEY_ARROW_DOWN		= 80;
+		static constexpr const char KEY_ENTER			= 13;
+		static constexpr const char KEY_ESCAPE			= 27;
 	};
 }

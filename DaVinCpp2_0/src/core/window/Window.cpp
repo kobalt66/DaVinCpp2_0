@@ -3,6 +3,7 @@
 #include <events/EventHandler.h>
 #include <rendering/Texture2D.h>
 #include <OpenGLUtils.h>
+#include <input/InputManager.h>
 
 namespace davincpp
 {
@@ -51,6 +52,8 @@ namespace davincpp
 
 		m_GameWindow.onSetup();
 		m_GameWindow.onResize(m_Width, m_Height);
+
+		InputManager::setWindowPtr(m_WindowPtr);
 	}
 
 	void Window::onUpdate()
