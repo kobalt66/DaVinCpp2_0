@@ -4,11 +4,55 @@
 #else
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <csignal>
 #endif
 #include <iomanip>
+#include <conio.h>
 
 namespace davincpp
 {
+#ifdef _WIN32
+	int Console::m_ResizeFlag = 0;
+	int Console::m_ClsWidth = 0;
+	int Console::m_ClsHeight = 0;
+#else
+	volatile sig_atomic_t Console::m_ResizeFlag = 0;
+#endif
+
+	void Console::onLoad()
+	{
+#ifdef _WIN32
+#else
+		signal(SIGWINCH, handle_resize);
+#endif
+	}
+
+	void Console::onUpdate()
+	{
+#ifdef _WIN32
+		std::pair<int, int> clsSize = getConsoleSize();
+
+		if (clsSize.first != m_ClsWidth || clsSize.second != m_ClsHeight) {
+			m_ResizeFlag = 1;
+		}
+
+		m_ClsWidth = clsSize.first;
+		m_ClsHeight = clsSize.second;
+#endif
+	}
+
+
+	bool Console::clsResized()
+	{
+		return m_ResizeFlag == 1;
+	}
+
+	void Console::resetResizeFlag()
+	{
+		m_ResizeFlag = 0;
+	}
+
+
 	void Console::printNChar(char c, int count, const char* color)
 	{
 		std::cout << color;
@@ -37,11 +81,7 @@ namespace davincpp
 
 	void Console::clear()
 	{
-#ifdef _WIN32
-		std::system("cls");
-#else
-		std::system("clear");
-#endif
+		std::cout << "\033[2J\033[1;1H";
 	}
 
 	void Console::newline()
@@ -90,4 +130,40 @@ namespace davincpp
 		return w.ws_row;
 #endif
 	}
+
+	std::pair<int, int> Console::getConsoleSize()
+	{
+#ifdef _WIN32
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+		return { 
+			csbi.srWindow.Right - csbi.srWindow.Left + 1,
+			csbi.srWindow.Bottom - csbi.srWindow.Top + 1 
+		};
+#else
+		struct winsize w;
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+		return {
+			w.ws_col,
+			w.ws_row
+		};
+#endif
+	}
+
+	char Console::getInputKey()
+	{
+		if (!_kbhit()) {
+			return KEY_NULL;
+		}
+
+		return _getch();
+	}
+
+
+#ifndef _WIN32
+	void Console::handle_resize(int sig)
+	{
+		resize_flag = 1;
+	}
+#endif
 }

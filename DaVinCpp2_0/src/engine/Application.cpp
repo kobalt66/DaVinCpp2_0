@@ -4,13 +4,14 @@
 #include <rendering/renderables/Triangle.h>
 #include <rendering/renderables/Line.h>
 #include <rendering/renderables/Circle.h>
-#include <conio.h>
 #include <Color.h>
 
 namespace davincpp
 {
 	void Application::onStartEngine()
 	{
+		ASSERT_ENGINE_CALL(Console::onLoad(), "onStartEngine: loading console");
+
 		ASSERT_ENGINE_CALL({
 			m_SelectionMenu = std::make_unique<SelectionMenu>();
 			m_SelectionMenu->onLoad();
@@ -18,12 +19,7 @@ namespace davincpp
 
 		Console::clear();
 
-		char inputChar = '\0';
-
-		do {
-			ASSERT_ENGINE_CALL(m_SelectionMenu->onUpdate(inputChar), "onStartEngine: updating selection menu");
-			ASSERT_ENGINE_CALL(m_SelectionMenu->onRender(), "onStartEngine: rendering selection menu");
-		} while ((inputChar = _getch()) != Console::KEY_ESCAPE);
+		m_SelectionMenu->onExecute();
 		
 		Console::clear();
 	}

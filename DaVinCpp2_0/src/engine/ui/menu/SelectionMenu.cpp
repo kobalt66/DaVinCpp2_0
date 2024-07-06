@@ -17,6 +17,45 @@ namespace davincpp
 		switchPage("main");
 	}
 
+	void SelectionMenu::onExecute()
+	{
+		char inputChar = Console::KEY_NULL;
+
+		do {
+#ifdef _WIN32
+			Console::onUpdate();
+#endif
+			inputChar = Console::getInputKey();
+			
+			if (inputChar == Console::KEY_ESCAPE) {
+				break;
+			}
+			else {
+				onRender();
+				onUpdate(inputChar);
+			}
+
+			if (!Console::clsResized()) {
+				continue;
+			}
+
+			Console::clear();
+			Console::resetResizeFlag();
+			onRender();
+		} while (true);
+	}
+
+
+	void SelectionMenu::switchPage(std::string_view pageTag)
+	{
+		if (m_MenuPages.find(pageTag.data()) == m_MenuPages.end()) {
+			return;
+		}
+
+		m_CurrentPage = m_MenuPages.at(pageTag.data());
+	}
+
+
 	void SelectionMenu::onRender() const
 	{
 		if (m_CurrentPage == nullptr) {
@@ -38,15 +77,5 @@ namespace davincpp
 		else if (input == Console::KEY_ENTER) {
 			m_CurrentPage->interact();
 		}
-	}
-
-
-	void SelectionMenu::switchPage(std::string_view pageTag)
-	{
-		if (m_MenuPages.find(pageTag.data()) == m_MenuPages.end()) {
-			return;
-		}
-
-		m_CurrentPage = m_MenuPages.at(pageTag.data());
 	}
 }

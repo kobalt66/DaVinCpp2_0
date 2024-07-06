@@ -5,9 +5,16 @@
 
 namespace davincpp 
 {
+
 	class Console
 	{
 	public:
+		static void onLoad();
+		static void onUpdate();
+
+		static bool clsResized();
+		static void resetResizeFlag();
+
 		template<class... Args> static void raw(const char* color, Args... args)
 		{
 			std::cout << color;
@@ -135,6 +142,13 @@ namespace davincpp
 		static void setCursor(int row, int xIdx);
 		static int getConsoleWidth();
 		static int getConsoleHeight();
+		static std::pair<int, int> getConsoleSize();
+		static char getInputKey();
+
+	private:
+#ifndef _WIN32
+		static void handle_resize(int sig);
+#endif
 
 	public:
 		static constexpr const char* LOG_PREFIX			= "[Log]     | ";
@@ -150,11 +164,20 @@ namespace davincpp
 		static constexpr const char* GREEN				= "\033[32m";
 		static constexpr const char* GREEN_BG_BLACK_FG	= "\033[42;5;30m";
 
+		static constexpr const char KEY_NULL			= '\0';
 		static constexpr const char KEY_ARROW_UP		= 72;
 		static constexpr const char KEY_ARROW_LEFT		= 75;
 		static constexpr const char KEY_ARROW_RIGHT		= 77;
 		static constexpr const char KEY_ARROW_DOWN		= 80;
 		static constexpr const char KEY_ENTER			= 13;
 		static constexpr const char KEY_ESCAPE			= 27;
+
+	private:
+#ifdef _WIN32
+		static int m_ResizeFlag;
+		static int m_ClsWidth, m_ClsHeight;
+#else
+		static volatile sig_atomic_t m_ResizeFlag;
+#endif
 	};
 }

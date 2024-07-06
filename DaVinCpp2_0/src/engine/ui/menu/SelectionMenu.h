@@ -10,10 +10,13 @@ namespace davincpp
 		SelectionMenu() = default;
 
 		void onLoad();
-		void onRender() const;
-		void onUpdate(char input);
+		void onExecute();
 
 		void switchPage(std::string_view pageTag);
+
+	private:
+		void onRender() const;
+		void onUpdate(char input);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
