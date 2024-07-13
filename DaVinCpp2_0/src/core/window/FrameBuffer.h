@@ -1,5 +1,6 @@
 #pragma once
 #include <opengl.h>
+#include <memory>
 
 namespace davincpp
 {
@@ -14,7 +15,7 @@ namespace davincpp
 
 		void setPixel(int pixelX, int pixelY, glm::vec4 color);
 		void setPixelSize(glm::ivec2 pixelSize);
-		glm::vec4&& getPixel(int pixelX, int pixelY) const;
+		glm::vec4 getPixel(int pixelX, int pixelY) const;
 		size_t getPixelCount() const;
 
 		glm::uvec2 getPixelSize() const;

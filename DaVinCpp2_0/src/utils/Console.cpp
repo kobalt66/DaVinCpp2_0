@@ -1,13 +1,13 @@
 #include "Console.h"
 #ifdef _WIN32
 #include <windows.h>
+#include <conio.h>
 #else
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <csignal>
 #endif
 #include <iomanip>
-#include <conio.h>
 
 namespace davincpp
 {
@@ -152,18 +152,20 @@ namespace davincpp
 
 	char Console::getInputKey()
 	{
+#ifdef _WIN32
 		if (!_kbhit()) {
 			return KEY_NULL;
 		}
+#endif
 
-		return _getch();
+		return static_cast<char>(getchar());
 	}
 
 
 #ifndef _WIN32
 	void Console::handle_resize(int sig)
 	{
-		resize_flag = 1;
+		m_ResizeFlag = 1;
 	}
 #endif
 }

@@ -65,12 +65,13 @@ namespace davincpp
 		EventHandler::onUpdate();
 		m_GameWindow.onUpdate();
 	}
-	
+
 	void Window::onNewFrame()
 	{
-		m_GameWindow.onClear();
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		m_GameWindow.onClear();
 	}
+
 
 	void Window::onRender()
 	{

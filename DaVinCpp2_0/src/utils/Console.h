@@ -2,6 +2,9 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#ifndef _WIN32
+#include <csignal>
+#endif
 
 namespace davincpp 
 {

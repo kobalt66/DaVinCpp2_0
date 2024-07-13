@@ -28,13 +28,13 @@ namespace davincpp
 		m_FrameTexture.createTexture();
 
 		m_WindowShader = Shader(ShaderProfile(VertexAttribute(0, 2, GL_FLOAT, 0), VertexAttribute(1, 2, GL_FLOAT, 2)));
-		m_WindowShader.loadShader("./src/data/shader/vertex.shader", "./src/data/shader/fragment.shader");
-		
+		m_WindowShader.loadShader("[BASE_DIR]src/data/shader/vertex.shader", "[BASE_DIR]src/data/shader/fragment.shader");
+
 		m_Mesh = Mesh<float>();
 		m_Mesh.createMesh(m_Vertices, m_Indices, m_WindowShader);
 
 		m_Cursor->setComponent(new Square(glm::vec2(0), m_CursorColor, 1.0f, 1.0f, false));
-		m_Cursor->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\textures\\Cursor.png", false));
+		m_Cursor->setComponent(new Texture2D("[BASE_DIR]src/data/textures/Cursor.png", false));
 		m_Cursor->onLoad();
 	}
 
