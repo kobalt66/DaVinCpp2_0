@@ -75,9 +75,6 @@ namespace davincpp
 #else
 		std::pair<int, int> new_size = getConsoleSize();
 		resize_term(new_size.second, new_size.first);
-
-		clear();
-		refresh();
 #endif
 	}
 

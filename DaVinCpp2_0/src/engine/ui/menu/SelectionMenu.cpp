@@ -53,6 +53,10 @@ namespace davincpp
 #endif
 
 			Console::resetResizeFlag();
+#ifndef _WIN32
+			clear();
+#endif
+
 			onRender();
 		} while (true);
 	}
@@ -76,10 +80,9 @@ namespace davincpp
 
 #ifdef _WIN32
 		Console::setCursor(1, 1);
-#endif
-
 		m_CurrentPage->onRender();
-#ifndef _WIN32
+#else
+		m_CurrentPage->onRender();
 		refresh();
 #endif
 	}
