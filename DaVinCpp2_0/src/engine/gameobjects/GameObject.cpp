@@ -5,7 +5,7 @@
 namespace davincpp
 {
 	GameObject::GameObject(std::string objectName)
-		: m_Stats(this, objectName.data())
+		: m_Stats(this, objectName)
 	{ }
 
 
@@ -15,7 +15,7 @@ namespace davincpp
 			throw davincpp_error(Console::fmtTxt("Failed to add component to GameObject(", m_Stats.m_ObjectName, "): component has not valid type associated!"));
 		}
 
-		if (m_Components.find(component->getUniqueType()) != m_Components.end()) {
+		if (m_Components.contains(component->getUniqueType())) {
 			throw davincpp_error(Console::fmtTxt("Failed to add component to GameObject(", m_Stats.m_ObjectName, "): There is already a component with the same type attached to this game object!"));
 		}
 

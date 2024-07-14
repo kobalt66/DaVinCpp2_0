@@ -1,17 +1,22 @@
 #include "SelectionMenu.h"
 #include <ui/menu/PageElement.h>
+#include <DaVinCppExceptions.h>
 #include <Console.h>
 
 namespace davincpp
 {
 	void SelectionMenu::onLoad()
 	{
+#ifndef _WIN32
+		Console::loadNcurses();
+#endif
+
 		Console::showCursor(false);
 		m_MenuPages["main"] = std::make_shared<MenuPage>("D a V i n C p p  2.0\nMain Menu",
-			std::shared_ptr<MenuElement>(new PageElement("Test")),
-			std::shared_ptr<MenuElement>(new PageElement("asdfasdfasdf")),
-			std::shared_ptr<MenuElement>(new PageElement("öalskdjfkdlsöalskdjfkdlsöalskdjfkdlsöa")),
-			std::shared_ptr<MenuElement>(new PageElement("pqowieurieowpq"))
+			std::make_shared<PageElement>("Test"),
+			std::make_shared<PageElement>("asdfasdfasdf"),
+			std::make_shared<PageElement>("alskdjfkdlsalskdjfkdlsalskdjfkdlsa"),
+			std::make_shared<PageElement>("pqowieurieowpq")
 		);
 
 		switchPage("main");
@@ -19,7 +24,7 @@ namespace davincpp
 
 	void SelectionMenu::onExecute()
 	{
-		char inputChar = Console::KEY_NULL;
+		int inputChar;
 
 		do {
 #ifdef _WIN32
@@ -28,18 +33,25 @@ namespace davincpp
 			inputChar = Console::getInputKey();
 			
 			if (inputChar == Console::KEY_ESCAPE) {
+#ifndef _WIN32
+				Console::shutDownNcurses();
+#endif
 				break;
 			}
-			else {
-				onRender();
-				onUpdate(inputChar);
-			}
+
+			onRender();
+			onUpdate(inputChar);
 
 			if (!Console::clsResized()) {
 				continue;
 			}
 
+#ifdef _WIN32
 			Console::clear();
+#else
+			Console::resizeNcurses();
+#endif
+
 			Console::resetResizeFlag();
 			onRender();
 		} while (true);
@@ -48,7 +60,7 @@ namespace davincpp
 
 	void SelectionMenu::switchPage(std::string_view pageTag)
 	{
-		if (m_MenuPages.find(pageTag.data()) == m_MenuPages.end()) {
+		if (!m_MenuPages.contains(pageTag.data())) {
 			return;
 		}
 
@@ -62,11 +74,17 @@ namespace davincpp
 			throw davincpp_error("Failed to display selection menu: current selected menu page was null!");
 		}
 
+#ifdef _WIN32
 		Console::setCursor(1, 1);
+#endif
+
 		m_CurrentPage->onRender();
+#ifndef _WIN32
+		refresh();
+#endif
 	}
 
-	void SelectionMenu::onUpdate(char input)
+	void SelectionMenu::onUpdate(int input)
 	{
 		if (input == Console::KEY_ARROW_UP) {
 			m_CurrentPage->switchElement(-1);
@@ -74,7 +92,7 @@ namespace davincpp
 		else if (input == Console::KEY_ARROW_DOWN) {
 			m_CurrentPage->switchElement(1);
 		}
-		else if (input == Console::KEY_ENTER) {
+		else if (input == Console::KEY_NEWLINE) {
 			m_CurrentPage->interact();
 		}
 	}

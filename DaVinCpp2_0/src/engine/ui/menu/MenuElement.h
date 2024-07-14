@@ -6,9 +6,10 @@ namespace davincpp
 	class MenuElement
 	{
 	public:
-		MenuElement(std::string_view displayText);
+		explicit MenuElement(std::string_view displayText);
+		virtual ~MenuElement() = default;
 
-		void onRender(bool selected) const;
+		void onRender(bool selected);
 		virtual void onInteraction() = 0;
 
 		void setPosition(int row, int xIdx);

@@ -22,31 +22,23 @@ add_library(glfw STATIC IMPORTED)
 
 find_package(OpenGL REQUIRED)
 
-# Set the path to libglfw3.a
-set(GLFW_LIB_PATH "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/libraries/libglfw3.a")
-
-# Set the path to GLFW include directory
-set(GLFW_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/libraries")
-
-# Check if the library file exists
-if(NOT EXISTS ${GLFW_LIB_PATH})
-    message(FATAL_ERROR "GLFW library not found at ${GLFW_LIB_PATH}")
-endif()
-
-# Check if the include directory exists
-if(NOT EXISTS ${GLFW_INCLUDE_PATH})
-    message(FATAL_ERROR "GLFW include directory not found at ${GLFW_INCLUDE_PATH}")
-endif()
-
 set_target_properties(glfw PROPERTIES
-        IMPORTED_LOCATION "${GLFW_LIB_PATH}"
-        INTERFACE_INCLUDE_DIRECTORIES "${GLFW_INCLUDE_PATH}"
+        IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/libraries/libglfw3.a"
+        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/libraries/"
 )
 
 add_library(glad "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/glad.c")
 
+# Add ncurses
+add_library(ncurses STATIC IMPORTED)
+
+set_target_properties(ncurses PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/libraries/libncurses.a"
+        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/DaVinCpp2_0/libraries/"
+)
+
 # Link libraries
-target_link_libraries(DaVinCpp2_0 PRIVATE glfw glad OpenGL::GL)
+target_link_libraries(DaVinCpp2_0 PRIVATE glfw glad OpenGL::GL ncurses)
 
 # On Linux, you might need to link against additional system libraries
 if(UNIX AND NOT APPLE)

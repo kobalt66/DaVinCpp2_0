@@ -2,7 +2,6 @@
 #include <DaVinCppMacros.h>
 #include <rendering/renderables/Square.h>
 #include <rendering/renderables/Triangle.h>
-#include <rendering/renderables/Line.h>
 #include <rendering/renderables/Circle.h>
 #include <Color.h>
 

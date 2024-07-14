@@ -4,10 +4,9 @@
 #include <conio.h>
 #else
 #include <sys/ioctl.h>
-#include <unistd.h>
-#include <csignal>
 #endif
 #include <iomanip>
+#include <DaVinCppExceptions.h>
 
 namespace davincpp
 {
@@ -41,6 +40,48 @@ namespace davincpp
 #endif
 	}
 
+	void Console::loadNcurses()
+	{
+#ifdef _WIN32
+		throw not_implemented(__LINE__, __FILE__);
+#else
+		initscr();
+		cbreak();
+		noecho();
+		nodelay(stdscr, TRUE);
+		keypad(stdscr, TRUE);
+
+		start_color();
+		init_pair(GREEN_BLACK_PAIR, COLOR_GREEN, COLOR_BLACK);
+		init_pair(BLACK_GREEN_PAIR, COLOR_BLACK, COLOR_GREEN);
+#endif
+	}
+
+	void Console::shutDownNcurses()
+	{
+#ifdef _WIN32
+		throw not_implemented(__LINE__, __FILE__);
+#else
+		clear();
+		refresh();
+		endwin();
+#endif
+	}
+
+	void Console::resizeNcurses()
+	{
+#ifdef _WIN32
+		throw not_implemented(__LINE__, __FILE__);
+#else
+		std::pair<int, int> new_size = getConsoleSize();
+		resize_term(new_size.second, new_size.first);
+
+		clear();
+		refresh();
+#endif
+	}
+
+
 
 	bool Console::clsResized()
 	{
@@ -53,11 +94,12 @@ namespace davincpp
 	}
 
 
-	void Console::printNChar(char c, int count, const char* color)
+#ifdef _WIN32
+	void Console::printNChar(char c, int length, const char* color)
 	{
 		std::cout << color;
 
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < length; i++) {
 			std::cout << c;
 		}
 
@@ -77,11 +119,37 @@ namespace davincpp
 		std::cout << "\n";
 		std::cout << "\033[0m";
 	}
+#else
+	void Console::printCenteredText(std::string_view text, int colorPair, int cliY)
+	{
+		int maxx = stdscr->_maxx;
+		int length = text.length();
+		int padding = (maxx - length) / 2;
 
+		attron(COLOR_PAIR(colorPair));
+		mvhline(cliY, 1, ' ', padding);
+		mvprintw(cliY, padding, text.data());
+		mvhline(cliY, padding + length, ' ', maxx - (padding + length));
+		attroff(COLOR_PAIR(colorPair));
+		refresh();
+	}
+
+	void Console::printNChar(int c, int colorPair, int length, int cliX, int cliY)
+	{
+		attron(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
+		mvhline(cliY, cliX, c, length);
+		attroff(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
+		refresh();
+	}
+#endif
 
 	void Console::clear()
 	{
-		std::cout << "\033[2J\033[1;1H";
+#ifdef _WIN32
+		system("cls");
+#else
+		system("clear");
+#endif
 	}
 
 	void Console::newline()
@@ -92,12 +160,16 @@ namespace davincpp
 
 	void Console::showCursor(bool show)
 	{
+#ifdef _WIN32
 		if (!show) {
 			std::cout << "\033[?25l";
 			return;
 		}
 
 		std::cout << "\033[?25h";
+#else
+		curs_set(show);
+#endif
 	}
 
 	void Console::setCursor(int row, int xIdx)
@@ -150,15 +222,22 @@ namespace davincpp
 #endif
 	}
 
-	char Console::getInputKey()
+	int Console::getInputKey()
 	{
 #ifdef _WIN32
 		if (!_kbhit()) {
 			return KEY_NULL;
 		}
-#endif
 
-		return static_cast<char>(getchar());
+		return static_cast<int>(_getch());
+#else
+		int c = getch();
+		if (c == ERR) {
+			return KEY_NULL;
+		}
+
+		return c;
+#endif
 	}
 
 

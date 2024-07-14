@@ -3,8 +3,9 @@
 
 namespace davincpp
 {
-	void MenuPage::onRender() const
+	void MenuPage::onRender()
 	{
+#ifdef _WIN32
 		onRenderHeader();
 		Console::newline();
 		
@@ -14,6 +15,18 @@ namespace davincpp
 
 		Console::setCursor(Console::getConsoleHeight() - 1, 1);
 		Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
+#else
+		onRenderHeader();
+
+		for (std::shared_ptr<MenuElement> menuElement : m_MenuElements) {
+			menuElement->setPosition(advanceRow(), 0);
+			menuElement->onRender(m_SelectedElement.get() == menuElement.get());
+		}
+
+		m_CurrentRow = 0;
+
+		//Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
+#endif
 	}
 
 
@@ -46,8 +59,9 @@ namespace davincpp
 	}
 
 
-	void MenuPage::onRenderHeader() const
+	void MenuPage::onRenderHeader()
 	{
+#ifdef _WIN32
 		std::vector<std::string> headerLines = DaVinCppString::split(m_Title, '\n');
 
 		Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
@@ -57,5 +71,26 @@ namespace davincpp
 		}
 		
 		Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
+#else
+		std::vector<std::string> headerLines = DaVinCppString::split(m_Title, '\n');
+
+		attron(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
+		box(stdscr, 0, 0);
+		attroff(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
+
+		for (std::string& headerLine : headerLines) {
+			Console::printCenteredText(headerLine, Console::GREEN_BLACK_PAIR, advanceRow());
+		}
+
+		Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 2, 1, advanceRow());
+#endif
 	}
+
+
+#ifndef _WIN32
+	int MenuPage::advanceRow()
+	{
+		return ++m_CurrentRow;
+	}
+#endif
 }

@@ -16,7 +16,7 @@ namespace davincpp
 
 	private:
 		void onRender() const;
-		void onUpdate(char input);
+		void onUpdate(int input);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;

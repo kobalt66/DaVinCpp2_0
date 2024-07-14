@@ -14,7 +14,8 @@ namespace davincpp
 	class Component
 	{
 	public:
-		Component(ComponentType uniqueType);
+		explicit Component(ComponentType uniqueType);
+		virtual ~Component() = default;
 
 		virtual void onLoad(GameObjectStats& gameObjectStats) { }
 		virtual void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const { }
@@ -24,7 +25,7 @@ namespace davincpp
 		/// TODO:	Add virtual functions that allow the components to get properly rendered on the game engine's UI.
 		///			Every component has to be able to get rendered differently inside the engine's UI.
 
-		ComponentType getUniqueType() const;
+		[[nodiscard]] ComponentType getUniqueType() const;
 
 	private:
 		ComponentType m_UniqueType = ComponentType::NONE;

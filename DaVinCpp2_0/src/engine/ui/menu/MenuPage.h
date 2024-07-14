@@ -1,39 +1,46 @@
 #pragma once
 #include <ui/menu/MenuElement.h>
-#include <DaVinCppExceptions.h>
 #include <Console.h>
 #include <memory>
 #include <vector>
 
 namespace davincpp
 {
+	template<typename T>
+	concept MenuElementPtr = requires(T t) {
+		{ std::dynamic_pointer_cast<MenuElement>(t) } -> std::convertible_to<std::shared_ptr<MenuElement>>;
+	};
+
 	class MenuPage
 	{
 	public:
-		template<class ...Args> MenuPage(std::string_view title, Args... args)
+		template<MenuElementPtr ...Args> explicit MenuPage(std::string_view title, Args... args)
 			: m_Title(title.data())
 		{
-			if (!(std::is_same_v<Args, std::shared_ptr<MenuElement>> && ...)) {
-				Console::err("Failed to construct menu page: provided argument has to be of type MenuElement ptr!");
-				throw core_error();
-			}
-
 			m_MenuElements.insert(m_MenuElements.begin(), { args... });
 
 			switchElement(1);
 		}
 
-		void onRender() const;
+		void onRender();
 
 		void switchElement(int switchDirection);
 		void interact();
 
 	private:
-		void onRenderHeader() const;
+		void onRenderHeader();
+
+#ifndef _WIN32
+		int advanceRow();
+#endif
 
 	private:
 		const char* m_Title;
 		std::vector<std::shared_ptr<MenuElement>> m_MenuElements;
+
+#ifndef _WIN32
+		int m_CurrentRow = 0;
+#endif
 
 		int m_SelectedElementIdx = -1;
 		std::shared_ptr<MenuElement> m_SelectedElement = nullptr;

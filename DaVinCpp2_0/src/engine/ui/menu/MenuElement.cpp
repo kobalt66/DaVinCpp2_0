@@ -8,9 +8,13 @@ namespace davincpp
 	{ }
 
 
-	void MenuElement::onRender(bool selected) const
+	void MenuElement::onRender(bool selected)
 	{
-		Console::printCenteredText(Console::fmtTxt("> ", m_DisplayText), selected ? Console::GREEN_BG_BLACK_FG : Console::GREEN);
+#ifdef _WIN32
+		Console::printCenteredText(m_DisplayText, selected ? Console::GREEN_BG_BLACK_FG : Console::GREEN);
+#else
+		Console::printCenteredText(m_DisplayText, selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR, m_Row);
+#endif
 	}
 
 

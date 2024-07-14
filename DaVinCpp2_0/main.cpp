@@ -7,7 +7,7 @@ int main()
 {
 	try {
 		davincpp::Application app;
-		//app.onStartEngine();
+		app.onStartEngine();
 		app.onLoad();
 
 		while (!app.shouldShutdown()) {
