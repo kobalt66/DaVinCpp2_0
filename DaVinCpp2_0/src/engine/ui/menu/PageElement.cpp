@@ -1,5 +1,4 @@
 #include "PageElement.h"
-
 #include "SelectionMenu.h"
 
 namespace davincpp

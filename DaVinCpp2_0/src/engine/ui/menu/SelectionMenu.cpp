@@ -1,5 +1,7 @@
 #include "SelectionMenu.h"
 #include <ui/menu/PageElement.h>
+#include <ui/menu/PlayButton.h>
+#include <ui/menu/ExitButton.h>
 #include <DaVinCppExceptions.h>
 #include <Console.h>
 
@@ -12,19 +14,32 @@ namespace davincpp
 #endif
 
 		Console::showCursor(false);
-		m_MenuPages["main"] = std::make_shared<MenuPage>("D a V i n C p p  2.0\nMain Menu",
-			std::make_shared<PageElement>("Test", "test"),
-			std::make_shared<PageElement>("asdfasdfasdf", "asdf"),
-			std::make_shared<PageElement>("alskdjfkdlsalskdjfkdlsalskdjfkdlsa", "asdf"),
-			std::make_shared<PageElement>("pqowieurieowpq", "asdf")
+		m_MenuPages[PAGE_MAIN] = std::make_shared<MenuPage>("D a V i n C p p  2.0\nMain Menu",
+			std::make_shared<PlayButton>("Start Game"),
+			std::make_shared<PageElement>("Select project", PAGE_SELECT_PROJECT),
+			std::make_shared<PageElement>("Create project", PAGE_CREATE_PROJECT),
+			std::make_shared<PageElement>("Delete project", PAGE_DELETE_PROJECT),
+			std::make_shared<PageElement>("Rename project", PAGE_RENAME_PROJECT),
+			std::make_shared<ExitButton>("Exit")
 		);
 
-		m_MenuPages["test"] = std::make_shared<MenuPage>("This is a test page!",
-			std::make_shared<PageElement>("../", "main"),
-			std::make_shared<PageElement>("Test2", "asdf")
+		m_MenuPages[PAGE_SELECT_PROJECT] = std::make_shared<MenuPage>("Select a project",
+			std::make_shared<PageElement>("../", PAGE_MAIN)
 		);
 
-		switchPage("main");
+		m_MenuPages[PAGE_CREATE_PROJECT] = std::make_shared<MenuPage>("Create a new project",
+			std::make_shared<PageElement>("../", PAGE_MAIN)
+		);
+
+		m_MenuPages[PAGE_DELETE_PROJECT] = std::make_shared<MenuPage>("Delete a project",
+			std::make_shared<PageElement>("../", PAGE_MAIN)
+		);
+
+		m_MenuPages[PAGE_RENAME_PROJECT] = std::make_shared<MenuPage>("Rename a project",
+			std::make_shared<PageElement>("../", PAGE_MAIN)
+		);
+
+		switchPage(PAGE_MAIN);
 	}
 
 	void SelectionMenu::onExecute()
@@ -73,6 +88,11 @@ namespace davincpp
 		m_CurrentPage = m_MenuPages.at(pageTag.data());
 	}
 
+	void SelectionMenu::shouldShutDown(bool shutDown)
+	{
+		m_ShouldShutdown = shutDown;
+	}
+
 
 	void SelectionMenu::onRender() const
 	{
@@ -92,11 +112,6 @@ namespace davincpp
 	void SelectionMenu::onUpdate(int input)
 	{
 		if (input == Console::KEY_NULL) {
-			return;
-		}
-
-		if (input == Console::KEY_ESCAPE) {
-			m_ShouldShutdown = true;
 			return;
 		}
 

@@ -257,17 +257,17 @@ namespace davincpp
 	{
 		switch (keyCode)
 		{
-			case Console::KEY_NEWLINE:
+			case KEY_NEWLINE:
 				return "NL";
-			case Console::KEY_ESCAPE:
+			case KEY_ESCAPE:
 				return "ESC";
-			case Console::KEY_ARROW_UP:
+			case KEY_ARROW_UP:
 				return "UP";
-			case Console::KEY_ARROW_DOWN:
+			case KEY_ARROW_DOWN:
 				return "DOWN";
-			case Console::KEY_ARROW_LEFT:
+			case KEY_ARROW_LEFT:
 				return "LEFT";
-			case Console::KEY_ARROW_RIGHT:
+			case KEY_ARROW_RIGHT:
 				return "RIGHT";
 			default:
 				return "" + std::string(1, static_cast<char>(keyCode));
