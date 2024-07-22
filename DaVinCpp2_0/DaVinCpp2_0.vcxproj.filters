@@ -105,6 +105,27 @@
     <ClCompile Include="src\engine\gameobjects\GameObjectStats.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\input\InputManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ui\menu\SelectionMenu.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ui\menu\MenuElement.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ui\menu\MenuPage.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\DaVinCppString.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Console.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ui\menu\PageElement.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Application.h">
@@ -1071,6 +1092,24 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\gameobjects\GameObjectStats.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\menu\SelectionMenu.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\input\InputManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\menu\MenuElement.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\menu\MenuPage.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\DaVinCppString.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ui\menu\PageElement.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

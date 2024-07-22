@@ -24,32 +24,36 @@ namespace davincpp
 			throw davincpp_error(Console::fmtTxt("Failed to load texture asset: The texture file at '", m_FilePath, "' doesn't exist!"));
 		}
 
-		m_TextureBuffer = std::unique_ptr<uchar_t[]>(stbi_load(m_FilePath, &m_Width, &m_Height, &m_BytesPerPixel, DESIRED_CHANNEL_COUNT));
+		m_TextureBuffer = std::unique_ptr<uchar_t[]>(stbi_load(DaVinCppFileSystem::prepareFilePath(m_FilePath).c_str(), &m_Width, &m_Height, &m_BytesPerPixel, DESIRED_CHANNEL_COUNT));
 	}
 
 
 	glm::vec4 Texture2D::getColorByUV(int pixelX, int pixelY, float width, float height) const
 	{
-		int u = static_cast<int>(std::floorf((pixelX / (width)) * m_Width)) % m_Width;
-		int v = static_cast<int>(std::floorf((pixelY / (height)) * m_Height)) % m_Height;
+		if (m_TextureBuffer == nullptr) {
+			throw davincpp_error("Failed to map texture: Texture buffer was null!");
+		}
+
+		int u = static_cast<int>(std::floor((static_cast<float>(pixelX) / (width)) * static_cast<float>(m_Width))) % m_Width;
+		int v = static_cast<int>(std::floor((static_cast<float>(pixelY) / (height)) * static_cast<float>(m_Height))) % m_Height;
 
 		if (!validateUVCoordinates(u, v)) {
-			return glm::vec4(
+			return {
 				static_cast<float>(m_TextureBuffer[R] / MAX_COLOR_VALUE),
 				static_cast<float>(m_TextureBuffer[G] / MAX_COLOR_VALUE),
 				static_cast<float>(m_TextureBuffer[B] / MAX_COLOR_VALUE),
 				static_cast<float>(m_TextureBuffer[A] / MAX_COLOR_VALUE)
-				);
+			};
 		}
 
 		uint32_t pixelIdx = getPixelIndex(u, v);
 
-		return glm::vec4(
+		return {
 			m_TextureBuffer[pixelIdx + R],
 			m_TextureBuffer[pixelIdx + G],
 			m_TextureBuffer[pixelIdx + B],
 			m_TextureBuffer[pixelIdx + A]
-		);
+		};
 	}
 
 	glm::ivec2 Texture2D::getTextureSize() const

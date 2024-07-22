@@ -90,7 +90,11 @@ namespace davincpp
 
 		GLCall(glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length));
 
-		char* message = (char*)_malloca(length * sizeof(char));
+#ifdef _WIN32
+		char* message = static_cast<char*>(_malloca(length * sizeof(char)));
+#else
+		char* message = static_cast<char*>(malloc(length * sizeof(char)));
+#endif
 		GLCall(glGetShaderInfoLog(shaderId, length, &length, message));
 
 		const char* shaderTypeStr =
@@ -120,7 +124,11 @@ namespace davincpp
 
 		GLCall(glGetProgramiv(m_ProgramID, GL_INFO_LOG_LENGTH, &length));
 
-		char* message = (char*)_malloca(length * sizeof(char));
+#ifdef _WIN32
+		char* message = static_cast<char*>(_malloca(length * sizeof(char)));
+#else
+		char* message = static_cast<char*>(malloc(length * sizeof(char)));
+#endif
 		GLCall(glGetProgramInfoLog(m_ProgramID, length, &length, message));
 
 		Console::openglErr("Failed to link shader program!");

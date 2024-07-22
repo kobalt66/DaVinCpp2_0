@@ -1,5 +1,6 @@
 #include "FrameBuffer.h"
 #include <DaVinCppConstants.h>
+#include <cstring>
 
 namespace davincpp
 {
@@ -54,7 +55,7 @@ namespace davincpp
 		m_PixelSizeY = pixelSize.y;
 	}
 
-	glm::vec4&& FrameBuffer::getPixel(int pixelX, int pixelY) const
+	glm::vec4 FrameBuffer::getPixel(int pixelX, int pixelY) const
 	{
 		if (!isPixelInBoundry(pixelX, pixelY)) {
 			return glm::vec4(0);

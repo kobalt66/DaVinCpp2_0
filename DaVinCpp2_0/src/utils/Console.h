@@ -2,12 +2,26 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#ifndef _WIN32
+#include <csignal>
+#include <ncurses/curses.h>
+#endif
 
 namespace davincpp 
 {
 	class Console
 	{
 	public:
+		static void onLoad();
+		static void onUpdate();
+
+		static void loadNcurses();
+		static void shutDownNcurses();
+		static void resizeNcurses();
+
+		static bool clsResized();
+		static void resetResizeFlag();
+
 		template<class... Args> static void raw(const char* color, Args... args)
 		{
 			std::cout << color;
@@ -52,11 +66,11 @@ namespace davincpp
 			newline();
 		}
 
-		template<class... Args> static const std::string fmtTxt(Args... args)
+		template<class... Args> static std::string fmtTxt(Args... args)
 		{
 			std::stringstream output;
-			
-			(output << ... << args) << "\n";
+
+			(output << ... << args);
 
 			return output.str();
 		}
@@ -125,18 +139,30 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-		static void clear() {
 #ifdef _WIN32
-			std::system("cls");
+		static void printNChar(char c, int count, const char* color);
+		static void printCenteredText(std::string_view text, const char* color, char firstChar = ' ', char lastChar = ' ');
 #else
-			std::system("clear");
+		static void printCenteredText(std::string_view text, int colorPair, int cliY);
+		static void printText(std::string_view text, int colorPair, int cliY);
+		static void printNChar(int c, int colorPair, int length, int cliX, int cliY);
 #endif
-		}
 
-		static void newline()
-		{
-			std::cout << "\n";
-		}
+		static void clear();
+		static void newline();
+
+		static void showCursor(bool show);
+		static void setCursor(int row, int xIdx);
+		static int getConsoleWidth();
+		static int getConsoleHeight();
+		static std::pair<int, int> getConsoleSize();
+		static int getInputKey();
+		static std::string getInputKeyByCode(int keyCode);
+
+	private:
+#ifndef _WIN32
+		static void handle_resize(int sig);
+#endif
 
 	public:
 		static constexpr const char* LOG_PREFIX			= "[Log]     | ";
@@ -144,10 +170,45 @@ namespace davincpp
 		static constexpr const char* OPENGL_ERR_PREFIX	= "[OpenGL]  | ";
 		static constexpr const char* WRN_PREFIX			= "[Warning] | ";
 
-		static constexpr const char* RED		= "\x1B[91m";
-		static constexpr const char* GRAY		= "\x1B[90m";
-		static constexpr const char* CYAN		= "\x1B[36m";
-		static constexpr const char* MAGENTA	= "\x1B[95m";
-		static constexpr const char* YELLOW		= "\x1B[93m";
+		static constexpr const char* RED				= "\x1B[91m";
+		static constexpr const char* GRAY				= "\x1B[90m";
+		static constexpr const char* CYAN				= "\x1B[36m";
+		static constexpr const char* MAGENTA			= "\x1B[95m";
+		static constexpr const char* YELLOW				= "\x1B[93m";
+		static constexpr const char* GREEN				= "\033[32m";
+		static constexpr const char* GREEN_BG_BLACK_FG	= "\033[42;5;30m";
+
+#ifndef _WIN32
+		static constexpr int GREEN_BLACK_PAIR	= 1;
+		static constexpr int BLACK_GREEN_PAIR	= 2;
+		static constexpr int BLACK_YELLOW_PAIR	= 3;
+#endif
+
+#ifdef WIN32
+		static constexpr int KEY_NULL			= -1;
+		static constexpr int KEY_ARROW_UP		= 72;
+		static constexpr int KEY_ARROW_LEFT		= 75;
+		static constexpr int KEY_ARROW_RIGHT	= 77;
+		static constexpr int KEY_ARROW_DOWN		= 80;
+		static constexpr int KEY_NEWLINE		= 13;
+		static constexpr int KEY_ESCAPE			= 27;
+#else
+		static constexpr int KEY_NULL			= ERR;
+		static constexpr int KEY_ARROW_UP		= KEY_UP;
+		static constexpr int KEY_ARROW_LEFT		= KEY_LEFT;
+		static constexpr int KEY_ARROW_RIGHT	= KEY_RIGHT;
+		static constexpr int KEY_ARROW_DOWN		= KEY_DOWN;
+		static constexpr int KEY_NEWLINE		= 10;
+		static constexpr int KEY_ESCAPE			= 27;
+#endif
+
+	private:
+#ifdef _WIN32
+		static int m_ResizeFlag;
+		static int m_ClsWidth, m_ClsHeight;
+#else
+		static volatile sig_atomic_t m_ResizeFlag;
+#endif
 	};
+
 }

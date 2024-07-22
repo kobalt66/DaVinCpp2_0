@@ -158,13 +158,20 @@
     <ClCompile Include="src\engine\gameobjects\GameObject.cpp" />
     <ClCompile Include="src\engine\gameobjects\GameObjectStats.cpp" />
     <ClCompile Include="src\engine\gameobjects\GameObjectManager.cpp" />
+    <ClCompile Include="src\engine\input\InputManager.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Circle.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Line.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Renderable.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Square.cpp" />
     <ClCompile Include="src\engine\rendering\renderables\Triangle.cpp" />
     <ClCompile Include="src\engine\rendering\Texture2D.cpp" />
+    <ClCompile Include="src\engine\ui\menu\MenuElement.cpp" />
+    <ClCompile Include="src\engine\ui\menu\MenuPage.cpp" />
+    <ClCompile Include="src\engine\ui\menu\PageElement.cpp" />
+    <ClCompile Include="src\engine\ui\menu\SelectionMenu.cpp" />
+    <ClCompile Include="src\utils\Console.cpp" />
     <ClCompile Include="src\utils\DaVinCppFileSystem.cpp" />
+    <ClCompile Include="src\utils\DaVinCppString.cpp" />
     <ClCompile Include="src\utils\OpenGLUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -476,17 +483,23 @@
     <ClInclude Include="src\engine\gameobjects\GameObject.h" />
     <ClInclude Include="src\engine\gameobjects\GameObjectStats.h" />
     <ClInclude Include="src\engine\gameobjects\GameObjectManager.h" />
+    <ClInclude Include="src\engine\input\InputManager.h" />
     <ClInclude Include="src\engine\rendering\renderables\Circle.h" />
     <ClInclude Include="src\engine\rendering\renderables\Line.h" />
     <ClInclude Include="src\engine\rendering\renderables\Renderable.h" />
     <ClInclude Include="src\engine\rendering\renderables\Square.h" />
     <ClInclude Include="src\engine\rendering\renderables\Triangle.h" />
     <ClInclude Include="src\engine\rendering\Texture2D.h" />
+    <ClInclude Include="src\engine\ui\menu\MenuElement.h" />
+    <ClInclude Include="src\engine\ui\menu\MenuPage.h" />
+    <ClInclude Include="src\engine\ui\menu\PageElement.h" />
+    <ClInclude Include="src\engine\ui\menu\SelectionMenu.h" />
     <ClInclude Include="src\utils\Color.h" />
     <ClInclude Include="src\utils\Console.h" />
     <ClInclude Include="src\utils\DaVinCppConstants.h" />
     <ClInclude Include="src\utils\DaVinCppExceptions.h" />
     <ClInclude Include="src\utils\DaVinCppMacros.h" />
+    <ClInclude Include="src\utils\DaVinCppString.h" />
     <ClInclude Include="src\utils\DaVinCppTypes.h" />
     <ClInclude Include="src\utils\DaVinCppFileSystem.h" />
     <ClInclude Include="src\utils\OpenGLUtils.h" />

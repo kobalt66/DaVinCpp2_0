@@ -1,5 +1,5 @@
 #include "GameObjectManager.h"
-#include <format>
+#include <memory>
 
 namespace davincpp
 {
@@ -53,7 +53,7 @@ namespace davincpp
 		std::string finalName = originalName;
 
 		while (m_GameObjects.find(finalName) != m_GameObjects.end()) {
-			finalName = std::format("{} ({})", originalName, ++duplicateCount);
+			finalName = Console::fmtTxt(originalName, " (", ++duplicateCount, ")");
 		}
 
 		gameObject->setName(finalName.c_str());

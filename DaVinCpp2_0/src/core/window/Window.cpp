@@ -3,6 +3,7 @@
 #include <events/EventHandler.h>
 #include <rendering/Texture2D.h>
 #include <OpenGLUtils.h>
+#include <input/InputManager.h>
 
 namespace davincpp
 {
@@ -51,6 +52,8 @@ namespace davincpp
 
 		m_GameWindow.onSetup();
 		m_GameWindow.onResize(m_Width, m_Height);
+
+		InputManager::setWindowPtr(m_WindowPtr);
 	}
 
 	void Window::onUpdate()
@@ -62,12 +65,13 @@ namespace davincpp
 		EventHandler::onUpdate();
 		m_GameWindow.onUpdate();
 	}
-	
+
 	void Window::onNewFrame()
 	{
-		m_GameWindow.onClear();
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		m_GameWindow.onClear();
 	}
+
 
 	void Window::onRender()
 	{

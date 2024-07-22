@@ -8,7 +8,7 @@ namespace davincpp
 	class GameObject
 	{
 	public:
-		GameObject(std::string objectName = "game object");
+		explicit GameObject(std::string objectName = "game object");
 
 		void setComponent(Component* component);
 		std::shared_ptr<Component> getComponent(ComponentType uniqueType) const;

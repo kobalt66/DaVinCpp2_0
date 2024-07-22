@@ -2,12 +2,27 @@
 #include <DaVinCppMacros.h>
 #include <rendering/renderables/Square.h>
 #include <rendering/renderables/Triangle.h>
-#include <rendering/renderables/Line.h>
 #include <rendering/renderables/Circle.h>
 #include <Color.h>
 
 namespace davincpp
 {
+	void Application::onStartEngine()
+	{
+		ASSERT_ENGINE_CALL(Console::onLoad(), "onStartEngine: loading console");
+
+		ASSERT_ENGINE_CALL({
+			m_SelectionMenu = std::make_unique<SelectionMenu>();
+			m_SelectionMenu->onLoad();
+			}, "onStartEngine: creating selection menu");
+
+		Console::clear();
+
+		m_SelectionMenu->onExecute();
+		
+		Console::clear();
+	}
+
 	void Application::onLoad()
 	{
 		Console::log("Loading application...");
@@ -22,9 +37,9 @@ namespace davincpp
 
 		ASSERT_ENGINE_CALL(m_GameObjectManager = std::make_unique<GameObjectManager>(), "onLoad: creating game object manager");
 
-		GameObject* square = new GameObject("Square");
+		auto square = new GameObject("Square");
 		square->setComponent(new Square(glm::vec2(10), GREEN, 6.0f, 6.0f, false));
-		square->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", false));
+		square->setComponent(new Texture2D("[BASE_DIR]src/data/Cursor.png", false));
 		m_GameObjectManager->registerGameObject(square);
 
 		//GameObject* square2 = new GameObject("Square");
@@ -37,26 +52,26 @@ namespace davincpp
 		//
 		//GameObject* triangle = new GameObject("Triangle");
 		//triangle->setComponent(new Triangle(glm::vec2(200, 0), glm::vec2(20, 5), glm::vec2(0, 50), RED));
-		//triangle->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		//triangle->setComponent(new Texture2D("[BASE_DIR]src/data/Cursor.png", true));
 		//m_GameObjectManager->registerGameObject(triangle);
 
-		GameObject* triangle2 = new GameObject("Triangle");
+		auto triangle2 = new GameObject("Triangle");
 		triangle2->setComponent(new Triangle(glm::vec2(200, 50), glm::vec2(200, 100), glm::vec2(300, 50), RED));
-		triangle2->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		triangle2->setComponent(new Texture2D("[BASE_DIR]src/data/Cursor.png", true));
 		m_GameObjectManager->registerGameObject(triangle2);
 
-		GameObject* triangle3 = new GameObject("Triangle");
+		auto triangle3 = new GameObject("Triangle");
 		triangle3->setComponent(new Triangle(glm::vec2(200, 100), glm::vec2(250, 100), glm::vec2(350, 50), RED));
-		triangle3->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		triangle3->setComponent(new Texture2D("[BASE_DIR]src/data/Cursor.png", true));
 		m_GameObjectManager->registerGameObject(triangle3);
 
 		//GameObject* line = new GameObject("Line");
 		//line->setComponent(new Line(glm::vec2(20, 50), glm::vec2(20, 5), 50.0f, BLUE));
 		//m_GameObjectManager->registerGameObject(line);
 		//
-		GameObject* circle = new GameObject("Circle");
+		auto circle = new GameObject("Circle");
 		circle->setComponent(new Circle(glm::vec2(100), 24.0f, GRAY, true));
-		circle->setComponent(new Texture2D("D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\DaVinCpp2_0\\src\\data\\Cursor.png", true));
+		circle->setComponent(new Texture2D("[BASE_DIR]src/data/Cursor.png", true));
 		m_GameObjectManager->registerGameObject(circle);
 
 		ASSERT_ENGINE_CALL(m_GameObjectManager->onLoad(), "onLoad: loading game objects");

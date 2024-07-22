@@ -1,48 +1,47 @@
 #pragma once
 #include <stdexcept>
-#include <format>
 
 namespace davincpp
 {
 	class system_error : public std::runtime_error 
 	{
 	public:
-		explicit system_error() : std::runtime_error("[SYS] fatal error") {}
+		explicit system_error();
 	};
 
 	class core_error : public std::runtime_error 
 	{
 	public:
-		explicit core_error() : std::runtime_error("[CORE] fatal error") {}
+		explicit core_error();
 	};
 
 	class glfw_error : public std::runtime_error 
 	{
 	public:
-		explicit glfw_error() : std::runtime_error("[GLFW] fatal error") {}
+		explicit glfw_error();
 	};
 
 	class opengl_error : public std::runtime_error 
 	{
 	public:
-		explicit opengl_error() : std::runtime_error("[OpenGL] fatal error") {}
+		explicit opengl_error();
 	};
 
 	class event_error : public std::runtime_error 
 	{
 	public:
-		explicit event_error() : std::runtime_error("[Event] fatal error") {}
+		explicit event_error();
 	};
 
 	class not_implemented : public std::runtime_error
 	{
 	public:
-		explicit not_implemented(int line, const char* file) : std::runtime_error(std::format("(file: {}, line: {}) function is not implemented!", file, line).c_str()) {}
+		explicit not_implemented(int line, const char* file);
 	};
 
 	class davincpp_error : public std::runtime_error
 	{
 	public:
-		explicit davincpp_error(std::string_view message) : std::runtime_error(message.data()) { }
+		explicit davincpp_error(std::string_view message);
 	};
 }
