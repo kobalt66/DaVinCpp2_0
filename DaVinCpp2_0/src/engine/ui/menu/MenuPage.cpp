@@ -1,4 +1,5 @@
 #include "MenuPage.h"
+#include <ui/menu/SelectionMenu.h>
 #include <DaVinCppString.h>
 
 namespace davincpp
@@ -49,13 +50,13 @@ namespace davincpp
 		m_SelectedElement = m_MenuElements.at(m_SelectedElementIdx);
 	}
 
-	void MenuPage::interact()
+	void MenuPage::interact(SelectionMenu* selectionPage)
 	{
 		if (m_SelectedElement == nullptr) {
 			return;
 		}
 
-		m_SelectedElement->onInteraction();
+		m_SelectedElement->onInteraction(selectionPage);
 	}
 
 

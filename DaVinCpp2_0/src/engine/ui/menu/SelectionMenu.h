@@ -17,9 +17,17 @@ namespace davincpp
 	private:
 		void onRender() const;
 		void onUpdate(int input);
+#ifndef _WIN32
+		void displayDescription(std::string_view text, int colorPair);
+		void resetDescription();
+#endif
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
 		std::shared_ptr<MenuPage> m_CurrentPage = nullptr;
+
+		bool m_ShouldShutdown = false;
+
+		const char* WRN_INVALID_INPUT = "Invalid key input... ";
 	};
 }

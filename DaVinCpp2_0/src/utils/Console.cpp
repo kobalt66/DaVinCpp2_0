@@ -51,9 +51,12 @@ namespace davincpp
 		nodelay(stdscr, TRUE);
 		keypad(stdscr, TRUE);
 
+		setlocale(LC_ALL, "");
+
 		start_color();
 		init_pair(GREEN_BLACK_PAIR, COLOR_GREEN, COLOR_BLACK);
 		init_pair(BLACK_GREEN_PAIR, COLOR_BLACK, COLOR_GREEN);
+		init_pair(BLACK_YELLOW_PAIR, COLOR_BLACK, COLOR_YELLOW);
 #endif
 	}
 
@@ -120,7 +123,7 @@ namespace davincpp
 	void Console::printCenteredText(std::string_view text, int colorPair, int cliY)
 	{
 		int maxx = stdscr->_maxx;
-		int length = text.length();
+		int length = static_cast<int>(text.length());
 		int padding = (maxx - length) / 2;
 
 		attron(COLOR_PAIR(colorPair));
@@ -131,11 +134,24 @@ namespace davincpp
 		refresh();
 	}
 
+	void Console::printText(std::string_view text, int colorPair, int cliY)
+	{
+		int maxx = stdscr->_maxx;
+		int length = static_cast<int>(text.length());
+
+		attron(COLOR_PAIR(colorPair));
+		mvhline(cliY, 1, ' ', 1);
+		mvprintw(cliY, 2, text.data());
+		mvhline(cliY, length + 1, ' ', maxx - 1);
+		attroff(COLOR_PAIR(colorPair));
+		refresh();
+	}
+
 	void Console::printNChar(int c, int colorPair, int length, int cliX, int cliY)
 	{
-		attron(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
+		attron(COLOR_PAIR(colorPair));
 		mvhline(cliY, cliX, c, length);
-		attroff(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
+		attroff(COLOR_PAIR(colorPair));
 		refresh();
 	}
 #endif
@@ -235,6 +251,27 @@ namespace davincpp
 
 		return c;
 #endif
+	}
+
+	std::string Console::getInputKeyByCode(int keyCode)
+	{
+		switch (keyCode)
+		{
+			case Console::KEY_NEWLINE:
+				return "NL";
+			case Console::KEY_ESCAPE:
+				return "ESC";
+			case Console::KEY_ARROW_UP:
+				return "UP";
+			case Console::KEY_ARROW_DOWN:
+				return "DOWN";
+			case Console::KEY_ARROW_LEFT:
+				return "LEFT";
+			case Console::KEY_ARROW_RIGHT:
+				return "RIGHT";
+			default:
+				return "" + std::string(1, static_cast<char>(keyCode));
+		}
 	}
 
 

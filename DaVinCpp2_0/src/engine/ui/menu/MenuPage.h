@@ -6,6 +6,8 @@
 
 namespace davincpp
 {
+	class SelectionMenu;
+
 	template<typename T>
 	concept MenuElementPtr = requires(T t) {
 		{ std::dynamic_pointer_cast<MenuElement>(t) } -> std::convertible_to<std::shared_ptr<MenuElement>>;
@@ -25,7 +27,7 @@ namespace davincpp
 		void onRender();
 
 		void switchElement(int switchDirection);
-		void interact();
+		void interact(SelectionMenu* selectionPage);
 
 	private:
 		void onRenderHeader();

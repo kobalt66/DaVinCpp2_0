@@ -66,7 +66,7 @@ namespace davincpp
 			newline();
 		}
 
-		template<class... Args> static const std::string fmtTxt(Args... args)
+		template<class... Args> static std::string fmtTxt(Args... args)
 		{
 			std::stringstream output;
 
@@ -144,6 +144,7 @@ namespace davincpp
 		static void printCenteredText(std::string_view text, const char* color, char firstChar = ' ', char lastChar = ' ');
 #else
 		static void printCenteredText(std::string_view text, int colorPair, int cliY);
+		static void printText(std::string_view text, int colorPair, int cliY);
 		static void printNChar(int c, int colorPair, int length, int cliX, int cliY);
 #endif
 
@@ -156,6 +157,7 @@ namespace davincpp
 		static int getConsoleHeight();
 		static std::pair<int, int> getConsoleSize();
 		static int getInputKey();
+		static std::string getInputKeyByCode(int keyCode);
 
 	private:
 #ifndef _WIN32
@@ -179,6 +181,7 @@ namespace davincpp
 #ifndef _WIN32
 		static constexpr int GREEN_BLACK_PAIR	= 1;
 		static constexpr int BLACK_GREEN_PAIR	= 2;
+		static constexpr int BLACK_YELLOW_PAIR	= 3;
 #endif
 
 #ifdef WIN32
@@ -195,7 +198,7 @@ namespace davincpp
 		static constexpr int KEY_ARROW_LEFT		= KEY_LEFT;
 		static constexpr int KEY_ARROW_RIGHT	= KEY_RIGHT;
 		static constexpr int KEY_ARROW_DOWN		= KEY_DOWN;
-		static constexpr int KEY_NEWLINE		= KEY_ENTER;
+		static constexpr int KEY_NEWLINE		= 10;
 		static constexpr int KEY_ESCAPE			= 27;
 #endif
 

@@ -3,6 +3,8 @@
 
 namespace davincpp
 {
+	class SelectionMenu;
+
 	class MenuElement
 	{
 	public:
@@ -10,7 +12,7 @@ namespace davincpp
 		virtual ~MenuElement() = default;
 
 		void onRender(bool selected);
-		virtual void onInteraction() = 0;
+		virtual void onInteraction(SelectionMenu* selectionMenu) = 0;
 
 		void setPosition(int row, int xIdx);
 
