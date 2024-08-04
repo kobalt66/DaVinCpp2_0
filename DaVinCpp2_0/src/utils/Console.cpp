@@ -274,6 +274,15 @@ namespace davincpp
 		}
 	}
 
+	int Console::awaitKeyInput()
+	{
+#ifdef _WIN32
+		return static_cast<int>(_getch());
+#else
+		return getchar();
+#endif
+	}
+
 
 #ifndef _WIN32
 	void Console::handle_resize(int sig)

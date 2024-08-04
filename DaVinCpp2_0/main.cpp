@@ -1,6 +1,4 @@
-#include <iostream>
 #include "src/engine/Application.h"
-#include <sstream>
 #include <Console.h>
 
 int main()

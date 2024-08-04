@@ -158,6 +158,7 @@ namespace davincpp
 		static std::pair<int, int> getConsoleSize();
 		static int getInputKey();
 		static std::string getInputKeyByCode(int keyCode);
+		static int awaitKeyInput();
 
 	private:
 #ifndef _WIN32

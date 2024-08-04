@@ -1,0 +1,10 @@
+davincppVersion: 0.1_alpha
+name: Test Project
+pixelSize: [4, 4]
+resolution: [1200, 720]
+scripts: [
+  "/home/lephobix/CLionProjects/DaVinCpp2_0/TestEnv/test.ds"
+]
+textures: [
+  "/home/lephobix/CLionProjects/DaVinCpp2_0/TestEnv/Null.png"
+]

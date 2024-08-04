@@ -36,6 +36,7 @@ namespace davincpp
 	{
 		std::string output = path;
 		output = DaVinCppString::findReplace(output, "[BASE_DIR]", BASE_DIR);
+		output = DaVinCppString::findReplace(output, "[TEST_ENV]", TEST_ENV);
 #ifdef _WIN32
 		output = DaVinCppString::findReplaceAll(output, "/", "\\");
 #endif
