@@ -6,7 +6,7 @@ namespace davincpp
     class PlayButton : public MenuElement
     {
     public:
-        explicit PlayButton(std::string_view displayText);
+        explicit PlayButton(const std::string& displayText);
 
         void onInteraction(SelectionMenu* selectionMenu) override;
     };

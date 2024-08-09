@@ -3,7 +3,7 @@
 
 namespace davincpp
 {
-	PageElement::PageElement(std::string_view displayText, std::string_view pagePointer)
+	PageElement::PageElement(const std::string& displayText, std::string_view pagePointer)
 		: MenuElement(displayText), m_PagePointer(pagePointer)
 	{ }
 

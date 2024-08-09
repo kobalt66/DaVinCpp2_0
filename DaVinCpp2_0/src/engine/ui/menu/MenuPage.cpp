@@ -19,7 +19,7 @@ namespace davincpp
 #else
 		onRenderHeader();
 
-		for (std::shared_ptr<MenuElement> menuElement : m_MenuElements) {
+		for (const std::shared_ptr<MenuElement>& menuElement : m_MenuElements) {
 			menuElement->setPosition(advanceRow(), 0);
 			menuElement->onRender(m_SelectedElement.get() == menuElement.get());
 		}
@@ -33,7 +33,7 @@ namespace davincpp
 
 	void MenuPage::switchElement(int switchDirection)
 	{
-		if (m_MenuElements.size() == 0) {
+		if (m_MenuElements.empty()) {
 			return;
 		}
 
@@ -57,6 +57,12 @@ namespace davincpp
 		}
 
 		m_SelectedElement->onInteraction(selectionPage);
+	}
+
+
+	void MenuPage::addMenuElement(const std::shared_ptr<MenuElement>& menuElement)
+	{
+		m_MenuElements.emplace_back(menuElement);
 	}
 
 

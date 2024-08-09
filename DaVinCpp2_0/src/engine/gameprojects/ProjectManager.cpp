@@ -48,6 +48,11 @@ namespace davincpp
 
     std::string ProjectManager::getDaVinCppVersion() const
     {
-        return m_DaVinCppVersion.data();
+        return m_DaVinCppVersion;
+    }
+
+    const std::vector<Project>& ProjectManager::getProjectList() const
+    {
+        return m_Projects;
     }
 }

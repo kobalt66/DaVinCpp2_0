@@ -142,7 +142,7 @@ namespace davincpp
 		attron(COLOR_PAIR(colorPair));
 		mvhline(cliY, 1, ' ', 1);
 		mvprintw(cliY, 2, text.data());
-		mvhline(cliY, length + 1, ' ', maxx - 1);
+		mvhline(cliY, length + 1, ' ', maxx - 2);
 		attroff(COLOR_PAIR(colorPair));
 		refresh();
 	}

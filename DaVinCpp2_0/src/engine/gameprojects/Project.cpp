@@ -3,7 +3,6 @@
 #include <DaVinCppExceptions.h>
 #include <yaml-cpp/yaml.h>
 #include <Console.h>
-#include <thread>
 
 namespace davincpp
 {
@@ -27,5 +26,11 @@ namespace davincpp
             Console::newline();
             Console::awaitKeyInput();
         }
+    }
+
+
+    const ProjectConfig& Project::getProjectConfig() const
+    {
+        return m_Config;
     }
 }

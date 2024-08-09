@@ -73,6 +73,22 @@ namespace YAML
             rhs.TextureFiles.emplace_back(texturesList[i].as<std::string>());
         }
 
+        if (node["vsync"]) {
+            rhs.Vsync = node["vsync"].as<bool>();
+        }
+
+        if (node["showCursor"]) {
+            rhs.ShowCursor = node["showCursor"].as<bool>();
+        }
+
+        if (node["flipTexturesH"]) {
+            rhs.FlipTexturesH = node["flipTexturesH"].as<bool>();
+        }
+
+        if (node["debugMode"]) {
+            rhs.DebugMode = node["debugMode"].as<bool>();
+        }
+
         return true;
     }
 }

@@ -16,6 +16,10 @@ namespace davincpp
         std::string ProjectName;
         glm::uvec2 ScreenResolution = glm::uvec2(0);
         glm::uvec2 PixelSize = glm::uvec2(0);
+        bool Vsync = false;
+        bool ShowCursor = false;
+        bool FlipTexturesH = false;
+        bool DebugMode = false;
     };
 }
 

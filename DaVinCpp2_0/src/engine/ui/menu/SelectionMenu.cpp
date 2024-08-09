@@ -5,9 +5,17 @@
 #include <DaVinCppExceptions.h>
 #include <Console.h>
 
+#include "SelectProjectButton.h"
+
 namespace davincpp
 {
-	void SelectionMenu::onLoad()
+	const char* SelectionMenu::PAGE_MAIN		    = "main";
+	const char* SelectionMenu::PAGE_SELECT_PROJECT  = "select_project";
+	const char* SelectionMenu::PAGE_CREATE_PROJECT  = "create_project";
+	const char* SelectionMenu::PAGE_DELETE_PROJECT  = "delete_project";
+	const char* SelectionMenu::PAGE_RENAME_PROJECT  = "rename_project";
+
+	void SelectionMenu::onLoad(const std::shared_ptr<ProjectManager>& projectManager)
 	{
 #ifndef _WIN32
 		Console::loadNcurses();
@@ -26,6 +34,14 @@ namespace davincpp
 		m_MenuPages[PAGE_SELECT_PROJECT] = std::make_shared<MenuPage>("Select a project",
 			std::make_shared<PageElement>("../", PAGE_MAIN)
 		);
+
+		for (int i = 0; i < projectManager->getProjectList().size(); i++) {
+			ProjectConfig projectConfig = projectManager->getProjectList().at(i).getProjectConfig();
+
+			m_MenuPages[PAGE_SELECT_PROJECT]->addMenuElement(
+				std::make_shared<SelectProjectButton>(projectConfig.ProjectName, projectConfig, i)
+			);
+		}
 
 		m_MenuPages[PAGE_CREATE_PROJECT] = std::make_shared<MenuPage>("Create a new project",
 			std::make_shared<PageElement>("../", PAGE_MAIN)
@@ -94,6 +110,28 @@ namespace davincpp
 	}
 
 
+	void SelectionMenu::setSelectedProjectIdx(int projectIdx)
+	{
+		m_SelectedProjectIdx = projectIdx;
+	}
+
+	int SelectionMenu::getSelectedProjectIdx() const
+	{
+		return m_SelectedProjectIdx;
+	}
+
+#ifndef _WIN32
+	void SelectionMenu::displayDescription(std::string_view text, int colorPair)
+	{
+		Console::printText(text, colorPair, stdscr->_maxy - 1);
+	}
+
+	void SelectionMenu::resetDescription()
+	{
+		Console::printText(" ", Console::GREEN_BLACK_PAIR, stdscr->_maxy - 1);
+	}
+#endif
+
 	void SelectionMenu::onRender() const
 	{
 		if (m_CurrentPage == nullptr) {
@@ -135,16 +173,4 @@ namespace davincpp
 
 		displayDescription(Console::fmtTxt(WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "), Console::BLACK_YELLOW_PAIR);
 	}
-
-#ifndef _WIN32
-	void SelectionMenu::displayDescription(std::string_view text, int colorPair)
-	{
-		Console::printText(text, colorPair, stdscr->_maxy - 1);
-	}
-
-	void SelectionMenu::resetDescription()
-	{
-		Console::printText(" ", Console::GREEN_BLACK_PAIR, stdscr->_maxy - 1);
-	}
-#endif
 }

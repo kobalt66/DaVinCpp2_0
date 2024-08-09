@@ -21,10 +21,15 @@ namespace davincpp
 		bool shouldShutdown();
 
 	private:
+		void loadSelectedProject();
+
+	private:
 		std::unique_ptr<Window> m_Window = nullptr;
 		std::unique_ptr<GameObjectManager> m_GameObjectManager = nullptr;
-		std::unique_ptr<ProjectManager> m_ProjectManager = nullptr;
+		std::shared_ptr<ProjectManager> m_ProjectManager = nullptr;
 		std::unique_ptr<SelectionMenu> m_SelectionMenu = nullptr;
+
+		std::shared_ptr<Project> m_DaVinCppProject = nullptr;
 
 	public:
 		static std::string DaVinCppVerison;

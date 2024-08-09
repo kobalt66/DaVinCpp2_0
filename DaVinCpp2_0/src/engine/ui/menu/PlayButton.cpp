@@ -3,7 +3,7 @@
 
 namespace davincpp
 {
-    PlayButton::PlayButton(std::string_view displayText)
+    PlayButton::PlayButton(const std::string& displayText)
         : MenuElement(displayText)
     { }
 

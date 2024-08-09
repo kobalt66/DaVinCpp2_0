@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include <DaVinCppConstants.h>
 
 namespace davincpp
 {
@@ -34,6 +35,10 @@ namespace davincpp
 
 	void Texture::resize(glm::uvec2 textureSize)
 	{
+		if (textureSize.x < MIN_FRAMEBUFFER_SIZEX || textureSize.y < MIN_FRAMEBUFFER_SIZEY) {
+			return;
+		}
+
 		bind();
 		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureSize.x, textureSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
 		unbind();

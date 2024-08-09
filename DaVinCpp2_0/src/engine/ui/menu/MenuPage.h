@@ -29,6 +29,8 @@ namespace davincpp
 		void switchElement(int switchDirection);
 		void interact(SelectionMenu* selectionPage);
 
+		void addMenuElement(const std::shared_ptr<MenuElement>& menuElement);
+
 	private:
 		void onRenderHeader();
 

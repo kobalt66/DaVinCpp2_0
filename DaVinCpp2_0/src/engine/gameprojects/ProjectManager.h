@@ -12,6 +12,7 @@ namespace davincpp
         void initProject(std::string_view projectName);
 
         [[nodiscard]] std::string getDaVinCppVersion() const;
+        [[nodiscard]] const std::vector<Project>& getProjectList() const;
 
     private:
         std::string m_DaVinCppVersion;

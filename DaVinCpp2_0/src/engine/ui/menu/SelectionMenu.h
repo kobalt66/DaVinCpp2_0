@@ -1,5 +1,6 @@
 #pragma once
 #include <ui/menu/MenuPage.h>
+#include <gameprojects/ProjectManager.h>
 #include <unordered_map>
 
 namespace davincpp
@@ -9,19 +10,30 @@ namespace davincpp
 	public:
 		SelectionMenu() = default;
 
-		void onLoad();
+		void onLoad(const std::shared_ptr<ProjectManager>& projectManager);
 		void onExecute();
 
 		void switchPage(std::string_view pageTag);
 		void shouldShutDown(bool shutDown);
 
+		void setSelectedProjectIdx(int projectIdx);
+		int getSelectedProjectIdx() const;
+
+#ifndef _WIN32
+		static void displayDescription(std::string_view text, int colorPair);
+		static void resetDescription();
+#endif
+
 	private:
 		void onRender() const;
 		void onUpdate(int input);
-#ifndef _WIN32
-		void displayDescription(std::string_view text, int colorPair);
-		void resetDescription();
-#endif
+
+	public:
+		static const char* PAGE_MAIN;
+		static const char* PAGE_SELECT_PROJECT;
+		static const char* PAGE_CREATE_PROJECT;
+		static const char* PAGE_DELETE_PROJECT;
+		static const char* PAGE_RENAME_PROJECT;
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
@@ -29,12 +41,8 @@ namespace davincpp
 
 		bool m_ShouldShutdown = false;
 
-		const char* WRN_INVALID_INPUT = "Invalid key input... ";
+		int m_SelectedProjectIdx = 0;
 
-		const char* PAGE_MAIN				= "main";
-		const char* PAGE_SELECT_PROJECT	    = "select_project";
-		const char* PAGE_CREATE_PROJECT	    = "create_project";
-		const char* PAGE_DELETE_PROJECT	    = "delete_project";
-		const char* PAGE_RENAME_PROJECT		= "rename_project";
+		const char* WRN_INVALID_INPUT = "Invalid key input... ";
 	};
 }

@@ -10,6 +10,8 @@ namespace davincpp
 
         void loadProjectConfig(std::string_view davincppVersion);
 
+        [[nodiscard]] const ProjectConfig& getProjectConfig() const;
+
     private:
         ProjectConfig m_Config;
         std::string m_ProjectPath;

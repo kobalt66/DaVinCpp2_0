@@ -1,10 +1,11 @@
 #include "MenuElement.h"
 #include <Console.h>
+#include <utility>
 
 namespace davincpp
 {
-	MenuElement::MenuElement(std::string_view displayText)
-		: m_DisplayText(displayText.data())
+	MenuElement::MenuElement(std::string displayText)
+		: m_DisplayText(std::move(displayText))
 	{ }
 
 

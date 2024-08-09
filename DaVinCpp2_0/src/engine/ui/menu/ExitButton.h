@@ -6,7 +6,7 @@ namespace davincpp
     class ExitButton : public MenuElement
     {
     public:
-        explicit ExitButton(std::string_view displayText);
+        explicit ExitButton(const std::string& displayText);
 
         void onInteraction(SelectionMenu* selectionMenu) override;
     };
