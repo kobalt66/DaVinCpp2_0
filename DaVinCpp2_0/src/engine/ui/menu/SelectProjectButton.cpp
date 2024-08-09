@@ -14,7 +14,7 @@ namespace davincpp
         selectionMenu->setSelectedProjectIdx(m_ProjectIdx);
 
         SelectionMenu::displayDescription(Console::fmtTxt("Switched DaVinCpp Project to '", m_TargetProjectConfig.ProjectName, "'... "), Console::BLACK_GREEN_PAIR);
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         selectionMenu->switchPage(SelectionMenu::PAGE_MAIN);
     }

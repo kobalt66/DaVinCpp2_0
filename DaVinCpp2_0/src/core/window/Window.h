@@ -2,7 +2,6 @@
 #include <cstdint>
 #include <opengl.h>
 #include <window/GameWindow.h>
-#include <gameprojects/ProjectConfig.h>
 
 namespace davincpp
 {
@@ -36,7 +35,7 @@ namespace davincpp
 		FrameBuffer& getFrameBuffer();
 
 	private:
-		uint32_t m_Width, m_Height;
+		uint32_t m_Width = 0, m_Height = 0;
 		std::string m_Title;
 
 		GLFWwindow* m_WindowPtr = nullptr;

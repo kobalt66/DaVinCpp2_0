@@ -5,7 +5,7 @@ resolution: [1000, 800]
 vsync: true
 showCursor: false
 flipTexturesH: false
-debugMode: false
+debugMode: true
 scripts: [
 ]
 textures: [

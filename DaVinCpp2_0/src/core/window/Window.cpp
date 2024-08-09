@@ -7,7 +7,8 @@
 namespace davincpp
 {
 	Window::Window(const ProjectConfig& projectConfig)
-		: m_Width(projectConfig.ScreenResolution.x),
+		: m_GameWindow(projectConfig),
+		m_Width(projectConfig.ScreenResolution.x),
 		m_Height(projectConfig.ScreenResolution.y),
 		m_Title(projectConfig.ProjectName)
 	{ }

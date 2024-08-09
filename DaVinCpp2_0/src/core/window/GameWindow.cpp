@@ -4,10 +4,8 @@
 
 namespace davincpp
 {
-	GameWindow::GameWindow()
-		: m_Width(0),
-		m_Height(0),
-		m_FrameBuffer(4, 4, 4),
+	GameWindow::GameWindow(const ProjectConfig& projectConfig)
+		: m_FrameBuffer(projectConfig.PixelSize.x, projectConfig.PixelSize.y, 4),
 		m_CursorColor(CYAN),
 		m_Cursor(new GameObject("Cursor"))
 	{

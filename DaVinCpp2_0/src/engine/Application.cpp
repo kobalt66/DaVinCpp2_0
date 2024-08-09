@@ -31,7 +31,7 @@ namespace davincpp
 		Console::log("Loading application...");
 
 		Console::log("Loading DaVinCpp project...");
-		loadSelectedProject();
+		ASSERT_LETHAL_ENGINE_CALL(loadSelectedProject(), "onLoad: loading DaVinCpp project");
 
 		ASSERT_ENGINE_CALL({
 			const ProjectConfig& projectConfig = m_DaVinCppProject->getProjectConfig();
@@ -118,10 +118,14 @@ namespace davincpp
 
 	void Application::loadSelectedProject()
 	{
+		if (m_ProjectManager->getProjectList().empty()) {
+			throw davincpp_error("Failed to load DaVinCpp project: no projects are registered!");
+		}
+
 		int projectIdx = m_SelectionMenu->getSelectedProjectIdx();
 
 		if (projectIdx >= m_ProjectManager->getProjectList().size()) {
-			throw davincpp_error("Failed to load DaVinCpp project: project index out of range!");
+			throw davincpp_error("Failed to load DaVinCpp project: project index out of project list range!");
 		}
 
 		m_DaVinCppProject = std::make_shared<Project>(m_ProjectManager->getProjectList().at(projectIdx));
