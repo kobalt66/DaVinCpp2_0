@@ -34,6 +34,9 @@ namespace davincpp
 		static const char* PAGE_CREATE_PROJECT;
 		static const char* PAGE_DELETE_PROJECT;
 		static const char* PAGE_RENAME_PROJECT;
+		static const char* PAGE_EDIT_PROJECT_CONFIGS;
+
+		static const char* WRN_INVALID_INPUT;
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
@@ -42,7 +45,5 @@ namespace davincpp
 		bool m_ShouldShutdown = false;
 
 		int m_SelectedProjectIdx = 0;
-
-		const char* WRN_INVALID_INPUT = "Invalid key input... ";
 	};
 }

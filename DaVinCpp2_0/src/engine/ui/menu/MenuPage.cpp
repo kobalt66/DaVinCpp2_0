@@ -25,9 +25,12 @@ namespace davincpp
 		}
 
 		m_CurrentRow = 0;
-
-		//Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
 #endif
+	}
+
+	void MenuPage::onUpdate(SelectionMenu* selectionMenu, int input)
+	{
+		SelectionMenu::displayDescription(Console::fmtTxt(SelectionMenu::WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "), Console::BLACK_YELLOW_PAIR);
 	}
 
 
@@ -89,7 +92,7 @@ namespace davincpp
 			Console::printCenteredText(headerLine, Console::GREEN_BLACK_PAIR, advanceRow());
 		}
 
-		Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 2, 1, advanceRow());
+		Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 1, 1, advanceRow());
 #endif
 	}
 

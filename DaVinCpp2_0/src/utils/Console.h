@@ -146,6 +146,7 @@ namespace davincpp
 		static void printCenteredText(std::string_view text, int colorPair, int cliY);
 		static void printText(std::string_view text, int colorPair, int cliY);
 		static void printNChar(int c, int colorPair, int length, int cliX, int cliY);
+		static void printTextMarginLR(std::string_view textLeft, std::string_view textRight, int colorPair, int cliY, int marginLeft, int marginRight);
 #endif
 
 		static void clear();
@@ -201,6 +202,8 @@ namespace davincpp
 		static constexpr int KEY_ARROW_DOWN		= KEY_DOWN;
 		static constexpr int KEY_NEWLINE		= 10;
 		static constexpr int KEY_ESCAPE			= 27;
+		static constexpr int KEY_ERASE			= 127;
+		static constexpr int KEY_DELETE			= 330;
 #endif
 
 	private:

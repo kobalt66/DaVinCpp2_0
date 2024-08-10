@@ -154,6 +154,29 @@ namespace davincpp
 		attroff(COLOR_PAIR(colorPair));
 		refresh();
 	}
+
+	void Console::printTextMarginLR(std::string_view textLeft, std::string_view textRight, int colorPair, int cliY, int marginLeft, int marginRight)
+	{
+		int maxx = stdscr->_maxx;
+
+		int marginLeftStart = 1;
+		int marginLeftEnd = marginLeft;
+		int textLeftStart = marginLeftEnd + 1;
+
+		int marginRightStart = maxx - marginRight;
+		int textRightStart = static_cast<int>(marginRightStart - textRight.size());
+
+		attron(COLOR_PAIR(colorPair));
+		mvhline(cliY, marginLeftStart, ' ', marginLeftEnd);
+		mvprintw(cliY, textLeftStart, textLeft.data());
+
+		mvhline(cliY, marginLeftEnd + textLeft.size(), ' ', textRightStart - (marginLeftEnd + textLeft.size()));
+
+		mvprintw(cliY, textRightStart, textRight.data());
+		mvhline(cliY, marginRightStart, ' ', marginRight);
+		attroff(COLOR_PAIR(colorPair));
+		refresh();
+	}
 #endif
 
 	void Console::clear()

@@ -11,12 +11,14 @@ namespace davincpp
 		explicit MenuElement(std::string  displayText);
 		virtual ~MenuElement() = default;
 
-		void onRender(bool selected);
+		virtual void onSwitchPage(SelectionMenu* selectionMenu) { }
+		virtual void onRender(bool selected);
+		virtual void onUpdate(SelectionMenu* selectionMenu, int input) { }
 		virtual void onInteraction(SelectionMenu* selectionMenu) = 0;
 
 		void setPosition(int row, int xIdx);
 
-	private:
+	protected:
 		std::string m_DisplayText;
 		int m_Row = 1;
 		int m_Xidx = 1;

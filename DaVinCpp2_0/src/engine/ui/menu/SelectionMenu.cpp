@@ -2,18 +2,22 @@
 #include <ui/menu/PageElement.h>
 #include <ui/menu/PlayButton.h>
 #include <ui/menu/ExitButton.h>
+#include <ui/menu/SelectProjectButton.h>
+#include <ui/menu/TextFieldElement.h>
+#include <ui/menu/ProjectCreationWizard.h>
 #include <DaVinCppExceptions.h>
 #include <Console.h>
 
-#include "SelectProjectButton.h"
-
 namespace davincpp
 {
-	const char* SelectionMenu::PAGE_MAIN		    = "main";
-	const char* SelectionMenu::PAGE_SELECT_PROJECT  = "select_project";
-	const char* SelectionMenu::PAGE_CREATE_PROJECT  = "create_project";
-	const char* SelectionMenu::PAGE_DELETE_PROJECT  = "delete_project";
-	const char* SelectionMenu::PAGE_RENAME_PROJECT  = "rename_project";
+	const char* SelectionMenu::PAGE_MAIN		            = "main";
+	const char* SelectionMenu::PAGE_SELECT_PROJECT          = "select_project";
+	const char* SelectionMenu::PAGE_CREATE_PROJECT          = "create_project";
+	const char* SelectionMenu::PAGE_DELETE_PROJECT          = "delete_project";
+	const char* SelectionMenu::PAGE_RENAME_PROJECT          = "rename_project";
+	const char* SelectionMenu::PAGE_EDIT_PROJECT_CONFIGS	= "edit_project_config";
+
+	const char* SelectionMenu::WRN_INVALID_INPUT			= "Invalid key input... ";
 
 	void SelectionMenu::onLoad(const std::shared_ptr<ProjectManager>& projectManager)
 	{
@@ -28,6 +32,7 @@ namespace davincpp
 			std::make_shared<PageElement>("Create project", PAGE_CREATE_PROJECT),
 			std::make_shared<PageElement>("Delete project", PAGE_DELETE_PROJECT),
 			std::make_shared<PageElement>("Rename project", PAGE_RENAME_PROJECT),
+			std::make_shared<PageElement>("Edit project config", PAGE_EDIT_PROJECT_CONFIGS),
 			std::make_shared<ExitButton>("Exit")
 		);
 
@@ -43,8 +48,9 @@ namespace davincpp
 			);
 		}
 
-		m_MenuPages[PAGE_CREATE_PROJECT] = std::make_shared<MenuPage>("Create a new project",
-			std::make_shared<PageElement>("../", PAGE_MAIN)
+		m_MenuPages[PAGE_CREATE_PROJECT] = std::make_shared<ProjectCreationWizard>("Create a new project",
+			std::make_shared<PageElement>("<Cancle>", PAGE_MAIN),
+			std::make_shared<TextFieldElement>("Project Name", "Enter project name...", 48)
 		);
 
 		m_MenuPages[PAGE_DELETE_PROJECT] = std::make_shared<MenuPage>("Delete a project",
@@ -52,6 +58,10 @@ namespace davincpp
 		);
 
 		m_MenuPages[PAGE_RENAME_PROJECT] = std::make_shared<MenuPage>("Rename a project",
+			std::make_shared<PageElement>("../", PAGE_MAIN)
+		);
+
+		m_MenuPages[PAGE_EDIT_PROJECT_CONFIGS] = std::make_shared<MenuPage>("Edit project configs",
 			std::make_shared<PageElement>("../", PAGE_MAIN)
 		);
 
@@ -102,6 +112,7 @@ namespace davincpp
 
 		clear();
 		m_CurrentPage = m_MenuPages.at(pageTag.data());
+		m_CurrentPage->onSwitchPage(this);
 	}
 
 	void SelectionMenu::shouldShutDown(bool shutDown)
@@ -171,6 +182,6 @@ namespace davincpp
 			return;
 		}
 
-		displayDescription(Console::fmtTxt(WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "), Console::BLACK_YELLOW_PAIR);
+		m_CurrentPage->onUpdate(this, input);
 	}
 }

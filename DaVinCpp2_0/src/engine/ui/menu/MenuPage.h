@@ -21,24 +21,27 @@ namespace davincpp
 		{
 			m_MenuElements.insert(m_MenuElements.begin(), { args... });
 
-			switchElement(1);
+			MenuPage::switchElement(1);
 		}
+		virtual ~MenuPage() = default;
 
-		void onRender();
+		virtual void onSwitchPage(SelectionMenu* selectionMenu) { }
+		virtual void onRender();
+		virtual void onUpdate(SelectionMenu* selectionMenu, int input);
 
-		void switchElement(int switchDirection);
-		void interact(SelectionMenu* selectionPage);
+		virtual void switchElement(int switchDirection);
+		virtual void interact(SelectionMenu* selectionPage);
 
 		void addMenuElement(const std::shared_ptr<MenuElement>& menuElement);
 
-	private:
+	protected:
 		void onRenderHeader();
 
 #ifndef _WIN32
 		int advanceRow();
 #endif
 
-	private:
+	protected:
 		const char* m_Title;
 		std::vector<std::shared_ptr<MenuElement>> m_MenuElements;
 
