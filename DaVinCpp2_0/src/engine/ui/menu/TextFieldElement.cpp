@@ -1,8 +1,7 @@
 #include "TextFieldElement.h"
+#include <ui/menu/SelectionMenu.h>
 #include <Console.h>
 #include <utility>
-
-#include "SelectionMenu.h"
 
 namespace davincpp
 {
@@ -55,6 +54,4 @@ namespace davincpp
         SelectionMenu::resetDescription();
         m_EnteredText += static_cast<char>(input);
     }
-
-    void TextFieldElement::onInteraction(SelectionMenu *selectionMenu) { }
 }

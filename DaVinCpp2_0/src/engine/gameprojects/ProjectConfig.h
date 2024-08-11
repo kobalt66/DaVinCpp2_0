@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
-#include <yaml-cpp/yaml.h>
+#include <DaVinCppYamlHelper.h>
 #include <DavScript.h>
 
 namespace davincpp

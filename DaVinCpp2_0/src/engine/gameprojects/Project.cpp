@@ -1,7 +1,6 @@
 #include "Project.h"
 #include <DaVinCppFileSystem.h>
 #include <DaVinCppExceptions.h>
-#include <yaml-cpp/yaml.h>
 #include <Console.h>
 
 namespace davincpp
@@ -32,5 +31,14 @@ namespace davincpp
     const ProjectConfig& Project::getProjectConfig() const
     {
         return m_Config;
+    }
+}
+
+namespace YAML
+{
+    bool convert<davincpp::Project>::decode(const Node& node, davincpp::Project &rhs)
+    {
+        rhs = davincpp::Project(node.as<std::string>());
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 #include "ProjectManager.h"
 #include <DaVinCppFileSystem.h>
 #include <DaVinCppExceptions.h>
+#include <DaVinCppYamlHelper.h>
 #include <DaVinCppString.h>
 #include <yaml-cpp/yaml.h>
 #include <Console.h>
@@ -24,17 +25,9 @@ namespace davincpp
 
             YAML::Node davincppConfig = YAML::LoadFile(configFilePath);
 
-            m_DaVinCppVersion = davincppConfig["davincppVersion"].as<std::string>();
-
-            YAML::Node registeredProjectNode = davincppConfig["registered_projects"];
-
-            if (!registeredProjectNode.IsSequence() || registeredProjectNode.IsNull()) {
-                return;
-            }
-
-            for (std::size_t i = 0; i < registeredProjectNode.size(); i++) {
-                m_Projects.emplace_back(registeredProjectNode[i].as<std::string>());
-            }
+            m_DaVinCppVersion = DaVinCppYamlHelper::getValue<std::string>(davincppConfig, "davincppVersion");
+            m_LegacyVersions = DaVinCppYamlHelper::getSequence<std::string>(davincppConfig, "legacyVersions");
+            m_Projects = DaVinCppYamlHelper::getSequence<Project>(davincppConfig, "registeredProjects");
 
             for (Project& project : m_Projects) {
                 project.loadProjectConfig(m_DaVinCppVersion);
@@ -60,4 +53,10 @@ namespace davincpp
     {
         return m_Projects;
     }
+
+    const std::vector<std::string> &ProjectManager::getLacacyVersions() const
+    {
+        return m_LegacyVersions;
+    }
+
 }

@@ -13,9 +13,11 @@ namespace davincpp
 
         [[nodiscard]] std::string getDaVinCppVersion() const;
         [[nodiscard]] const std::vector<Project>& getProjectList() const;
+        [[nodiscard]] const std::vector<std::string>& getLacacyVersions() const;
 
     private:
         std::string m_DaVinCppVersion;
+        std::vector<std::string> m_LegacyVersions;
 
         std::string m_DaVinCppConfig;
         std::vector<Project> m_Projects;

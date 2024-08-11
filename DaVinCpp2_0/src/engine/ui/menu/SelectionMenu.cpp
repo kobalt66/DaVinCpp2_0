@@ -4,6 +4,7 @@
 #include <ui/menu/ExitButton.h>
 #include <ui/menu/SelectProjectButton.h>
 #include <ui/menu/TextFieldElement.h>
+#include <ui/menu/ScrollSelectionElement.h>
 #include <ui/menu/ProjectCreationWizard.h>
 #include <DaVinCppExceptions.h>
 #include <Console.h>
@@ -50,7 +51,8 @@ namespace davincpp
 
 		m_MenuPages[PAGE_CREATE_PROJECT] = std::make_shared<ProjectCreationWizard>("Create a new project",
 			std::make_shared<PageElement>("<Cancle>", PAGE_MAIN),
-			std::make_shared<TextFieldElement>("Project Name", "Enter project name...", 48)
+			std::make_shared<TextFieldElement>("Project name", "Enter project name...", 48),
+			std::make_shared<ScrollSelectionElement>("Supported DaVinCpp verion", projectManager->getLacacyVersions())
 		);
 
 		m_MenuPages[PAGE_DELETE_PROJECT] = std::make_shared<MenuPage>("Delete a project",

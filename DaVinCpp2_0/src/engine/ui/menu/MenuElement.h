@@ -13,7 +13,7 @@ namespace davincpp
 
 		virtual void onSwitchPage(SelectionMenu* selectionMenu) { }
 		virtual void onRender(bool selected);
-		virtual void onUpdate(SelectionMenu* selectionMenu, int input) { }
+		virtual void onUpdate(SelectionMenu* selectionMenu, int input);
 		virtual void onInteraction(SelectionMenu* selectionMenu) = 0;
 
 		void setPosition(int row, int xIdx);

@@ -1,4 +1,5 @@
 #include "MenuElement.h"
+#include <ui/menu/SelectionMenu.h>
 #include <Console.h>
 #include <utility>
 
@@ -16,6 +17,11 @@ namespace davincpp
 #else
 		Console::printCenteredText(m_DisplayText, selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR, m_Row);
 #endif
+	}
+
+	void MenuElement::onUpdate(SelectionMenu *selectionMenu, int input)
+	{
+		SelectionMenu::displayDescription(Console::fmtTxt(SelectionMenu::WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "), Console::BLACK_YELLOW_PAIR);
 	}
 
 
