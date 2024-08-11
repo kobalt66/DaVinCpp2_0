@@ -14,6 +14,9 @@ namespace davincpp
         void onUpdate(SelectionMenu *selectionMenu, int input) override;
         void onInteraction(SelectionMenu *selectionMenu) override { }
 
+        void setSelectedOption(const std::string& option);
+        [[nodiscard]] std::string getSelectionOption() const;
+
     private:
         std::vector<std::string> m_Options;
         int m_SelectedOption = 0;

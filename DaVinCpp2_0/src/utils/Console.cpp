@@ -258,6 +258,7 @@ namespace davincpp
 #endif
 	}
 
+
 	int Console::getInputKey()
 	{
 #ifdef _WIN32

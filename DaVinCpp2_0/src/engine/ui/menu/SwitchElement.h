@@ -1,16 +1,21 @@
-//
-// Created by lephobix on 8/10/24.
-//
+#pragma once
+#include <ui/menu/MenuElement.h>
 
-#ifndef SWITCHELEMENT_H
-#define SWITCHELEMENT_H
+namespace davincpp
+{
+    class SwitchElement : public MenuElement
+    {
+    public:
+        explicit SwitchElement(const std::string& displayText);
 
+        void onSwitchPage(SelectionMenu *selectionMenu) override;
+        void onRender(bool selected) override;
+        void onInteraction(SelectionMenu *selectionMenu) override;
 
+        void setState(bool state);
+        [[nodiscard]] bool getState() const;
 
-class SwitchElement {
-
-};
-
-
-
-#endif //SWITCHELEMENT_H
+    private:
+        bool m_State = false;
+    };
+}

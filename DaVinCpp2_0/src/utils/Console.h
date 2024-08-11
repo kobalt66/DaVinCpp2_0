@@ -157,6 +157,7 @@ namespace davincpp
 		static int getConsoleWidth();
 		static int getConsoleHeight();
 		static std::pair<int, int> getConsoleSize();
+
 		static int getInputKey();
 		static std::string getInputKeyByCode(int keyCode);
 		static int awaitKeyInput();

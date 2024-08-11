@@ -54,4 +54,19 @@ namespace davincpp
         SelectionMenu::resetDescription();
         m_EnteredText += static_cast<char>(input);
     }
+
+
+    void TextFieldElement::setEnteredText(std::string enteredText)
+    {
+        if (enteredText.size() >= m_CharacterLimit) {
+            enteredText.resize(static_cast<size_t>(m_CharacterLimit));
+        }
+
+        m_EnteredText = enteredText;
+    }
+
+    std::string TextFieldElement::getEnteredText() const
+    {
+        return m_EnteredText;
+    }
 }

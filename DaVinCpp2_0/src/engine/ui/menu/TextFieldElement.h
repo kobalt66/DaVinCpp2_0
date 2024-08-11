@@ -13,6 +13,9 @@ namespace davincpp
         void onUpdate(SelectionMenu *selectionMenu, int input) override;
         void onInteraction(SelectionMenu *selectionMenu) override { }
 
+        void setEnteredText(std::string enteredText);
+        [[nodiscard]] std::string getEnteredText() const;
+
     private:
         const std::string m_PlaceHolderText;
         std::string m_EnteredText;

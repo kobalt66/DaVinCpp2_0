@@ -5,6 +5,8 @@
 #include <ui/menu/SelectProjectButton.h>
 #include <ui/menu/TextFieldElement.h>
 #include <ui/menu/ScrollSelectionElement.h>
+#include <ui/menu/SwitchElement.h>
+#include <ui/menu/NumberFieldElement.h>
 #include <ui/menu/ProjectCreationWizard.h>
 #include <DaVinCppExceptions.h>
 #include <Console.h>
@@ -52,7 +54,13 @@ namespace davincpp
 		m_MenuPages[PAGE_CREATE_PROJECT] = std::make_shared<ProjectCreationWizard>("Create a new project",
 			std::make_shared<PageElement>("<Cancle>", PAGE_MAIN),
 			std::make_shared<TextFieldElement>("Project name", "Enter project name...", 48),
-			std::make_shared<ScrollSelectionElement>("Supported DaVinCpp verion", projectManager->getLacacyVersions())
+			std::make_shared<ScrollSelectionElement>("Supported DaVinCpp verion", projectManager->getLacacyVersions()),
+			std::make_shared<SwitchElement>("Vsync"),
+			std::make_shared<SwitchElement>("Show system cursor"),
+			std::make_shared<NumberFieldElement>("Resolution (width)", 0, 3000), // TODO: try to find out what the maximum client size of the screen is!
+			std::make_shared<NumberFieldElement>("Resolution (height)", 0, 3000),
+			std::make_shared<NumberFieldElement>("Pixel width", 0, 20),
+			std::make_shared<NumberFieldElement>("Pixel height", 0, 20)
 		);
 
 		m_MenuPages[PAGE_DELETE_PROJECT] = std::make_shared<MenuPage>("Delete a project",

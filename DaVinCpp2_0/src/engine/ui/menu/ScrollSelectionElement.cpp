@@ -1,6 +1,7 @@
 #include "ScrollSelectionElement.h"
 #include <ui/menu/SelectionMenu.h>
 #include <Console.h>
+#include <ranges>
 
 namespace davincpp
 {
@@ -21,7 +22,7 @@ namespace davincpp
 #else
         Console::printTextMarginLR(
             Console::fmtTxt(m_DisplayText, " > "),
-            m_Options.empty() ? "< > | null " : Console::fmtTxt("< > |     ", m_Options.at(m_SelectedOption), " "),
+            m_Options.empty() ? "< >      null " : Console::fmtTxt("< >      ", m_Options.at(m_SelectedOption), " "),
             selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR,
             m_Row,
             (stdscr->_maxx - 2) / 8,
@@ -44,4 +45,23 @@ namespace davincpp
 
         SelectionMenu::displayDescription(Console::fmtTxt(SelectionMenu::WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "), Console::BLACK_YELLOW_PAIR);
     }
+
+
+    void ScrollSelectionElement::setSelectedOption(const std::string& option)
+    {
+        auto foundOption = std::find(m_Options.begin(), m_Options.end(), option);
+
+        if (foundOption == m_Options.end()) {
+            m_SelectedOption = static_cast<int>(std::ranges::distance(m_Options.begin(), foundOption));
+        }
+        else {
+            m_SelectedOption = 0;
+        }
+    }
+
+    std::string ScrollSelectionElement::getSelectionOption() const
+    {
+        return m_Options[m_SelectedOption];
+    }
+
 }
