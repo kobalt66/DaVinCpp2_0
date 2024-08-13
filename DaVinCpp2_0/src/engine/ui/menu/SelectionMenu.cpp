@@ -7,6 +7,7 @@
 #include <ui/menu/ScrollSelectionElement.h>
 #include <ui/menu/SwitchElement.h>
 #include <ui/menu/NumberFieldElement.h>
+#include <ui/menu/BreakElement.h>
 #include <ui/menu/ProjectCreationWizard.h>
 #include <DaVinCppExceptions.h>
 #include <Console.h>
@@ -31,11 +32,13 @@ namespace davincpp
 		Console::showCursor(false);
 		m_MenuPages[PAGE_MAIN] = std::make_shared<MenuPage>("D a V i n C p p  2.0\nMain Menu",
 			std::make_shared<PlayButton>("Start Game"),
+			std::make_shared<BreakElement>(),
 			std::make_shared<PageElement>("Select project", PAGE_SELECT_PROJECT),
 			std::make_shared<PageElement>("Create project", PAGE_CREATE_PROJECT),
 			std::make_shared<PageElement>("Delete project", PAGE_DELETE_PROJECT),
 			std::make_shared<PageElement>("Rename project", PAGE_RENAME_PROJECT),
 			std::make_shared<PageElement>("Edit project config", PAGE_EDIT_PROJECT_CONFIGS),
+			std::make_shared<BreakElement>(),
 			std::make_shared<ExitButton>("Exit")
 		);
 
@@ -55,8 +58,10 @@ namespace davincpp
 			std::make_shared<PageElement>("<Cancle>", PAGE_MAIN),
 			std::make_shared<TextFieldElement>("Project name", "Enter project name...", 48),
 			std::make_shared<ScrollSelectionElement>("Supported DaVinCpp verion", projectManager->getLacacyVersions()),
+			std::make_shared<BreakElement>(),
 			std::make_shared<SwitchElement>("Vsync"),
 			std::make_shared<SwitchElement>("Show system cursor"),
+			std::make_shared<BreakElement>(),
 			std::make_shared<NumberFieldElement>("Resolution (width)", 0, 3000), // TODO: try to find out what the maximum client size of the screen is!
 			std::make_shared<NumberFieldElement>("Resolution (height)", 0, 3000),
 			std::make_shared<NumberFieldElement>("Pixel width", 0, 20),

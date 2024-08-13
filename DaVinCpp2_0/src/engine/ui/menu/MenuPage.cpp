@@ -1,6 +1,7 @@
 #include "MenuPage.h"
 #include <ui/menu/SelectionMenu.h>
 #include <DaVinCppString.h>
+#include <ui/menu/BreakElement.h>
 
 namespace davincpp
 {
@@ -36,21 +37,23 @@ namespace davincpp
 
 	void MenuPage::switchElement(int switchDirection)
 	{
-		if (m_MenuElements.empty()) {
-			return;
-		}
+		do {
+			if (m_MenuElements.empty()) {
+				return;
+			}
 
-		if ((m_SelectedElementIdx + switchDirection) < 0) {
-			m_SelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
-		}
-		else if ((m_SelectedElementIdx + switchDirection) >= m_MenuElements.size()) {
-			m_SelectedElementIdx = 0;
-		}
-		else {
-			m_SelectedElementIdx += switchDirection;
-		}
+			if ((m_SelectedElementIdx + switchDirection) < 0) {
+				m_SelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
+			}
+			else if ((m_SelectedElementIdx + switchDirection) >= m_MenuElements.size()) {
+				m_SelectedElementIdx = 0;
+			}
+			else {
+				m_SelectedElementIdx += switchDirection;
+			}
 
-		m_SelectedElement = m_MenuElements.at(m_SelectedElementIdx);
+			m_SelectedElement = m_MenuElements.at(m_SelectedElementIdx);
+		} while (dynamic_cast<BreakElement*>(m_SelectedElement.get()) != nullptr);
 	}
 
 	void MenuPage::interact(SelectionMenu* selectionPage)
