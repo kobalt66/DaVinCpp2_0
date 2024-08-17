@@ -2,6 +2,7 @@
 #include <ui/menu/SelectionMenu.h>
 #include <DaVinCppString.h>
 #include <ui/menu/BreakElement.h>
+#include <ui/menu/TextElement.h>
 
 namespace davincpp
 {
@@ -21,7 +22,7 @@ namespace davincpp
 		onRenderHeader();
 
 		for (const std::shared_ptr<MenuElement>& menuElement : m_MenuElements) {
-			menuElement->setPosition(advanceRow(), 0);
+			menuElement->setCliY(advanceRow());
 			menuElement->onRender(m_SelectedElement.get() == menuElement.get());
 		}
 
@@ -37,23 +38,36 @@ namespace davincpp
 
 	void MenuPage::switchElement(int switchDirection)
 	{
-		do {
+		while (true) {
 			if (m_MenuElements.empty()) {
 				return;
 			}
 
+			int newSelectedElementIdx = m_SelectedElementIdx;
 			if ((m_SelectedElementIdx + switchDirection) < 0) {
-				m_SelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
+				newSelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
 			}
 			else if ((m_SelectedElementIdx + switchDirection) >= m_MenuElements.size()) {
-				m_SelectedElementIdx = 0;
+				newSelectedElementIdx = 0;
 			}
 			else {
-				m_SelectedElementIdx += switchDirection;
+				newSelectedElementIdx += switchDirection;
+			}
+
+			m_SelectedElementIdx = newSelectedElementIdx;
+
+			if (auto textElement = dynamic_cast<TextElement*>(m_MenuElements.at(newSelectedElementIdx).get())) {
+				if (textElement->isSkippable()) {
+					continue;
+				}
+			}
+			else if (dynamic_cast<BreakElement*>(m_MenuElements.at(newSelectedElementIdx).get()) != nullptr) {
+				continue;
 			}
 
 			m_SelectedElement = m_MenuElements.at(m_SelectedElementIdx);
-		} while (dynamic_cast<BreakElement*>(m_SelectedElement.get()) != nullptr);
+			break;
+		}
 	}
 
 	void MenuPage::interact(SelectionMenu* selectionPage)
@@ -69,6 +83,16 @@ namespace davincpp
 	void MenuPage::addMenuElement(const std::shared_ptr<MenuElement>& menuElement)
 	{
 		m_MenuElements.emplace_back(menuElement);
+	}
+
+
+	int MenuPage::getStartCliY() const
+	{
+		if (m_MenuElements.empty()) {
+			return 0;
+		}
+
+		return m_MenuElements.at(0)->getCliY();
 	}
 
 

@@ -1,5 +1,6 @@
 #include "SelectProjectButton.h"
 #include <ui/menu/SelectionMenu.h>
+#include <DaVinCppTypes.h>
 #include <thread>
 
 namespace davincpp
@@ -13,8 +14,10 @@ namespace davincpp
     {
         selectionMenu->setSelectedProjectIdx(m_ProjectIdx);
 
+        selectionMenu->setInputControl(false);
         SelectionMenu::displayDescription(Console::fmtTxt("Switched DaVinCpp Project to '", m_TargetProjectConfig.ProjectName, "'... "), Console::BLACK_GREEN_PAIR);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(sec(1));
+        selectionMenu->setInputControl(true);
 
         selectionMenu->switchPage(SelectionMenu::PAGE_MAIN);
     }

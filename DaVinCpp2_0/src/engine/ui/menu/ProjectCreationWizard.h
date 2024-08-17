@@ -10,7 +10,7 @@ namespace davincpp
             : MenuPage(title, args...)
         { }
 
-        void onSwitchPage(SelectionMenu *selectionMenu) override;
-        void onUpdate(SelectionMenu *selectionMenu, int input) override;
+        void onSwitchPage(SelectionMenu* selectionMenu) override;
+        void onUpdate(SelectionMenu* selectionMenu, int input) override;
     };
 };

@@ -8,7 +8,7 @@ namespace davincpp
 	class MenuElement
 	{
 	public:
-		explicit MenuElement(std::string  displayText);
+		explicit MenuElement(std::string displayText);
 		virtual ~MenuElement() = default;
 
 		virtual void onSwitchPage(SelectionMenu* selectionMenu) { }
@@ -16,11 +16,12 @@ namespace davincpp
 		virtual void onUpdate(SelectionMenu* selectionMenu, int input);
 		virtual void onInteraction(SelectionMenu* selectionMenu) = 0;
 
-		void setPosition(int row, int xIdx);
+		void setCliY(int cliY);
+		[[nodiscard]] int getCliY() const;
 
 	protected:
 		std::string m_DisplayText;
-		int m_Row = 1;
+		int m_CliY = 1;
 		int m_Xidx = 1;
 	};
 }

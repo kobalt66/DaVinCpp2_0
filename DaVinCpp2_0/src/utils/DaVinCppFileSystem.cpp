@@ -42,4 +42,21 @@ namespace davincpp
 #endif
 		return output;
 	}
+
+	std::pair<std::vector<std::filesystem::directory_entry>, std::vector<std::filesystem::directory_entry>> DaVinCppFileSystem::getContentsOfDirectory(const std::filesystem::path& directoryPath)
+	{
+		std::vector<std::filesystem::directory_entry> directories, files;
+
+		for (const auto& item : std::filesystem::directory_iterator(directoryPath)) {
+			if (item.is_directory()) {
+				directories.emplace_back(item);
+			}
+			else {
+				files.emplace_back(item);
+			}
+		}
+
+		return { directories, files };
+	}
+
 }

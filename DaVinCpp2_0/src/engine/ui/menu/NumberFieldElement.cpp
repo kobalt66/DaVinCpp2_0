@@ -27,7 +27,7 @@ namespace davincpp
             Console::fmtTxt(m_DisplayText, " > "),
             m_EnteredTextBuffer.empty() ? Console::fmtTxt("- ", m_Value, " + ") : Console::fmtTxt("(Press enter to verfiy number...)      - ", m_EnteredTextBuffer, " + "),
             selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR,
-            m_Row,
+            m_CliY,
             (stdscr->_maxx - 2) / 8,
             (stdscr->_maxx - 2) / 8
             );

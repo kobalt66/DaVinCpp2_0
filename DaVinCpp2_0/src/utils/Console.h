@@ -146,6 +146,8 @@ namespace davincpp
 		static void printCenteredText(std::string_view text, int colorPair, int cliY);
 		static void printText(std::string_view text, int colorPair, int cliY);
 		static void printNChar(int c, int colorPair, int length, int cliX, int cliY);
+		static void printTextMarginL(std::string_view textLeft, int colorPair, int cliY, int marginLeft);
+		static void printTextMarginR(std::string_view textRight, int colorPair, int cliY, int marginRight);
 		static void printTextMarginLR(std::string_view textLeft, std::string_view textRight, int colorPair, int cliY, int marginLeft, int marginRight);
 #endif
 

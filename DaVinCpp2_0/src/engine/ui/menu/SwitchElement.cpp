@@ -23,7 +23,7 @@ namespace davincpp
             Console::fmtTxt(m_DisplayText, " > "),
             m_State ? "<On>" : "<Off>",
             selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR,
-            m_Row,
+            m_CliY,
             (stdscr->_maxx - 2) / 8,
             (stdscr->_maxx - 2) / 8
             );

@@ -15,7 +15,7 @@ namespace davincpp
 #ifdef _WIN32
 		Console::printCenteredText(m_DisplayText, selected ? Console::GREEN_BG_BLACK_FG : Console::GREEN);
 #else
-		Console::printCenteredText(m_DisplayText, selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR, m_Row);
+		Console::printCenteredText(m_DisplayText, selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR, m_CliY);
 #endif
 	}
 
@@ -25,9 +25,13 @@ namespace davincpp
 	}
 
 
-	void MenuElement::setPosition(int row, int xIdx)
+	void MenuElement::setCliY(int cliY)
 	{
-		m_Row = row;
-		m_Xidx = xIdx;
+		m_CliY = cliY;
+	}
+
+	int MenuElement::getCliY() const
+	{
+		return m_CliY;
 	}
 }

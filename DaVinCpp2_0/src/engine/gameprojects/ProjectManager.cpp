@@ -38,9 +38,9 @@ namespace davincpp
         }
     }
 
-    void ProjectManager::initProject(std::string_view projectName)
+    void ProjectManager::initProject(const Project& projectName)
     {
-
+        throw not_implemented(__LINE__, __FILE__);
     }
 
 

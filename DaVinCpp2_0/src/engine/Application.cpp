@@ -15,8 +15,8 @@ namespace davincpp
 		ASSERT_ENGINE_CALL(m_ProjectManager->loadProjectList(), "onStartEngine: loading projects");
 
 		ASSERT_ENGINE_CALL({
-			m_SelectionMenu = std::make_unique<SelectionMenu>();
-			m_SelectionMenu->onLoad(m_ProjectManager);
+			m_SelectionMenu = std::make_unique<SelectionMenu>(m_ProjectManager);
+			m_SelectionMenu->onLoad();
 			}, "onStartEngine: creating selection menu");
 
 		Console::clear();

@@ -3,7 +3,7 @@
 
 namespace davincpp
 {
-    void ProjectCreationWizard::onSwitchPage(SelectionMenu *selectionMenu)
+    void ProjectCreationWizard::onSwitchPage(SelectionMenu* selectionMenu)
     {
         for (const std::shared_ptr<MenuElement>& menuElement : m_MenuElements) {
             menuElement->onSwitchPage(selectionMenu);

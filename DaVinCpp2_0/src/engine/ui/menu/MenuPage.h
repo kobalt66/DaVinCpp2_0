@@ -34,6 +34,8 @@ namespace davincpp
 
 		void addMenuElement(const std::shared_ptr<MenuElement>& menuElement);
 
+		[[nodiscard]] int getStartCliY() const;
+
 	protected:
 		void onRenderHeader();
 

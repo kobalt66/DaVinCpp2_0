@@ -9,7 +9,7 @@ namespace davincpp
         explicit ProjectManager(std::string_view davincppConfig);
 
         void loadProjectList();
-        void initProject(std::string_view projectName);
+        void initProject(const Project& projectName);
 
         [[nodiscard]] std::string getDaVinCppVersion() const;
         [[nodiscard]] const std::vector<Project>& getProjectList() const;
