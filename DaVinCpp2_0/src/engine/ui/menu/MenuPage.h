@@ -30,7 +30,7 @@ namespace davincpp
 		virtual void onUpdate(SelectionMenu* selectionMenu, int input);
 
 		virtual void switchElement(int switchDirection);
-		virtual void interact(SelectionMenu* selectionPage);
+		virtual void interact(SelectionMenu* selectionMenu);
 
 		void addMenuElement(const std::shared_ptr<MenuElement>& menuElement);
 

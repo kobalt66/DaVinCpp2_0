@@ -16,6 +16,7 @@ namespace davincpp
 		void onExecute();
 
 		void switchPage(std::string_view pageTag);
+		void gotoPreviousPage();
 		void shouldShutDown(bool shutDown);
 
 		void setInputControl(bool enableInput);
@@ -37,6 +38,7 @@ namespace davincpp
 		static void actionCreateProject(SelectionMenu* selectionMenu, ActionButton* buttonRef);
 
 	public:
+		static const char* PAGE_UNDEFINED;
 		static const char* PAGE_MAIN;
 		static const char* PAGE_SELECT_PROJECT;
 		static const char* PAGE_CREATE_PROJECT;
@@ -51,6 +53,7 @@ namespace davincpp
 		std::shared_ptr<ProjectManager> m_ProjectManager;
 
 		std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
+		std::vector<std::shared_ptr<MenuPage>> m_PageInvocationHistory;
 		std::shared_ptr<MenuPage> m_CurrentPage = nullptr;
 
 		bool m_ShouldShutdown = false;

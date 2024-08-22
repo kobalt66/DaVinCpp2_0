@@ -70,13 +70,13 @@ namespace davincpp
 		}
 	}
 
-	void MenuPage::interact(SelectionMenu* selectionPage)
+	void MenuPage::interact(SelectionMenu* selectionMenu)
 	{
 		if (m_SelectedElement == nullptr) {
 			return;
 		}
 
-		m_SelectedElement->onInteraction(selectionPage);
+		m_SelectedElement->onInteraction(selectionMenu);
 	}
 
 

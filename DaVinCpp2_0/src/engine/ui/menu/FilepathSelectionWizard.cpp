@@ -18,22 +18,17 @@ namespace davincpp
 #ifdef _WIN32
         throw not_implemented(__LINE__, __FILE__);
 #else
-        m_CurrentDirectory = "/home";
+        m_CurrentPath = "/home";
 #endif
     }
 
 
-    void FilepathSelectionWizard::onSwitchPage(SelectionMenu* selectionMenu)
+    void FilepathSelectionWizard::onSwitchPage(SelectionMenu *selectionMenu)
     {
         updateDirectoryStructure();
     }
 
-    void FilepathSelectionWizard::onUpdate(SelectionMenu* selectionMenu, int input)
-    {
-
-    }
-
-    void FilepathSelectionWizard::interact(SelectionMenu* selectionPage)
+    void FilepathSelectionWizard::interact(SelectionMenu* selectionMenu)
     {
         if (auto directoryEntry = dynamic_cast<DirectoryEntryElement*>(m_SelectedElement.get())) {
             std::filesystem::path newFilepath = directoryEntry->getDirectoryEntryPath();
@@ -47,29 +42,39 @@ namespace davincpp
             try {
                 permissions(newFilepath, std::filesystem::perms::owner_all);
             } catch (std::exception& exception) {
-                selectionPage->setInputControl(false);
-                SelectionMenu::displayDescription(Console::fmtTxt("Failed to access file: ", exception.what()), Console::BLACK_YELLOW_PAIR);
+                selectionMenu->setInputControl(false);
+                SelectionMenu::displayDescription(Console::fmtTxt("Failed to access file: ", exception.what(), " "), Console::BLACK_YELLOW_PAIR);
                 std::this_thread::sleep_for(sec(2));
-                selectionPage->setInputControl(true);
+                selectionMenu->setInputControl(true);
                 return;
             }
 
-            m_CurrentDirectory = newFilepath;
-            selectionPage->clearCurrentMenuPage();
+            m_CurrentPath = newFilepath;
+            selectionMenu->clearCurrentMenuPage();
             updateDirectoryStructure();
+            return;
         }
+
+        m_SelectedElement->onInteraction(selectionMenu);
     }
 
 
     void FilepathSelectionWizard::updateDirectoryStructure()
     {
         m_MenuElements.clear();
-        std::pair<std::vector<std::filesystem::directory_entry>, std::vector<std::filesystem::directory_entry>> directoryContents = DaVinCppFileSystem::getContentsOfDirectory(m_CurrentDirectory);
+        std::pair<std::vector<std::filesystem::directory_entry>, std::vector<std::filesystem::directory_entry>> directoryContents = DaVinCppFileSystem::getContentsOfDirectory(m_CurrentPath);
 
-        addMenuElement(std::make_shared<PageElement>("<Cancle>", SelectionMenu::PAGE_MAIN));
+        addMenuElement(std::make_shared<PageElement>("<Cancle>", SelectionMenu::PAGE_UNDEFINED, true));
         addMenuElement(std::make_shared<BreakElement>());
-        addMenuElement(std::make_shared<TextElement>(Console::fmtTxt("Current directory > ", m_CurrentDirectory.string(), "/ "), true, ALIGN_LEFT, 5));
-        addMenuElement(std::make_shared<DirectoryEntryElement>("../", Console::fmtTxt(m_CurrentDirectory.string(), "/..")));
+        addMenuElement(std::make_shared<ActionButton>("<Apply>", [this](SelectionMenu* selectionMenu, ActionButton* buttonRef) {
+            *m_PathRef = m_CurrentPath;
+            m_PathRef = nullptr;
+            selectionMenu->gotoPreviousPage();
+        }));
+
+        addMenuElement(std::make_shared<BreakElement>());
+        addMenuElement(std::make_shared<TextElement>(Console::fmtTxt("Current directory > ", m_CurrentPath.string(), "/ "), true, ALIGN_LEFT, 5));
+        addMenuElement(std::make_shared<DirectoryEntryElement>("../", Console::fmtTxt(m_CurrentPath.string(), "/..")));
 
         for (const auto& directory : directoryContents.first) {
             std::string fileName  = directory.path().filename();
@@ -77,22 +82,43 @@ namespace davincpp
         }
 
         if (m_ShowOnlyDirectories) {
+            selectDefaultElement();
             return;
         }
 
         for (const auto& file : directoryContents.second) {
             m_MenuElements.emplace_back(std::make_shared<DirectoryEntryElement>(file.path().filename(), file.path()));
         }
+
+        selectDefaultElement();
     }
 
 
-    void FilepathSelectionWizard::setFilePathVariable(std::filesystem::path *filepathRef)
+    void FilepathSelectionWizard::setPathVariable(std::filesystem::path *pathRef)
     {
-        m_FilepathRef = filepathRef;
+        m_PathRef = pathRef;
+
+        if (m_PathRef->empty()) {
+#ifdef _WIN32
+            throw not_implemented(__LINE__, __FILE__);
+#else
+            m_CurrentPath = "/home";
+#endif
+            return;
+        }
+
+        m_CurrentPath = *m_PathRef;
     }
 
     void FilepathSelectionWizard::showOnlyDirectories(bool showOnlyDirectories)
     {
         m_ShowOnlyDirectories = showOnlyDirectories;
+    }
+
+
+    void FilepathSelectionWizard::selectDefaultElement()
+    {
+        m_SelectedElementIdx = DEFAULT_SELECTED_IDX;
+        switchElement(1);
     }
 }

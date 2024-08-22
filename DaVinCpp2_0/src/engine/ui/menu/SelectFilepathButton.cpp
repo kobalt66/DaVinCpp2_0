@@ -14,7 +14,7 @@ namespace davincpp
     void SelectFilepathButton::onRender(bool selected)
     {
         Console::printCenteredText(
-            m_FilePath.empty() ? m_DisplayText : Console::fmtTxt("\"", m_FilePath, "\" "),
+            m_FilePath.empty() ? m_DisplayText : m_FilePath.c_str(),
             selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR,
             m_CliY
             );
@@ -28,7 +28,7 @@ namespace davincpp
             throw davincpp_error("Failed to fetch file path selection menu: Selection menu doesn't exist!");
         }
 
-        filepathSelectionMenu->setFilePathVariable(&m_FilePath);
+        filepathSelectionMenu->setPathVariable(&m_FilePath);
         filepathSelectionMenu->showOnlyDirectories(m_ShowOnlyDirectories);
         selectionMenu->switchPage(SelectionMenu::PAGE_SELECT_FILE_PATH);
     }

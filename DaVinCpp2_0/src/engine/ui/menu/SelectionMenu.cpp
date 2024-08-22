@@ -20,6 +20,7 @@
 
 namespace davincpp
 {
+	const char* SelectionMenu::PAGE_UNDEFINED				= "<undefined>";
 	const char* SelectionMenu::PAGE_MAIN		            = "main";
 	const char* SelectionMenu::PAGE_SELECT_PROJECT          = "select_project";
 	const char* SelectionMenu::PAGE_CREATE_PROJECT          = "create_project";
@@ -147,9 +148,22 @@ namespace davincpp
 			return;
 		}
 
+		if (pageTag == PAGE_MAIN) {
+			m_PageInvocationHistory.clear();
+		}
+
 		clear();
 		m_CurrentPage = m_MenuPages.at(pageTag.data());
 		m_CurrentPage->onSwitchPage(this);
+		m_PageInvocationHistory.emplace_back(m_CurrentPage);
+	}
+
+	void SelectionMenu::gotoPreviousPage()
+	{
+		clearCurrentMenuPage();
+		m_CurrentPage->onSwitchPage(this);
+		m_PageInvocationHistory.pop_back();
+		m_CurrentPage = m_PageInvocationHistory.at(m_PageInvocationHistory.size() - 1);
 	}
 
 	void SelectionMenu::shouldShutDown(bool shutDown)
