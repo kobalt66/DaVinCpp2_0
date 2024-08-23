@@ -16,7 +16,6 @@
 #include <DaVinCppTypes.h>
 #include <Console.h>
 #include <thread>
-#include <utility>
 
 namespace davincpp
 {
@@ -73,17 +72,17 @@ namespace davincpp
 			std::make_shared<PageElement>("<Cancle>", PAGE_MAIN),
 			std::make_shared<BreakElement>(),
 			std::make_shared<BreakElement>(),
-			std::make_shared<SelectFilepathButton>("Press enter to select project location...", true),
-			std::make_shared<TextFieldElement>("Project name", "Enter project name...", 48),
-			std::make_shared<ScrollSelectionElement>("Supported DaVinCpp verion", m_ProjectManager->getLacacyVersions()),
+			std::make_shared<SelectFilepathButton>("Press enter to select project location...", true, ProjectCreationWizard::PROJECT_DIRECTORY),
+			std::make_shared<TextFieldElement>("Project name", "Enter project name...", 48, ProjectCreationWizard::PROJECT_NAME),
+			std::make_shared<ScrollSelectionElement>("Supported DaVinCpp verion", m_ProjectManager->getLacacyVersions(), ProjectCreationWizard::PROJECT_SUPPORTED_VERSION),
 			std::make_shared<BreakElement>(),
-			std::make_shared<SwitchElement>("Vsync"),
-			std::make_shared<SwitchElement>("Show system cursor"),
+			std::make_shared<SwitchElement>("Vsync", ProjectCreationWizard::PROJECT_VSYNC),
+			std::make_shared<SwitchElement>("Show system cursor", ProjectCreationWizard::PROJECT_SHOW_CURSOR),
 			std::make_shared<BreakElement>(),
-			std::make_shared<NumberFieldElement>("Resolution (width)", 0, 3000), // TODO: try to find out what the maximum client size of the screen is!
-			std::make_shared<NumberFieldElement>("Resolution (height)", 0, 3000),
-			std::make_shared<NumberFieldElement>("Pixel width", 0, 20),
-			std::make_shared<NumberFieldElement>("Pixel height", 0, 20),
+			std::make_shared<NumberFieldElement>("Resolution (width)", 0, 3000, ProjectCreationWizard::PROJECT_RESOLUTION_WIDTH), // TODO: try to find out what the maximum client size of screen is!
+			std::make_shared<NumberFieldElement>("Resolution (height)", 0, 3000, ProjectCreationWizard::PROJECT_RESOLUTION_HEIGHT),
+			std::make_shared<NumberFieldElement>("Pixel width", 0, 20, ProjectCreationWizard::PROJECT_PIXEL_WIDTH),
+			std::make_shared<NumberFieldElement>("Pixel height", 0, 20, ProjectCreationWizard::PROJECT_PIXEL_HEIGHT),
 			std::make_shared<BreakElement>(),
 			std::make_shared<BreakElement>(),
 			std::make_shared<CreateProjectButton>("<Create project>", actionCreateProject)
@@ -191,13 +190,17 @@ namespace davincpp
 		return m_SelectedProjectIdx;
 	}
 
-	std::shared_ptr<MenuPage> SelectionMenu::getMenuPage(std::string_view pageTag)
+	template<class T> std::shared_ptr<T> SelectionMenu::getMenuPage(std::string_view pageTag) const
 	{
 		if (!m_MenuPages.contains(pageTag.data())) {
-			return nullptr;
+			throw davincpp_error(Console::fmtTxt("Faile to get menu page called '", pageTag, "': The menu page is not registered!"));
 		}
 
-		return m_MenuPages.at(pageTag.data());
+		if (std::shared_ptr<T> menuPage = std::dynamic_pointer_cast<T>(m_MenuPages.at(pageTag.data()))) {
+			return menuPage;
+		}
+
+		throw davincpp_error(Console::fmtTxt("Failed to get menu page called '", pageTag, "': Failed to cast the page to the desired page type!"));
 	}
 
 #ifndef _WIN32
@@ -265,22 +268,25 @@ namespace davincpp
 	void SelectionMenu::actionCreateProject(SelectionMenu* selectionMenu, ActionButton* buttonRef)
 	{
 		if (auto createProjectButton = dynamic_cast<CreateProjectButton*>(buttonRef)) {
-			Project project = createProjectButton->getProject();
+			ProjectConfig projectConfig = createProjectButton->getProject();
+			std::filesystem::path projectDirectory = createProjectButton->getProjectDirectory();
+
+			std::filesystem::path projectConfigFilePath;
 
 			try {
-				selectionMenu->m_ProjectManager->initProject(project);
+				projectConfigFilePath = selectionMenu->m_ProjectManager->initProject(projectConfig, projectDirectory);
 			}
 			catch (std::runtime_error& error) {
 				selectionMenu->setInputControl(false);
-				displayDescription(Console::fmtTxt("Failed to created new project called '", project.getProjectConfig().ProjectName, "':", error.what(), " "), Console::BLACK_YELLOW_PAIR);
-				std::this_thread::sleep_for(sec(1));
+				displayDescription(Console::fmtTxt("Failed to created new project called '", projectConfig.ProjectName, "':", error.what(), " "), Console::BLACK_YELLOW_PAIR);
+				std::this_thread::sleep_for(sec(2));
 				selectionMenu->setInputControl(true);
 				return;
 			}
 
 			selectionMenu->setInputControl(false);
-			displayDescription(Console::fmtTxt("Created new project '", project.getProjectConfig().ProjectName, "'... "), Console::BLACK_GREEN_PAIR);
-			std::this_thread::sleep_for(sec(1));
+			displayDescription(Console::fmtTxt("Created new project '", projectConfig.ProjectName, "' (Project config at '", projectConfigFilePath, "')... "), Console::BLACK_GREEN_PAIR);
+			std::this_thread::sleep_for(sec(2));
 			selectionMenu->setInputControl(true);
 			selectionMenu->switchPage(PAGE_MAIN);
 			return;
@@ -288,4 +294,10 @@ namespace davincpp
 
 		displayDescription("Failed to create new Project: Wrong type of action button is used!", Console::BLACK_YELLOW_PAIR);
 	}
+
+
+
+	template std::shared_ptr<ProjectCreationWizard> SelectionMenu::getMenuPage(std::string_view pageTag) const;
+	template std::shared_ptr<FilepathSelectionWizard> SelectionMenu::getMenuPage(std::string_view pageTag) const;
+	template std::shared_ptr<MenuPage> SelectionMenu::getMenuPage(std::string_view pageTag) const;
 }

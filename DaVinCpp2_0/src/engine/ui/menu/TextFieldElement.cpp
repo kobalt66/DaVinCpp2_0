@@ -5,8 +5,8 @@
 
 namespace davincpp
 {
-    TextFieldElement::TextFieldElement(const std::string& displayText, std::string placeHolderText, int characterLimit)
-        : MenuElement(displayText),
+    TextFieldElement::TextFieldElement(const std::string& displayText, std::string placeHolderText, int characterLimit, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag),
         m_PlaceHolderText(std::move(placeHolderText)),
         m_CharacterLimit(characterLimit)
     { }

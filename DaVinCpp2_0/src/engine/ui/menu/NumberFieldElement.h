@@ -6,7 +6,7 @@ namespace davincpp
     class NumberFieldElement : public MenuElement
     {
     public:
-        NumberFieldElement(const std::string& displayText, int minValue, int maxValue);
+        NumberFieldElement(const std::string& displayText, int minValue, int maxValue, const std::string& uniqueTag = "");
 
         void onSwitchPage(SelectionMenu *selectionMenu) override;
         void onRender(bool selected) override;

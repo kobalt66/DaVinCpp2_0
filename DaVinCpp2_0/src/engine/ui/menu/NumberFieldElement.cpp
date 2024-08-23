@@ -6,8 +6,8 @@
 
 namespace davincpp
 {
-    NumberFieldElement::NumberFieldElement(const std::string &displayText, int minValue, int maxValue)
-        : MenuElement(displayText),
+    NumberFieldElement::NumberFieldElement(const std::string &displayText, int minValue, int maxValue, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag),
         m_MinValue(minValue),
         m_MaxValue(maxValue)
     { }

@@ -49,6 +49,15 @@ namespace davincpp
     }
 
 
+    void DaVinCppYamlHelper::writeYamlToFile(const YAML::Node& node, const std::filesystem::path& filepath)
+    {
+        YAML::Emitter emitter;
+        emitter << node;
+        DaVinCppFileSystem::writeFile(filepath, emitter.c_str());
+    }
+
+
+
     template std::vector<int>                   DaVinCppYamlHelper::getSequence(const YAML::Node& node, std::string_view nodeName);
     template std::vector<uint32_t>              DaVinCppYamlHelper::getSequence(const YAML::Node& node, std::string_view nodeName);
     template std::vector<float>                 DaVinCppYamlHelper::getSequence(const YAML::Node& node, std::string_view nodeName);

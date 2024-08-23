@@ -5,8 +5,8 @@
 
 namespace davincpp
 {
-    ScrollSelectionElement::ScrollSelectionElement(const std::string &displayText, const std::vector<std::string>& options)
-        : MenuElement(displayText), m_Options(options)
+    ScrollSelectionElement::ScrollSelectionElement(const std::string &displayText, const std::vector<std::string>& options, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag), m_Options(options)
     { }
 
 

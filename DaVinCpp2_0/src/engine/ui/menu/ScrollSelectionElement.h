@@ -7,7 +7,7 @@ namespace davincpp
     class ScrollSelectionElement : public MenuElement
     {
     public:
-        ScrollSelectionElement(const std::string& displayText, const std::vector<std::string>& options);
+        ScrollSelectionElement(const std::string& displayText, const std::vector<std::string>& options, const std::string& uniqueTag = "");
 
         void onSwitchPage(SelectionMenu *selectionMenu) override;
         void onRender(bool selected) override;

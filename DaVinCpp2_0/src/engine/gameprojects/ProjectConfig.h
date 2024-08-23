@@ -32,6 +32,7 @@ namespace YAML
 
     template<> struct convert<davincpp::ProjectConfig>
     {
+        static Node encode(const davincpp::ProjectConfig& rhs);
         static bool decode(const Node& node, davincpp::ProjectConfig& rhs);
     };
 }

@@ -6,7 +6,7 @@ namespace davincpp
     class TextFieldElement : public MenuElement
     {
     public:
-        explicit TextFieldElement(const std::string& displayText, std::string placeHolderText, int characterLimit);
+        TextFieldElement(const std::string& displayText, std::string placeHolderText, int characterLimit, const std::string& uniqueTag = "");
 
         void onSwitchPage(SelectionMenu *selectionMenu) override;
         void onRender(bool selected) override;

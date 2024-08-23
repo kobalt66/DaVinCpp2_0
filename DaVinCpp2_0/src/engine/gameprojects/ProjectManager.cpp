@@ -38,9 +38,14 @@ namespace davincpp
         }
     }
 
-    void ProjectManager::initProject(const Project& projectName)
+    std::filesystem::path ProjectManager::initProject(const ProjectConfig& projectConfig, std::filesystem::path projectDirectory)
     {
-        throw not_implemented(__LINE__, __FILE__);
+        std::filesystem::path projectConfigFilePath = projectDirectory.concat(Console::fmtTxt(projectConfig.ProjectName, ".yaml"));
+        YAML::Node configNode = YAML::convert<ProjectConfig>::encode(projectConfig);
+
+        DaVinCppYamlHelper::writeYamlToFile(configNode, projectConfigFilePath);
+
+        return projectConfigFilePath;
     }
 
 

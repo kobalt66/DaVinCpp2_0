@@ -1,13 +1,13 @@
 #include "SelectFilepathButton.h"
 #include <ui/menu/SelectionMenu.h>
 #include <ui/menu/FilepathSelectionWizard.h>
-#include <DaVinCppExceptions.h>
+#include <Console.h>
 #include <utility>
 
 namespace davincpp
 {
-    SelectFilepathButton::SelectFilepathButton(const std::string &displayText, bool showOnlyDirectories)
-        : MenuElement(displayText), m_ShowOnlyDirectories(showOnlyDirectories)
+    SelectFilepathButton::SelectFilepathButton(const std::string &displayText, bool showOnlyDirectories, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag), m_ShowOnlyDirectories(showOnlyDirectories)
     { }
 
 
@@ -22,11 +22,7 @@ namespace davincpp
 
     void SelectFilepathButton::onInteraction(SelectionMenu* selectionMenu)
     {
-        auto filepathSelectionMenu = dynamic_cast<FilepathSelectionWizard*>(selectionMenu->getMenuPage(SelectionMenu::PAGE_SELECT_FILE_PATH).get());
-
-        if (filepathSelectionMenu == nullptr) {
-            throw davincpp_error("Failed to fetch file path selection menu: Selection menu doesn't exist!");
-        }
+        std::shared_ptr<FilepathSelectionWizard> filepathSelectionMenu = selectionMenu->getMenuPage<FilepathSelectionWizard>(SelectionMenu::PAGE_SELECT_FILE_PATH);
 
         filepathSelectionMenu->setPathVariable(&m_FilePath);
         filepathSelectionMenu->showOnlyDirectories(m_ShowOnlyDirectories);

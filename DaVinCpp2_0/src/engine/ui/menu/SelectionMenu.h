@@ -22,7 +22,7 @@ namespace davincpp
 		void setInputControl(bool enableInput);
 		void setSelectedProjectIdx(int projectIdx);
 		int getSelectedProjectIdx() const;
-		std::shared_ptr<MenuPage> getMenuPage(std::string_view pageTag);
+		template<class T = MenuPage> std::shared_ptr<T> getMenuPage(std::string_view pageTag) const;
 
 #ifndef _WIN32
 		static void displayDescription(std::string_view text, int colorPair);

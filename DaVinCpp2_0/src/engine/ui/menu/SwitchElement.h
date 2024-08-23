@@ -6,7 +6,7 @@ namespace davincpp
     class SwitchElement : public MenuElement
     {
     public:
-        explicit SwitchElement(const std::string& displayText);
+        explicit SwitchElement(const std::string& displayText, const std::string& uniqueTag = "");
 
         void onSwitchPage(SelectionMenu *selectionMenu) override;
         void onRender(bool selected) override;

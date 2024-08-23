@@ -7,7 +7,7 @@ namespace davincpp
     class SelectFilepathButton : public MenuElement
     {
     public:
-        SelectFilepathButton(const std::string& displayText, bool showOnlyDirectories);
+        SelectFilepathButton(const std::string& displayText, bool showOnlyDirectories, const std::string& uniqueTag = "");
 
         void onRender(bool selected) override;
         void onInteraction(SelectionMenu *selectionMenu) override;

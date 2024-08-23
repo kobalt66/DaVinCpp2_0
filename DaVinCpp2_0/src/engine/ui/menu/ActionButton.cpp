@@ -5,8 +5,8 @@
 
 namespace davincpp
 {
-    ActionButton::ActionButton(const std::string& displayText, std::function<void(SelectionMenu* selectionMenu, ActionButton* buttonRef)> action)
-        : MenuElement(displayText), m_Action(std::move(action))
+    ActionButton::ActionButton(const std::string& displayText, std::function<void(SelectionMenu* selectionMenu, ActionButton* buttonRef)> action, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag), m_Action(std::move(action))
     { }
 
 

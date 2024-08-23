@@ -4,7 +4,7 @@
 
 namespace YAML
 {
-    bool convert<glm::uvec2>::decode(const Node &node, glm::uvec2 &rhs)
+    bool convert<glm::uvec2>::decode(const Node& node, glm::uvec2& rhs)
     {
         if(!node.IsSequence() || node.size() != 2) {
             return false;
@@ -16,7 +16,29 @@ namespace YAML
     }
 
 
-    bool convert<davincpp::ProjectConfig>::decode(const Node &node, davincpp::ProjectConfig &rhs)
+    Node convert<davincpp::ProjectConfig>::encode(const davincpp::ProjectConfig& rhs)
+    {
+        Node configNode;
+        configNode["davincppVersion"] = rhs.DaVinCppVersion;
+        configNode["name"] = rhs.ProjectName;
+
+        configNode["pixelSize"].push_back(rhs.PixelSize.x);
+        configNode["pixelSize"].push_back(rhs.PixelSize.y);
+
+        configNode["resolution"].push_back(rhs.ScreenResolution.x);
+        configNode["resolution"].push_back(rhs.ScreenResolution.y);
+
+        configNode["scripts"].push_back("");
+        configNode["textures"].push_back("");
+
+        configNode["vsync"] = rhs.Vsync;
+        configNode["showCursor"] = rhs.ShowCursor;
+        configNode["flipTexturesH"] = false;
+        configNode["debugMode"] = false;
+        return configNode;
+    }
+
+    bool convert<davincpp::ProjectConfig>::decode(const Node& node, davincpp::ProjectConfig& rhs)
     {
         rhs.DaVinCppVersion = davincpp::DaVinCppYamlHelper::getValue<std::string>(node, "davincppVersion");
         rhs.ProjectName = davincpp::DaVinCppYamlHelper::getValue<std::string>(node, "name");

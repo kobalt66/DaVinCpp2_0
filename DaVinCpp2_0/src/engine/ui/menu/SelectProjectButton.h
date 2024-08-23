@@ -7,7 +7,7 @@ namespace davincpp
     class SelectProjectButton : public MenuElement
     {
     public:
-        explicit SelectProjectButton(std::string displayText, ProjectConfig& projectConfig, int projectIdx);
+        explicit SelectProjectButton(const std::string& displayText, ProjectConfig& projectConfig, int projectIdx, const std::string& uniqueTag = "");
 
         void onInteraction(SelectionMenu* selectionMenu) override;
 

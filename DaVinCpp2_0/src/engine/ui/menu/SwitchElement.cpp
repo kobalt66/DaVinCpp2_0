@@ -4,8 +4,8 @@
 
 namespace davincpp
 {
-    SwitchElement::SwitchElement(const std::string &displayText)
-        : MenuElement(displayText)
+    SwitchElement::SwitchElement(const std::string &displayText, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag)
     { }
 
 

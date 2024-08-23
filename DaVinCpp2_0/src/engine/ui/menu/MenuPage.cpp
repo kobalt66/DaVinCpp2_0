@@ -3,6 +3,7 @@
 #include <DaVinCppString.h>
 #include <ui/menu/BreakElement.h>
 #include <ui/menu/TextElement.h>
+#include <Console.h>
 
 namespace davincpp
 {

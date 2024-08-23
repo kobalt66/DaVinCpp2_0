@@ -5,8 +5,8 @@
 
 namespace davincpp
 {
-	MenuElement::MenuElement(std::string displayText)
-		: m_DisplayText(std::move(displayText))
+	MenuElement::MenuElement(std::string displayText, std::string uniqueTag)
+		: m_DisplayText(std::move(displayText)), m_UniqueTag(std::move(uniqueTag))
 	{ }
 
 
@@ -33,5 +33,10 @@ namespace davincpp
 	int MenuElement::getCliY() const
 	{
 		return m_CliY;
+	}
+
+	std::string_view MenuElement::getUniqueTag() const
+	{
+		return m_UniqueTag;
 	}
 }

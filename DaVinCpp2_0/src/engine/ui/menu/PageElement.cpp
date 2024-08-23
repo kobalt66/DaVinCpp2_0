@@ -2,8 +2,8 @@
 
 namespace davincpp
 {
-	PageElement::PageElement(const std::string& displayText, std::string_view pagePointer, bool gotoPreviousPage)
-		: MenuElement(displayText), m_PagePointer(pagePointer), m_GotoPreviousPage(gotoPreviousPage)
+	PageElement::PageElement(const std::string& displayText, std::string_view pagePointer, bool gotoPreviousPage, const std::string& uniqueTag)
+		: MenuElement(displayText, uniqueTag), m_PagePointer(pagePointer), m_GotoPreviousPage(gotoPreviousPage)
 	{ }
 
 

@@ -1,5 +1,4 @@
 #include "FilepathSelectionWizard.h"
-#include <DaVinCppExceptions.h>
 #include <DaVinCppFileSystem.h>
 #include <DaVinCppString.h>
 #include <DaVinCppTypes.h>
@@ -8,6 +7,7 @@
 #include <ui/menu/BreakElement.h>
 #include <ui/menu/PageElement.h>
 #include <ui/menu/SelectionMenu.h>
+#include <Console.h>
 #include <thread>
 
 namespace davincpp
@@ -39,11 +39,9 @@ namespace davincpp
                 switchElement(1);
             }
 
-            try {
-                permissions(newFilepath, std::filesystem::perms::owner_all);
-            } catch (std::exception& exception) {
+            if (!DaVinCppFileSystem::canRead(newFilepath)) {
                 selectionMenu->setInputControl(false);
-                SelectionMenu::displayDescription(Console::fmtTxt("Failed to access file: ", exception.what(), " "), Console::BLACK_YELLOW_PAIR);
+                SelectionMenu::displayDescription(Console::fmtTxt("Failed to access file/directory at ", newFilepath, ": You are not allowed to read at this location! "), Console::BLACK_YELLOW_PAIR);
                 std::this_thread::sleep_for(sec(2));
                 selectionMenu->setInputControl(true);
                 return;

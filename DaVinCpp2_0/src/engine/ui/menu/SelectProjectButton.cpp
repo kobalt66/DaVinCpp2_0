@@ -1,12 +1,13 @@
 #include "SelectProjectButton.h"
 #include <ui/menu/SelectionMenu.h>
 #include <DaVinCppTypes.h>
+#include <Console.h>
 #include <thread>
 
 namespace davincpp
 {
-    SelectProjectButton::SelectProjectButton(std::string displayText, ProjectConfig& projectConfig, int projectIdx)
-        : MenuElement(displayText), m_TargetProjectConfig(projectConfig), m_ProjectIdx(projectIdx)
+    SelectProjectButton::SelectProjectButton(const std::string& displayText, ProjectConfig& projectConfig, int projectIdx, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag), m_TargetProjectConfig(projectConfig), m_ProjectIdx(projectIdx)
     { }
 
 

@@ -7,6 +7,7 @@ namespace davincpp
 	{
 	public:
 		explicit system_error();
+		explicit system_error(std::string_view message);
 	};
 
 	class core_error : public std::runtime_error 
