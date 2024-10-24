@@ -1,0 +1,10 @@
+# This is a test script for dav script
+
+module std
+
+internal @ref this_obj
+
+internal function onReady(): void
+    this_obj.setPosition(1, 10)
+    this_obj.addVelocity(-1, -1)
+end

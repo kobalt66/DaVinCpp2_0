@@ -14,8 +14,11 @@ namespace davincpp
 		static bool canReadWrite(const std::filesystem::path& path);
 		static bool canRead(const std::filesystem::path& path);
 		static bool canWrite(const std::filesystem::path& path);
+		static bool canExec(const std::filesystem::path& path);
 
 		static std::filesystem::path prepareFilePath(const std::filesystem::path& path);
+
+		static std::filesystem::path getAbosultePath(const std::filesystem::path& path);
 
 		/// Returns two lists of file paths.
 		/// 1. All sub directories inside the target directory

@@ -1,4 +1,5 @@
 #include "DaVinCppYamlHelper.h"
+#include <DaVinCppFileSystem.h>
 #include <DaVinCppExceptions.h>
 #include <gameprojects/Project.h>
 #include <Console.h>

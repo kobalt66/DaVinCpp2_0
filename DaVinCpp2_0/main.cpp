@@ -1,9 +1,13 @@
 #include "src/engine/Application.h"
 #include <Console.h>
 
+#include "DaVinCppFileSystem.h"
+
 int main()
 {
 	try {
+		davincpp::DaVinCppFileSystem::canWrite("/root");
+
 		davincpp::Application app;
 		app.onStartEngine();
 		app.onLoad();
@@ -15,9 +19,9 @@ int main()
 		}
 
 		app.onShutdown();
-	}
-	catch (std::runtime_error& exception) {
+	} catch (std::runtime_error& exception) {
 		davincpp::Console::raw(davincpp::Console::RED, exception.what());
+		davincpp::Console::raw(davincpp::Console::GRAY, "Unhandled error...");
 		return 1;
 	}
 

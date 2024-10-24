@@ -39,7 +39,7 @@ namespace davincpp
                 switchElement(1);
             }
 
-            if (!DaVinCppFileSystem::canRead(newFilepath)) {
+            if (!DaVinCppFileSystem::canReadWrite(newFilepath)) {
                 selectionMenu->setInputControl(false);
                 SelectionMenu::displayDescription(Console::fmtTxt("Failed to access file/directory at ", newFilepath, ": You are not allowed to read at this location! "), Console::BLACK_YELLOW_PAIR);
                 std::this_thread::sleep_for(sec(2));

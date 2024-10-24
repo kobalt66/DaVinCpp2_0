@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
 #include <csignal>
 #include <ncurses/curses.h>
 #endif
@@ -139,7 +139,7 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
 		static void printNChar(char c, int count, const char* color);
 		static void printCenteredText(std::string_view text, const char* color, char firstChar = ' ', char lastChar = ' ');
 #else
@@ -165,7 +165,7 @@ namespace davincpp
 		static int awaitKeyInput();
 
 	private:
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
 		static void handle_resize(int sig);
 #endif
 
@@ -183,13 +183,13 @@ namespace davincpp
 		static constexpr const char* GREEN				= "\033[32m";
 		static constexpr const char* GREEN_BG_BLACK_FG	= "\033[42;5;30m";
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
 		static constexpr int GREEN_BLACK_PAIR	= 1;
 		static constexpr int BLACK_GREEN_PAIR	= 2;
 		static constexpr int BLACK_YELLOW_PAIR	= 3;
 #endif
 
-#ifdef WIN32
+#if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
 		static constexpr int KEY_NULL			= -1;
 		static constexpr int KEY_ARROW_UP		= 72;
 		static constexpr int KEY_ARROW_LEFT		= 75;
@@ -210,7 +210,7 @@ namespace davincpp
 #endif
 
 	private:
-#ifdef _WIN32
+#if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
 		static int m_ResizeFlag;
 		static int m_ClsWidth, m_ClsHeight;
 #else
