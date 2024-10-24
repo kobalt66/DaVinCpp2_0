@@ -29,7 +29,7 @@ namespace davincpp
 	}
 
 
-	void Shader::bind()
+	void Shader::bind() const
 	{
 		GLCall(glUseProgram(m_ProgramID));
 	}
@@ -109,7 +109,7 @@ namespace davincpp
 		throw opengl_error();
 	}
 
-	void Shader::linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID)
+	void Shader::linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) const
 	{
 		GLCall(glAttachShader(m_ProgramID, vertexShaderID));
 		GLCall(glAttachShader(m_ProgramID, fragmentShaderID));
@@ -137,7 +137,7 @@ namespace davincpp
 		throw opengl_error();
 	}
 
-	void Shader::finalizeShader(uint32_t vertexShaderID, uint32_t fragmentShaderID)
+	void Shader::finalizeShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) const
 	{
 		GLCall(glValidateProgram(m_ProgramID));
 		GLCall(glDeleteShader(vertexShaderID));

@@ -10,12 +10,12 @@ namespace davincpp
 	{
 	public:
 		Shader() = default;
-		Shader(ShaderProfile&& profile);
+		explicit Shader(ShaderProfile&& profile);
 		~Shader();
 
 		void loadShader(std::string_view vertexShaderPath, std::string_view fragmentShaderPath);
 
-		void bind();
+		void bind() const;
 		void unbind();
 
 		template<class T> void setup();
@@ -27,8 +27,8 @@ namespace davincpp
 		int getUniformLocation(std::string_view uniform);
 
 		uint32_t compileShader(const char* shaderCode, GLenum shaderType);
-		void linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID);
-		void finalizeShader(uint32_t vertexShaderID, uint32_t fragmentShaderID);
+		void linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) const;
+		void finalizeShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) const;
 
 	private:
 		std::unordered_map<std::string_view, int> m_UniformLocationCache;

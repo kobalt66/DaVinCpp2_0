@@ -12,8 +12,8 @@ namespace davincpp
 		std::filesystem::path targetDirectory = prepareFilePath(path.parent_path());
 		std::filesystem::path finalPath = prepareFilePath(path);
 
-		if (!canReadWrite(targetDirectory)) {
-			throw system_error(Console::fmtTxt("Failed to write data to file at ", finalPath, ": You are not allowed to read or write at this location!"));
+		if (!canWrite(targetDirectory)) {
+			throw system_error(Console::fmtTxt("Failed to write data to file at ", finalPath, ": You are not allowed to write at this location!"));
 		}
 
 		std::ofstream fileStream(finalPath);
@@ -33,8 +33,8 @@ namespace davincpp
 			throw system_error(Console::fmtTxt("The file at ", finalPath, " doesn't exist!"));
 		}
 
-		if (!canReadWrite(finalPath)) {
-			throw system_error(Console::fmtTxt("Failed to read data from file at ", finalPath, ": You are not allowed to read or write at this location!"));
+		if (!canRead(finalPath)) {
+			throw system_error(Console::fmtTxt("Failed to read data from file at ", finalPath, ": You are not allowed to read at this location!"));
 		}
 
 		std::fstream fileStream(finalPath);
@@ -61,25 +61,25 @@ namespace davincpp
 	bool DaVinCppFileSystem::canRead(const std::filesystem::path& path)
 	{
 		std::filesystem::perms permission = status(path).permissions();
-		return  (permission & std::filesystem::perms::group_read) == std::filesystem::perms::none ||
-				(permission & std::filesystem::perms::others_read) == std::filesystem::perms::none ||
-				(permission & std::filesystem::perms::owner_read) == std::filesystem::perms::none;
+		return  (permission & std::filesystem::perms::group_read) != std::filesystem::perms::none ||
+				(permission & std::filesystem::perms::others_read) != std::filesystem::perms::none ||
+				(permission & std::filesystem::perms::owner_read) != std::filesystem::perms::none;
 	}
 
 	bool DaVinCppFileSystem::canWrite(const std::filesystem::path& path)
 	{
 		std::filesystem::perms permission = status(path).permissions();
-		return  (permission & std::filesystem::perms::group_write) == std::filesystem::perms::none ||
-				(permission & std::filesystem::perms::others_write) == std::filesystem::perms::none ||
-				(permission & std::filesystem::perms::owner_write) == std::filesystem::perms::none;
+		return  (permission & std::filesystem::perms::group_write) != std::filesystem::perms::none ||
+				(permission & std::filesystem::perms::others_write) != std::filesystem::perms::none ||
+				(permission & std::filesystem::perms::owner_write) != std::filesystem::perms::none;
 	}
 
 	bool DaVinCppFileSystem::canExec(const std::filesystem::path& path)
 	{
 		std::filesystem::perms permission = status(path).permissions();
-		return  (permission & std::filesystem::perms::group_exec) == std::filesystem::perms::none ||
-				(permission & std::filesystem::perms::others_exec) == std::filesystem::perms::none ||
-				(permission & std::filesystem::perms::owner_exec) == std::filesystem::perms::none;
+		return  (permission & std::filesystem::perms::group_exec) != std::filesystem::perms::none ||
+				(permission & std::filesystem::perms::others_exec) != std::filesystem::perms::none ||
+				(permission & std::filesystem::perms::owner_exec) != std::filesystem::perms::none;
 	}
 
 
