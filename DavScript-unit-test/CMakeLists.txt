@@ -12,26 +12,25 @@ add_definitions(-DDAVSCRIPT_UNIT_TEST)
 file(GLOB_RECURSE SOURCES
         "./main.cpp"
         "../DaVinCpp2_0/src/davscript/**/*.cpp"
-        "../DaVinCpp2_0/src/davscript/**/*.h"
         "../DaVinCpp2_0/src/davscript/*.cpp"
-        "../DaVinCpp2_0/src/davscript/*.h"
         "../DaVinCpp2_0/src/utils/DaVinCppFileSystem.cpp"
-        "../DaVinCpp2_0/src/utils/DaVinCppFileSystem.h"
         "../DaVinCpp2_0/src/utils/DaVinCppExceptions.cpp"
-        "../DaVinCpp2_0/src/utils/DaVinCppExceptions.h"
         "../DaVinCpp2_0/src/utils/DaVinCppNumeric.cpp"
-        "../DaVinCpp2_0/src/utils/DaVinCppNumeric.h"
         "../DaVinCpp2_0/src/utils/DaVinCppConstants.cpp"
-        "../DaVinCpp2_0/src/utils/DaVinCppConstants.h"
         "../DaVinCpp2_0/src/utils/DaVinCppString.cpp"
-        "../DaVinCpp2_0/src/utils/DaVinCppString.h"
-        "../DaVinCpp2_0/src/utils/DaVinCppTypes.h"
         "../DaVinCpp2_0/src/utils/Console.cpp"
-        "../DaVinCpp2_0/src/utils/Console.h"
+        "../Tests/Units/UnitTest.cpp"
+        "../Tests/Units/UnitTestEnvironment.cpp"
+        "../DaVinCpp2_0/src/core/time/Timer.cpp"
+        "./Tests/*.cpp"
 )
 
 # Add the executable target
-add_executable(DavScript ${SOURCES})
+add_executable(DavScript ${SOURCES}
+        ../DaVinCpp2_0/src/core/time/Timer.cpp
+        ../DaVinCpp2_0/src/core/time/Timer.h
+        Tests/DavScriptFileTest.cpp
+        Tests/DavScriptFileTest.h)
 
 # On Linux adding additional system libraries
 if(UNIX AND NOT APPLE)
@@ -48,4 +47,7 @@ endif()
 target_include_directories(DavScript PRIVATE
         "../DaVinCpp2_0/src/davscript"
         "../DaVinCpp2_0/src/utils"
+        "../DaVinCpp2_0/src/core/time"
+        "../Tests/Units"
+        "./Tests"
 )

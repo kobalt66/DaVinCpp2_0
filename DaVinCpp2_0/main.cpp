@@ -20,6 +20,9 @@ int main()
 
 		app.onShutdown();
 	} catch (std::runtime_error& exception) {
+#ifdef __linux__
+		davincpp::Console::shutDownNcurses();
+#endif
 		davincpp::Console::raw(davincpp::Console::RED, exception.what());
 		davincpp::Console::raw(davincpp::Console::GRAY, "Unhandled error...");
 		return 1;

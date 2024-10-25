@@ -1,4 +1,5 @@
 #include "DaVinCppString.h"
+#include <iomanip>
 #include <sstream>
 #include <string>
 
@@ -47,5 +48,32 @@ namespace davincpp
 		}
 
 		return str;
+	}
+
+
+	std::string DaVinCppString::fmtTime(msc duration)
+	{
+		min minutes = std::chrono::duration_cast<min>(duration);
+		sec seconds = std::chrono::duration_cast<sec>(duration);
+		msc milliseconds = duration - seconds;
+
+		std::ostringstream oss;
+		oss << std::setfill('0') << std::setw(2) << minutes.count() << ":"
+			<< std::setfill('0') << std::setw(2) << seconds.count() << "."
+			<< std::setfill('0') << std::setw(2) << milliseconds.count();
+
+		return oss.str();
+	}
+
+	std::string DaVinCppString::fmtTime(sec duration)
+	{
+		min minutes = std::chrono::duration_cast<min>(duration);
+		sec seconds = duration - minutes;
+
+		std::ostringstream oss;
+		oss << std::setfill('0') << std::setw(2) << minutes.count() << ":"
+			<< std::setfill('0') << std::setw(2) << seconds.count();
+
+		return oss.str();
 	}
 }

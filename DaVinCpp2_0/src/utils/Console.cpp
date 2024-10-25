@@ -5,8 +5,10 @@
 #else
 #include <sys/ioctl.h>
 #endif
-#include <iomanip>
+#if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
 #include <DaVinCppExceptions.h>
+#endif
+#include <iomanip>
 
 namespace davincpp
 {

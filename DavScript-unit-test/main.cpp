@@ -1,12 +1,16 @@
 #include <DaVinCppExceptions.h>
 #include <DaVinCppFileSystem.h>
-#include <lexer/DavScriptLexer.h>
+#include <UnitTestEnvironment.h>
+#include <DavScriptFileTest.h>
 
 int main()
 {
     try {
-        davincpp::davscript::DavScript davScript("../test.dav");
-        davincpp::davscript::DavScriptLexer lexer(davScript);
+        davincpp::unittest::UnitTestEnvironment testEnvironment;
+
+        testEnvironment.addUnitTest(std::make_unique<davscript::DavScriptFileTest>());
+
+        testEnvironment.execute();
     } catch (std::runtime_error& exception) {
         throw davincpp::davincpp_error(exception.what());
     }
