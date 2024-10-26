@@ -1,9 +1,9 @@
 #pragma once
 #include <UnitTest.h>
 
-namespace davscript
+namespace davincpp::davscript
 {
-    class DavScriptFileTest : public davincpp::unittest::UnitTest
+    class DavScriptFileTest : public unittest::UnitTest
     {
     public:
         explicit DavScriptFileTest();

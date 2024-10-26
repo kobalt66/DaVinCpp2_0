@@ -8,7 +8,7 @@ int main()
     try {
         davincpp::unittest::UnitTestEnvironment testEnvironment;
 
-        testEnvironment.addUnitTest(std::make_unique<davscript::DavScriptFileTest>());
+        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptFileTest>());
 
         testEnvironment.execute();
     } catch (std::runtime_error& exception) {

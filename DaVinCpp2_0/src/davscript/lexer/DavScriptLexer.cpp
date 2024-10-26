@@ -10,4 +10,9 @@ namespace davincpp::davscript
     }
 
 
+    void DavScriptLexer::generateTokens()
+    {
+
+    }
+
 }

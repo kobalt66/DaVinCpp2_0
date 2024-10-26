@@ -1,10 +1,7 @@
 #include "DavScriptFileTest.h"
-
-#include <DaVinCppTypes.h>
 #include <DavScript.h>
-#include <thread>
 
-namespace davscript
+namespace davincpp::davscript
 {
     DavScriptFileTest::DavScriptFileTest()
         : UnitTest("DavScript script file loading test")
@@ -13,7 +10,7 @@ namespace davscript
 
     void DavScriptFileTest::execute()
     {
-        davincpp::davscript::DavScript davScript("../test.dav");
+        DavScript davScript("../test.dav");
         davScript.loadFile();
 
         assertTrue(davScript.Content.empty() == false);

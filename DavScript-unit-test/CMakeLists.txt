@@ -23,14 +23,23 @@ file(GLOB_RECURSE SOURCES
         "../Tests/Units/UnitTestEnvironment.cpp"
         "../DaVinCpp2_0/src/core/time/Timer.cpp"
         "./Tests/*.cpp"
+        "./main.cpp"
+        "../DaVinCpp2_0/src/davscript/**/*.h"
+        "../DaVinCpp2_0/src/davscript/*.h"
+        "../DaVinCpp2_0/src/utils/DaVinCppFileSystem.h"
+        "../DaVinCpp2_0/src/utils/DaVinCppExceptions.h"
+        "../DaVinCpp2_0/src/utils/DaVinCppNumeric.h"
+        "../DaVinCpp2_0/src/utils/DaVinCppConstants.h"
+        "../DaVinCpp2_0/src/utils/DaVinCppString.h"
+        "../DaVinCpp2_0/src/utils/Console.h"
+        "../Tests/Units/UnitTest.h"
+        "../Tests/Units/UnitTestEnvironment.h"
+        "../DaVinCpp2_0/src/core/time/Timer.h"
+        "./Tests/*.h"
 )
 
 # Add the executable target
-add_executable(DavScript ${SOURCES}
-        ../DaVinCpp2_0/src/core/time/Timer.cpp
-        ../DaVinCpp2_0/src/core/time/Timer.h
-        Tests/DavScriptFileTest.cpp
-        Tests/DavScriptFileTest.h)
+add_executable(DavScript ${SOURCES})
 
 # On Linux adding additional system libraries
 if(UNIX AND NOT APPLE)
@@ -46,6 +55,7 @@ endif()
 
 target_include_directories(DavScript PRIVATE
         "../DaVinCpp2_0/src/davscript"
+        "../DaVinCpp2_0/src/davscript/**"
         "../DaVinCpp2_0/src/utils"
         "../DaVinCpp2_0/src/core/time"
         "../Tests/Units"
