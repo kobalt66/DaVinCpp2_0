@@ -5,6 +5,7 @@
 #else
 #include <DaVinCppFileSystem.h>
 #endif
+#include <tokens/Token.h>
 
 namespace davincpp::davscript
 {
@@ -15,7 +16,13 @@ namespace davincpp::davscript
 
         void loadFile();
 
-        std::string Content;
+        [[nodiscard]] char getCharByPosition(CharPosition position) const;
+        [[nodiscard]] bool atEndOfLine(CharPosition position) const;
+        [[nodiscard]] bool atEndOfFile(CharPosition position) const;
+
+        std::string RawContent;
+        std::vector<std::string> RefinedContent;
+
         std::filesystem::path Location;
         std::string Name;
     };

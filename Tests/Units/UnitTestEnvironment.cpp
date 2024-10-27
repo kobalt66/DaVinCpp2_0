@@ -30,9 +30,9 @@ namespace davincpp::unittest
 
         for (const std::unique_ptr<UnitTest>& unitTest : m_AvailableTests) {
             try {
-                unitTest->onSetup();
-                unitTest->execute();
-                unitTest->onCleanUp();
+                assertTestCall(unitTest->onSetup());
+                assertTestCall(unitTest->execute());
+                assertTestCall(unitTest->onCleanUp());
 
                 successfullyExecutedTestCount++;
                 std::cout << ".";

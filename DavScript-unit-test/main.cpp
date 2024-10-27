@@ -1,7 +1,8 @@
 #include <DaVinCppExceptions.h>
 #include <DaVinCppFileSystem.h>
 #include <UnitTestEnvironment.h>
-#include <DavScriptFileTest.h>
+#include <DavScriptFiles/DavScriptFileTest.h>
+#include <DavScriptLexer/DavScriptLexerTest.h>
 
 int main()
 {
@@ -9,9 +10,10 @@ int main()
         davincpp::unittest::UnitTestEnvironment testEnvironment;
 
         testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptFileTest>());
+        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptLexerTest>());
 
         testEnvironment.execute();
-    } catch (std::runtime_error& exception) {
+    } catch (std::exception& exception) {
         throw davincpp::davincpp_error(exception.what());
     }
 

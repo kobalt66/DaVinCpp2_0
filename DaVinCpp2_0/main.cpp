@@ -19,7 +19,7 @@ int main()
 		}
 
 		app.onShutdown();
-	} catch (std::runtime_error& exception) {
+	} catch (std::exception& exception) {
 #ifdef __linux__
 		davincpp::Console::shutDownNcurses();
 #endif
