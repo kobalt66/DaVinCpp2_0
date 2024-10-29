@@ -7,8 +7,6 @@ namespace davincpp::davscript
     enum TokenType : int
     {
         NONE            = -1,
-        EOF_,           // \0
-
 
         // Normal tokens
         COMMA,          // ,
@@ -53,12 +51,12 @@ namespace davincpp::davscript
         ARRAY,
 
         // Value types
-        VOID_T,
-        INT_T,
-        FLOAT_T,
-        STRING_T,
-        BOOL_T,
-        MIXED_T,
+        VOIDTYPE,
+        INTTYPE,
+        FLOATTYPE,
+        STRINGTYPE,
+        BOOLTYPE,
+        MIXEDTYPE,
 
         // Operators
         PLUS,           // +
@@ -146,12 +144,12 @@ namespace davincpp::davscript
     };
 
     static const std::unordered_map<std::string, TokenType> VALUE_TYPE_TOKENS = {
-        { "void",   VOID_T   },
-        { "int",    INT_T    },
-        { "float",  FLOAT_T  },
-        { "string", STRING_T },
-        { "bool",   BOOL_T   },
-        { "mixed",  MIXED_T  },
+        { "void",   VOIDTYPE   },
+        { "int",    INTTYPE    },
+        { "float",  FLOATTYPE  },
+        { "string", STRINGTYPE },
+        { "bool",   BOOLTYPE   },
+        { "mixed",  MIXEDTYPE  },
     };
 
     static const std::unordered_map<std::string, TokenType> OPERATOR_TOKENS = {
@@ -168,4 +166,60 @@ namespace davincpp::davscript
         { ">=", GREATEREQ },
         { "<=", LESSEQ    },
     };
+
+
+    static const char T_COMMA               = ',';
+    static const char T_QUOTE               = '"';
+    static const char T_HASH                = '#';
+    static const char T_DOT                 = '.';
+    static const char T_COLON               = ':';
+    static const char T_LPARAN              = '(';
+    static const char T_RPARAN              = ')';
+    static const char T_LBRAKET             = '[';
+    static const char T_RBRAKET             = ']';
+    static const char T_NEWLINE             = '\n';
+    static const char T_EOF                 = '\0';
+
+    static const std::string T_USE          = "use";
+    static const std::string T_MODULE       = "module";
+    static const std::string T_INTERNAL     = "internal";
+    static const std::string T_PRIVATE      = "private";
+    static const std::string T_PUBLIC       = "public";
+    static const std::string T_FUNCTION     = "function";
+    static const std::string T_END          = "end";
+    static const std::string T_IF           = "if";
+    static const std::string T_ELIF         = "elif";
+    static const std::string T_ELSE         = "else";
+    static const std::string T_WHILE        = "while";
+    static const std::string T_DO           = "do";
+    static const std::string T_THROW        = "throw";
+    static const std::string T_TRY          = "try";
+    static const std::string T_CATCH        = "catch";
+    static const std::string T_FINALLY      = "finally";
+
+    static const std::string T_REF          = "@ref";
+    static const std::string T_VAR          = "@var";
+    static const std::string T_CONST        = "@const";
+    static const std::string T_REFCOMP      = "@refcomp";
+    static const std::string T_ARRAY        = "@array";
+
+    static const std::string T_VOID         = "void";
+    static const std::string T_INT          = "int";
+    static const std::string T_FLOAT        = "float";
+    static const std::string T_BOOL         = "bool";
+    static const std::string T_MIXED        = "mixed";
+    static const std::string T_STRING       = "string";
+
+    static const char T_PLUS                = '+';
+    static const char T_MINUS               = '-';
+    static const char T_ASTRIX              = '*';
+    static const char T_DIVIDE              = '/';
+    static const std::string T_LESS         = "<";
+    static const std::string T_GREATER      = ">";
+    static const std::string T_EQUALS       = "=";
+    static const std::string T_ASSOSIATE    = ">>";
+    static const std::string T_EQUALSTO     = "==";
+    static const std::string T_NOTEQ        = "!=";
+    static const std::string T_GREATEREQ    = ">=";
+    static const std::string T_LESSEQ       = "<=";
 }

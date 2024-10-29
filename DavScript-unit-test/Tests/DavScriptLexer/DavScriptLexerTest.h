@@ -9,10 +9,10 @@ namespace davincpp::davscript
     public:
         explicit DavScriptLexerTest();
 
-        void onSetup() override;
         void execute() override;
 
     private:
-        std::unique_ptr<DavScriptLexer> m_Lexer = nullptr;
+        static void testSingleCharTokens();
+        static void testComments();
     };
 }

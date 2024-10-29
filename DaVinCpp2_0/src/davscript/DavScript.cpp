@@ -16,10 +16,15 @@ namespace davincpp::davscript
     {
         RawContent = DaVinCppFileSystem::readFile(Location);
 
-        RefinedContent = DaVinCppString::split(RawContent, '\n');
+        RefinedContent = DaVinCppString::split(RawContent, T_NEWLINE);
 
-        for (std::string& line : RefinedContent) {
-            line = line.append("\n");
+        int lineCount = RawContent.at(RawContent.size() - 1) == T_NEWLINE ?
+            static_cast<int>(RefinedContent.size()) :
+            static_cast<int>(RefinedContent.size() - 1);
+
+        for (int i = 0; i < lineCount; i++) {
+            std::string& line = RefinedContent.at(i);
+            line = line.append(1, T_NEWLINE);
         }
     }
 
@@ -27,7 +32,7 @@ namespace davincpp::davscript
     char DavScript::getCharByPosition(CharPosition position) const
     {
         if (atEndOfFile(position)) {
-            return EOF_;
+            return T_EOF;
         }
 
         std::string line = RefinedContent.at(position.Line);

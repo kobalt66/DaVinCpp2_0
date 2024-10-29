@@ -20,24 +20,53 @@ namespace davincpp::unittest {
         std::string m_TestName;
     };
 
+#define assertTestStep(test) \
+    try { test; } \
+    catch (std::exception& exception) { \
+        throw std::runtime_error( \
+            davincpp::Console::fmtTxt("Test step '", #test, "' failed: \t", exception.what()) \
+        ); \
+    }
+
 #define assertTrue(expression) \
-    if (!expression) { \
+    if (!(expression)) { \
         throw davincpp::system_error(davincpp::Console::fmtTxt( \
-            "Failed to assert that the expression is true! \n\n\tExpression: '", #expression, "' was '", expression, "' \n\tFailed assertion at (", __FILE__, ":", __LINE__, ")")); \
+            "Failed to assert that the expression is true! \n\n\tExpression: '", #expression, "' was '", expression, "' \n\tFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+        ); \
     }
 
 #define assertEquals(expected, actual) \
-    if (expected != actual) { \
-        throw davincpp::system_error(davincpp::Console::fmtTxt("Failed to assert that '", actual, "' equals '", expected, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")")); \
+    if ((expected) != (actual)) { \
+        throw davincpp::system_error( \
+            davincpp::Console::fmtTxt("Failed to assert that '", actual, "' equals '", expected, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+        ); \
     }
 
 #define assertGreaterThan(actual, number) \
-    if (actual <= number) { \
-        throw davincpp::system_error(davincpp::Console::fmtTxt("Failed to assert that '", actual, "' is greater than '", number, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")")); \
+    if ((actual) <= (number)) { \
+        throw davincpp::system_error( \
+            davincpp::Console::fmtTxt("Failed to assert that '", actual, "' is greater than '", number, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+        ); \
     }
 
 #define assertLessThan(actual, number) \
-    if (actual <= number) { \
-        throw davincpp::system_error(davincpp::Console::fmtTxt("Failed to assert that '", actual, "' is less than '", number, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")")); \
+    if ((actual) >= (number)) { \
+        throw davincpp::system_error( \
+            davincpp::Console::fmtTxt("Failed to assert that '", actual, "' is less than '", number, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+        ); \
+    }
+
+#define assertGreaterEqualsThan(actual, number) \
+    if ((actual) < (number)) { \
+        throw davincpp::system_error( \
+            davincpp::Console::fmtTxt("Failed to assert that '", actual, "' is greater or equal than '", number, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+        ); \
+    }
+
+#define assertLessEqualsThan(actual, number) \
+    if ((actual) > (number)) { \
+        throw davincpp::system_error( \
+            davincpp::Console::fmtTxt("Failed to assert that '", actual, "' is less or equal than '", number, "'! \nFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+        ); \
     }
 }
