@@ -11,12 +11,13 @@ namespace davincpp::davscript
     {
         assertTestStep(testSingleCharTokens());
         assertTestStep(testComments());
+        assertTestStep(testVariableType());
     }
 
 
     void DavScriptLexerTest::testSingleCharTokens()
     {
-        DavScript davScript("../Tests/DavScriptLexer/singleCharTokens.dav");
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/singleCharTokens.dav");
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
@@ -32,7 +33,7 @@ namespace davincpp::davscript
 
     void DavScriptLexerTest::testComments()
     {
-        DavScript davScript("../Tests/DavScriptLexer/comments.dav");
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/comments.dav");
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
@@ -40,5 +41,19 @@ namespace davincpp::davscript
 
         assertEquals(5, tokens.size());
         assertEquals("# this is a comment #", tokens.at(0).getActualValue());
+    }
+
+    void DavScriptLexerTest::testVariableType()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/variableTypes.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+        assertEquals(VARIABLE_TYPE_TOKENS.size(), tokens.size());
+
+        for (Token& token : tokens) {
+            assertTrue(VARIABLE_TYPE_TOKENS.find(token.getActualValue()) != VARIABLE_TYPE_TOKENS.end());
+        }
     }
 }

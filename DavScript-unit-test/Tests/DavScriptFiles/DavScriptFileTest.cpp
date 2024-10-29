@@ -10,7 +10,7 @@ namespace davincpp::davscript
 
     void DavScriptFileTest::execute()
     {
-        DavScript davScript("../Tests/DavScriptFiles/test.dav");
+        DavScript davScript("../Tests/DavScriptFiles/TestFiles/test.dav");
         davScript.loadFile();
 
         assertEquals(false, davScript.RawContent.empty());

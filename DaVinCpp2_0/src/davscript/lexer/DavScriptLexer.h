@@ -18,6 +18,7 @@ namespace davincpp::davscript
         void lexSingleCharTokens();
         void lexMultiCharTokens();
         void lexComment();
+        void lexVariableType();
 
         char advanceChar();
         char peakNextChar();
@@ -26,7 +27,8 @@ namespace davincpp::davscript
         [[nodiscard]] bool isSingleCharToken() const;
         [[nodiscard]] bool isOperatorToken() const;
 
-        static bool assertCharInFilter(char character, const std::vector<char>& filter);
+        static bool charOnBlackList(char character, const std::vector<char>& blackList);
+        static bool charOnInCharList(char character, const std::string& charList);
 
     private:
         DavScript m_DavScript;

@@ -14,5 +14,6 @@ namespace davincpp::davscript
     private:
         static void testSingleCharTokens();
         static void testComments();
+        static void testVariableType();
     };
 }

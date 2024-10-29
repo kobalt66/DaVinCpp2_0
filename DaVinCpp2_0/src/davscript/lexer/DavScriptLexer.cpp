@@ -48,6 +48,8 @@ namespace davincpp::davscript
     {
         if (m_CurrentChar == T_HASH) {
             lexComment();
+        } else if (m_CurrentChar == T_AT) {
+            lexVariableType();
         }
     }
 
@@ -59,7 +61,7 @@ namespace davincpp::davscript
         while (true) {
             char nextChar = peakNextChar();
 
-            if (!assertCharInFilter(nextChar, {T_EOF, T_NEWLINE})) {
+            if (charOnBlackList(nextChar, {T_EOF, T_NEWLINE})) {
                 break;
             }
 
@@ -67,6 +69,30 @@ namespace davincpp::davscript
         }
 
         m_Tokens.emplace_back(m_CurrentCharPosition, comment.str(), NONE, COMMENT);
+    }
+
+    void DavScriptLexer::lexVariableType()
+    {
+        std::ostringstream variableType;
+        variableType << m_CurrentChar;
+
+        while (true) {
+            char nextChar = peakNextChar();
+
+            if (charOnBlackList(nextChar, {T_EOF, T_SPACE}) || !charOnInCharList(nextChar, ALPHABET)) {
+                break;
+            }
+
+            variableType << advanceChar();
+        }
+
+        std::string variableTypeValue = variableType.str();
+
+        if (VARIABLE_TYPE_TOKENS.find(variableTypeValue) == VARIABLE_TYPE_TOKENS.end()) {
+            throw std::runtime_error("TODO: CHANGE ERROR MESSAGE TO SPECIAL DAVSCRIPT ERROR OUTPUT! Undefined variable type was used.");
+        }
+
+        m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, VARIABLE_TYPE_TOKENS.at(variableTypeValue), VARIABLETYPE);
     }
 
 
@@ -109,8 +135,13 @@ namespace davincpp::davscript
     }
 
 
-    bool DavScriptLexer::assertCharInFilter(char character, const std::vector<char>& filter)
+    bool DavScriptLexer::charOnBlackList(char character, const std::vector<char>& blackList)
     {
-        return std::find(filter.begin(), filter.end(), character) == filter.end();
+        return std::find(blackList.begin(), blackList.end(), character) != blackList.end();
+    }
+
+    bool DavScriptLexer::charOnInCharList(char character, const std::string& charList)
+    {
+        return charList.find(character) != std::string::npos;
     }
 }
