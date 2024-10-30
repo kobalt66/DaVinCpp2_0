@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-DDAVSCRIPT_UNIT_TEST)
+add_definitions(-DDEBUG_BREAK_POINTS=0)
 
 # Collect all source files
 file(GLOB_RECURSE SOURCES
@@ -31,6 +32,7 @@ file(GLOB_RECURSE SOURCES
         "../DaVinCpp2_0/src/utils/DaVinCppNumeric.h"
         "../DaVinCpp2_0/src/utils/DaVinCppConstants.h"
         "../DaVinCpp2_0/src/utils/DaVinCppString.h"
+        "../DaVinCpp2_0/src/utils/DaVinCppMacros.h"
         "../DaVinCpp2_0/src/utils/Console.h"
         "../Tests/Units/UnitTest.h"
         "../Tests/Units/UnitTestEnvironment.h"

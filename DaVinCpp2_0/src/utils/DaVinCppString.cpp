@@ -38,8 +38,7 @@ namespace davincpp
 	{
 		std::string str = input.data();
 
-		size_t pos = str.find(find.data());
-		while (pos != std::string::npos) {
+		while (size_t pos = str.find(find.data()) != std::string::npos) {
 			str.replace(pos, find.length(), replace);
 
 			if (str.at(pos) == '\0') {

@@ -1,0 +1,4 @@
+asdf   _c_s123d # identifier
+public function # keywords
+int   bool      # value type
+false null      # variable values

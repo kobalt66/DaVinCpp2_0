@@ -16,3 +16,14 @@ namespace davinpp
 		exit(1); \
 	}
 }
+
+#if !defined(NDEBUG) && DEBUG_BREAK_POINTS == 1 // Debug mode
+	#ifdef _MSC_VER
+		#define DEBUG_BREAK __debugbreak()
+	#else
+		#include <csignal>
+		#define DEBUG_BREAK raise(SIGTRAP)
+	#endif
+#else  // Release mode
+	#define DEBUG_BREAK ((void)0)  // Do nothing in release
+#endif

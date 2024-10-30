@@ -1,5 +1,6 @@
 #include "DavScriptLexer.h"
 #include <algorithm>
+#include <Console.h>
 #include <utility>
 
 namespace davincpp::davscript
@@ -48,8 +49,17 @@ namespace davincpp::davscript
     {
         if (m_CurrentChar == T_HASH) {
             lexComment();
-        } else if (m_CurrentChar == T_AT) {
+            return;
+        }
+
+        if (m_CurrentChar == T_AT) {
             lexVariableType();
+            return;
+        }
+
+        if (charOnInCharList(m_CurrentChar, WORD_ChARACTERS)) {
+            lexWordToken();
+            return;
         }
     }
 
@@ -95,6 +105,44 @@ namespace davincpp::davscript
         m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, VARIABLE_TYPE_TOKENS.at(variableTypeValue), VARIABLETYPE);
     }
 
+    void DavScriptLexer::lexWordToken() {
+        std::ostringstream word;
+        word << m_CurrentChar;
+
+        while (true) {
+            char nextChar = peakNextChar();
+
+            if (!charOnInCharList(nextChar, WORD_ChARACTERS)) {
+                break;
+            }
+
+            word << advanceChar();
+        }
+
+        std::string wordValue = word.str();
+        TokenType type = NONE;
+        TokenRole role = NORMAL;
+
+        if (tokenValueOnWhiteList(wordValue, KEYWORD_TOKENS)) {
+            role = KEYWORD;
+            type = KEYWORD_TOKENS.at(wordValue);
+        } else if (tokenValueOnWhiteList(wordValue, VALUE_TYPE_TOKENS)) {
+            role = VALUETYPE;
+            type = VALUE_TYPE_TOKENS.at(wordValue);
+        } else if (tokenValueOnWhiteList(wordValue, BUILTIN_VALUE_TOKENS)) {
+            role = VARIABLEVALUE;
+            type = BUILTIN_VALUE_TOKENS.at(wordValue);
+        } else {
+            role = IDENTIFIER;
+        }
+
+        if (role == NORMAL) {
+            throw std::runtime_error(davincpp::Console::fmtTxt("TODO: CHANGE ERROR MESSAGE TO SPECIAL DAVSCRIPT ERROR OUTPUT! Failed to identify token for word: '", wordValue, "'"));
+        }
+
+        m_Tokens.emplace_back(m_CurrentCharPosition, wordValue, type, role);
+    }
+
 
     char DavScriptLexer::advanceChar()
     {
@@ -138,6 +186,11 @@ namespace davincpp::davscript
     bool DavScriptLexer::charOnBlackList(char character, const std::vector<char>& blackList)
     {
         return std::find(blackList.begin(), blackList.end(), character) != blackList.end();
+    }
+
+    bool DavScriptLexer::tokenValueOnWhiteList(std::string_view tokenValue, const std::unordered_map<std::string, TokenType>& whiteList)
+    {
+        return whiteList.find(tokenValue.data()) != whiteList.end();
     }
 
     bool DavScriptLexer::charOnInCharList(char character, const std::string& charList)

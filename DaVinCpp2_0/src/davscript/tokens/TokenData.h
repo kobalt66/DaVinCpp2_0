@@ -85,145 +85,148 @@ namespace davincpp::davscript
 
         // Regular roles
         NORMAL,             // ., :, [, ...
-        DATA,               // "asdf", 123, -12, ...
+        VARIABLEVALUE,      // "asdf", 123, -12, ...
         KEYWORD,            // if, else, function, ...
         VARIABLETYPE,       // @var, @const, ...
-        TYPE,               // int, string, bool, ...
+        VALUETYPE,          // int, string, bool, ...
         OPERATOR,           // +, -, *, /, ...
         SPECIAL,            // ß, ¼, ſ, \0, ...
     };
 
+    static const char T_COMMA                   = ',';
+    static const char T_QUOTE                   = '"';
+    static const char T_HASH                    = '#';
+    static const char T_AT                      = '@';
+    static const char T_SPACE                   = ' ';
+    static const char T_DOT                     = '.';
+    static const char T_COLON                   = ':';
+    static const char T_LPARAN                  = '(';
+    static const char T_RPARAN                  = ')';
+    static const char T_LBRAKET                 = '[';
+    static const char T_RBRAKET                 = ']';
+    static const char T_NEWLINE                 = '\n';
+    static const char T_EOF                     = '\0';
+
+    static const std::string T_USE              = "use";
+    static const std::string T_MODULE           = "module";
+    static const std::string T_INTERNAL         = "internal";
+    static const std::string T_PRIVATE          = "private";
+    static const std::string T_PUBLIC           = "public";
+    static const std::string T_FUNCTION         = "function";
+    static const std::string T_END              = "end";
+    static const std::string T_IF               = "if";
+    static const std::string T_ELIF             = "elif";
+    static const std::string T_ELSE             = "else";
+    static const std::string T_WHILE            = "while";
+    static const std::string T_DO               = "do";
+    static const std::string T_THROW            = "throw";
+    static const std::string T_TRY              = "try";
+    static const std::string T_CATCH            = "catch";
+    static const std::string T_FINALLY          = "finally";
+
+    static const std::string T_REF              = "@ref";
+    static const std::string T_VAR              = "@var";
+    static const std::string T_CONST            = "@const";
+    static const std::string T_REFCOMP          = "@refcomp";
+    static const std::string T_ARRAY            = "@array";
+
+    static const std::string T_VOID             = "void";
+    static const std::string T_INT              = "int";
+    static const std::string T_FLOAT            = "float";
+    static const std::string T_BOOL             = "bool";
+    static const std::string T_MIXED            = "mixed";
+    static const std::string T_STRING           = "string";
+
+    static const std::string T_NULL             = "null";
+    static const std::string T_TRUE             = "true";
+    static const std::string T_FALSE            = "false";
+
+    static const char T_PLUS                    = '+';
+    static const char T_MINUS                   = '-';
+    static const char T_ASTRIX                  = '*';
+    static const char T_DIVIDE                  = '/';
+    static const std::string T_LESS             = "<";
+    static const std::string T_GREATER          = ">";
+    static const std::string T_EQUALS           = "=";
+    static const std::string T_ASSOSIATE        = ">>";
+    static const std::string T_EQUALSTO         = "==";
+    static const std::string T_NOTEQ            = "!=";
+    static const std::string T_GREATEREQ        = ">=";
+    static const std::string T_LESSEQ           = "<=";
+
+    static const std::string ALPHABET           = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+    static const std::string NUMBER_CHARACTERS  = "0123456789.-";
+    static const std::string WORD_ChARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
+
     static const std::unordered_map<char, TokenType> SINGLE_CHAR_TOKENS = {
-        {  ',',     COMMA    },
-        {  '.',     DOT      },
-        {  ':',     COLON    },
-        {  '(',     LPARAN   },
-        {  ')',     RPARAN   },
-        {  '[',     LBRAKET  },
-        {  ']',     RBRAKET  },
-        {  '\n',    NEWLINE  },
-        {  '+',     PLUS     },
-        {  '-',     MINUS    },
-        {  '*',     ASTRIX   },
-        {  '/',     DIVIDE   },
+        {  T_COMMA,     COMMA    },
+        {  T_DOT,       DOT      },
+        {  T_COLON,     COLON    },
+        {  T_LPARAN,    LPARAN   },
+        {  T_RPARAN,    RPARAN   },
+        {  T_LBRAKET,   LBRAKET  },
+        {  T_RBRAKET,   RBRAKET  },
+        {  T_NEWLINE,   NEWLINE  },
+        {  T_PLUS,      PLUS     },
+        {  T_MINUS,     MINUS    },
+        {  T_ASTRIX,    ASTRIX   },
+        {  T_DIVIDE,    DIVIDE   },
     };
 
-    static const std::vector DATA_TOKENS = {
-        NUMBER,
-        STRING,
-        NULL_,
-        TRUE,
-        FALSE,
+    static const std::unordered_map<std::string, TokenType> BUILTIN_VALUE_TOKENS = {
+        { T_NULL,       NULL_ },
+        { T_TRUE,       TRUE  },
+        { T_FALSE,      FALSE },
     };
 
     static const std::unordered_map<std::string, TokenType> KEYWORD_TOKENS = {
-        { "use",        USE      },
-        { "module",     MODULE   },
-        { "internal",   INTERNAL },
-        { "private",    PRIVATE  },
-        { "public",     PUBLIC   },
-        { "function",   FUNCTION },
-        { "end",        END      },
-        { "if",         IF       },
-        { "elif",       ELIF     },
-        { "else",       ELSE     },
-        { "while",      WHILE    },
-        { "do",         DO       },
-        { "throw",      THROW    },
-        { "try",        TRY      },
-        { "catch",      CATCH    },
-        { "finally",    FINALLY  },
+        { T_USE,        USE      },
+        { T_MODULE,     MODULE   },
+        { T_INTERNAL,   INTERNAL },
+        { T_PRIVATE,    PRIVATE  },
+        { T_PUBLIC,     PUBLIC   },
+        { T_FUNCTION,   FUNCTION },
+        { T_END,        END      },
+        { T_IF,         IF       },
+        { T_ELIF,       ELIF     },
+        { T_ELSE,       ELSE     },
+        { T_WHILE,      WHILE    },
+        { T_DO,         DO       },
+        { T_THROW,      THROW    },
+        { T_TRY,        TRY      },
+        { T_CATCH,      CATCH    },
+        { T_FINALLY,    FINALLY  },
     };
 
     static const std::unordered_map<std::string, TokenType> VARIABLE_TYPE_TOKENS = {
-        { "@ref",    REF     },
-        { "@var",    VAR     },
-        { "@const",  CONST   },
-        { "@refcomp",REFCOMP },
-        { "@array",  ARRAY   },
+        { T_REF,        REF     },
+        { T_VAR,        VAR     },
+        { T_CONST,      CONST   },
+        { T_REFCOMP,    REFCOMP },
+        { T_ARRAY,      ARRAY   },
     };
 
     static const std::unordered_map<std::string, TokenType> VALUE_TYPE_TOKENS = {
-        { "void",   VOIDTYPE   },
-        { "int",    INTTYPE    },
-        { "float",  FLOATTYPE  },
-        { "string", STRINGTYPE },
-        { "bool",   BOOLTYPE   },
-        { "mixed",  MIXEDTYPE  },
+        { T_VOID,       VOIDTYPE   },
+        { T_INT,        INTTYPE    },
+        { T_FLOAT,      FLOATTYPE  },
+        { T_STRING,     STRINGTYPE },
+        { T_BOOL,       BOOLTYPE   },
+        { T_MIXED,      MIXEDTYPE  },
     };
 
     static const std::unordered_map<std::string, TokenType> OPERATOR_TOKENS = {
-        { "+",  PLUS      },
-        { "-",  MINUS     },
-        { "*",  ASTRIX    },
-        { "/",  DIVIDE    },
-        { "<",  LESS      },
-        { ">",  GREATER   },
-        { "=",  EQUALS    },
-        { ">>", ASSOSIATE },
-        { "==", EQUALSTO  },
-        { "!=", NOTEQ     },
-        { ">=", GREATEREQ },
-        { "<=", LESSEQ    },
+        { std::string(1, T_PLUS),   PLUS      },
+        { std::string(1, T_MINUS),  MINUS     },
+        { std::string(1, T_ASTRIX), ASTRIX    },
+        { std::string(1, T_DIVIDE), DIVIDE    },
+        { T_LESS,                       LESS      },
+        { T_GREATER,                    GREATER   },
+        { T_EQUALS,                     EQUALS    },
+        { T_ASSOSIATE,                  ASSOSIATE },
+        { T_EQUALSTO,                   EQUALSTO  },
+        { T_NOTEQ,                      NOTEQ     },
+        { T_GREATEREQ,                  GREATEREQ },
+        { T_LESSEQ,                     LESSEQ    },
     };
-
-
-    static const char T_COMMA               = ',';
-    static const char T_QUOTE               = '"';
-    static const char T_HASH                = '#';
-    static const char T_AT                  = '@';
-    static const char T_SPACE               = ' ';
-    static const char T_DOT                 = '.';
-    static const char T_COLON               = ':';
-    static const char T_LPARAN              = '(';
-    static const char T_RPARAN              = ')';
-    static const char T_LBRAKET             = '[';
-    static const char T_RBRAKET             = ']';
-    static const char T_NEWLINE             = '\n';
-    static const char T_EOF                 = '\0';
-
-    static const std::string T_USE          = "use";
-    static const std::string T_MODULE       = "module";
-    static const std::string T_INTERNAL     = "internal";
-    static const std::string T_PRIVATE      = "private";
-    static const std::string T_PUBLIC       = "public";
-    static const std::string T_FUNCTION     = "function";
-    static const std::string T_END          = "end";
-    static const std::string T_IF           = "if";
-    static const std::string T_ELIF         = "elif";
-    static const std::string T_ELSE         = "else";
-    static const std::string T_WHILE        = "while";
-    static const std::string T_DO           = "do";
-    static const std::string T_THROW        = "throw";
-    static const std::string T_TRY          = "try";
-    static const std::string T_CATCH        = "catch";
-    static const std::string T_FINALLY      = "finally";
-
-    static const std::string T_REF          = "@ref";
-    static const std::string T_VAR          = "@var";
-    static const std::string T_CONST        = "@const";
-    static const std::string T_REFCOMP      = "@refcomp";
-    static const std::string T_ARRAY        = "@array";
-
-    static const std::string T_VOID         = "void";
-    static const std::string T_INT          = "int";
-    static const std::string T_FLOAT        = "float";
-    static const std::string T_BOOL         = "bool";
-    static const std::string T_MIXED        = "mixed";
-    static const std::string T_STRING       = "string";
-
-    static const char T_PLUS                = '+';
-    static const char T_MINUS               = '-';
-    static const char T_ASTRIX              = '*';
-    static const char T_DIVIDE              = '/';
-    static const std::string T_LESS         = "<";
-    static const std::string T_GREATER      = ">";
-    static const std::string T_EQUALS       = "=";
-    static const std::string T_ASSOSIATE    = ">>";
-    static const std::string T_EQUALSTO     = "==";
-    static const std::string T_NOTEQ        = "!=";
-    static const std::string T_GREATEREQ    = ">=";
-    static const std::string T_LESSEQ       = "<=";
-
-    static const std::string ALPHABET       = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 }

@@ -1,1 +1,3 @@
-@var@ref@const @array @refcomp
+@var@ref
+
+@array             @refcomp @const

@@ -19,6 +19,7 @@ namespace davincpp::davscript
         void lexMultiCharTokens();
         void lexComment();
         void lexVariableType();
+        void lexWordToken();
 
         char advanceChar();
         char peakNextChar();
@@ -28,6 +29,7 @@ namespace davincpp::davscript
         [[nodiscard]] bool isOperatorToken() const;
 
         static bool charOnBlackList(char character, const std::vector<char>& blackList);
+        static bool tokenValueOnWhiteList(std::string_view tokenValue, const std::unordered_map<std::string, TokenType>& whiteList);
         static bool charOnInCharList(char character, const std::string& charList);
 
     private:
