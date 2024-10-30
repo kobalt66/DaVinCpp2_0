@@ -15,6 +15,7 @@ namespace davincpp::davscript
         assertTestStep(testVariableType());
         assertTestStep(testWrongVariableType());
         assertTestStep(testWords());
+        assertTestStep(testNumbers());
     }
 
 
@@ -79,7 +80,18 @@ namespace davincpp::davscript
         assertEquals(2, getTokenCountByTokenRole(IDENTIFIER, tokens));
         assertEquals(2, getTokenCountByTokenRole(KEYWORD, tokens));
         assertEquals(2, getTokenCountByTokenRole(VALUETYPE, tokens));
-        assertEquals(2, getTokenCountByTokenRole(VARIABLEVALUE, tokens));
+        assertEquals(2, getTokenCountByTokenRole(DATAVALUE, tokens));
+    }
+
+    void DavScriptLexerTest::testNumbers()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/numbers.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+
+        assertEquals(9, getTokenCountByTokenRole(DATAVALUE, tokens));
     }
 
 

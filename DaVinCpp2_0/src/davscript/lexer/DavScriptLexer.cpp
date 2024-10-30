@@ -1,6 +1,7 @@
 #include "DavScriptLexer.h"
 #include <algorithm>
 #include <Console.h>
+#include <DaVinCppExceptions.h>
 #include <utility>
 
 namespace davincpp::davscript
@@ -17,13 +18,29 @@ namespace davincpp::davscript
         m_CurrentCharPosition.reset();
 
         do {
-            tryAdvanceChar();
+            if (peakNextChar() == T_EOF) {
+                break;
+            }
 
+            advanceChar();
+
+            // Lexing number tokens
+            if (charInCharList(m_CurrentChar, NUMBER_CHARACTERS)) {
+                char nextChar = peakNextChar();
+
+                if (!charOnBlackList(nextChar, {T_MINUS, T_DOT})) {
+                    lexNumberToken();
+                    return;
+                }
+            }
+
+            // Lexing simple tokens
             if (isSingleCharToken()) {
                 lexSingleCharTokens();
                 continue;
             }
 
+            // Lexing more complex tokens
             lexMultiCharTokens();
         } while (true);
     }
@@ -48,22 +65,22 @@ namespace davincpp::davscript
     void DavScriptLexer::lexMultiCharTokens()
     {
         if (m_CurrentChar == T_HASH) {
-            lexComment();
+            lexCommentToken();
             return;
         }
 
         if (m_CurrentChar == T_AT) {
-            lexVariableType();
+            lexVariableTypeToken();
             return;
         }
 
-        if (charOnInCharList(m_CurrentChar, WORD_ChARACTERS)) {
+        if (charInCharList(m_CurrentChar, ALPHABET)) {
             lexWordToken();
             return;
         }
     }
 
-    void DavScriptLexer::lexComment()
+    void DavScriptLexer::lexCommentToken()
     {
         std::ostringstream comment;
         comment << m_CurrentChar;
@@ -81,7 +98,7 @@ namespace davincpp::davscript
         m_Tokens.emplace_back(m_CurrentCharPosition, comment.str(), NONE, COMMENT);
     }
 
-    void DavScriptLexer::lexVariableType()
+    void DavScriptLexer::lexVariableTypeToken()
     {
         std::ostringstream variableType;
         variableType << m_CurrentChar;
@@ -89,7 +106,7 @@ namespace davincpp::davscript
         while (true) {
             char nextChar = peakNextChar();
 
-            if (charOnBlackList(nextChar, {T_EOF, T_SPACE}) || !charOnInCharList(nextChar, ALPHABET)) {
+            if (charOnBlackList(nextChar, {T_EOF, T_SPACE}) || !charInCharList(nextChar, ALPHABET)) {
                 break;
             }
 
@@ -112,7 +129,7 @@ namespace davincpp::davscript
         while (true) {
             char nextChar = peakNextChar();
 
-            if (!charOnInCharList(nextChar, WORD_ChARACTERS)) {
+            if (!charInCharList(nextChar, WORD_ChARACTERS)) {
                 break;
             }
 
@@ -130,17 +147,18 @@ namespace davincpp::davscript
             role = VALUETYPE;
             type = VALUE_TYPE_TOKENS.at(wordValue);
         } else if (tokenValueOnWhiteList(wordValue, BUILTIN_VALUE_TOKENS)) {
-            role = VARIABLEVALUE;
+            role = DATAVALUE;
             type = BUILTIN_VALUE_TOKENS.at(wordValue);
         } else {
             role = IDENTIFIER;
         }
 
-        if (role == NORMAL) {
-            throw std::runtime_error(davincpp::Console::fmtTxt("TODO: CHANGE ERROR MESSAGE TO SPECIAL DAVSCRIPT ERROR OUTPUT! Failed to identify token for word: '", wordValue, "'"));
-        }
-
         m_Tokens.emplace_back(m_CurrentCharPosition, wordValue, type, role);
+    }
+
+    void DavScriptLexer::lexNumberToken()
+    {
+        throw davincpp::not_implemented(__LINE__, __FILE__);
     }
 
 
@@ -193,7 +211,7 @@ namespace davincpp::davscript
         return whiteList.find(tokenValue.data()) != whiteList.end();
     }
 
-    bool DavScriptLexer::charOnInCharList(char character, const std::string& charList)
+    bool DavScriptLexer::charInCharList(char character, const std::string& charList)
     {
         return charList.find(character) != std::string::npos;
     }

@@ -17,9 +17,10 @@ namespace davincpp::davscript
     private:
         void lexSingleCharTokens();
         void lexMultiCharTokens();
-        void lexComment();
-        void lexVariableType();
+        void lexCommentToken();
+        void lexVariableTypeToken();
         void lexWordToken();
+        void lexNumberToken();
 
         char advanceChar();
         char peakNextChar();
@@ -30,7 +31,7 @@ namespace davincpp::davscript
 
         static bool charOnBlackList(char character, const std::vector<char>& blackList);
         static bool tokenValueOnWhiteList(std::string_view tokenValue, const std::unordered_map<std::string, TokenType>& whiteList);
-        static bool charOnInCharList(char character, const std::string& charList);
+        static bool charInCharList(char character, const std::string& charList);
 
     private:
         DavScript m_DavScript;
@@ -40,10 +41,4 @@ namespace davincpp::davscript
         CharPosition m_CurrentCharPosition;
         char m_CurrentChar = '\0';
     };
-
-#define tryAdvanceChar() \
-    if (peakNextChar() == T_EOF) { \
-        return; \
-    } \
-    advanceChar();
 }

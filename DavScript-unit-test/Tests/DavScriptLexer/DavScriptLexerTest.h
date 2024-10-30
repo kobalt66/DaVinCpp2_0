@@ -17,6 +17,7 @@ namespace davincpp::davscript
         static void testVariableType();
         static void testWrongVariableType();
         static void testWords();
+        static void testNumbers();
 
         static int getTokenCountByTokenRole(TokenRole role, const std::vector<Token>& tokens);
         static int getTokenCountByTokenRole(std::vector<TokenRole>&& roles, const std::vector<Token>& tokens);

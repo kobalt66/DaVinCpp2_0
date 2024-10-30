@@ -14,7 +14,7 @@ namespace davincpp
     
     event_error::event_error() : std::runtime_error("[Event] fatal error") { }
 
-    not_implemented::not_implemented(int line, const char* file): std::runtime_error(Console::fmtTxt("(file: ", file, ", line: ", line, ") function is not implemented!").c_str()) { }
+    not_implemented::not_implemented(int line, const char* file): std::runtime_error(Console::fmtTxt("(", file, ":", line, ") function is not implemented!").c_str()) { }
 
     davincpp_error::davincpp_error(std::string_view message): std::runtime_error(message.data()) { }
 }
