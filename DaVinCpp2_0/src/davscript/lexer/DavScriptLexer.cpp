@@ -29,7 +29,14 @@ namespace davincpp::davscript
                 continue;
             }
 
-            lexMultiCharTokens();
+            if (isMultiCharToken()) {
+                lexMultiCharTokens();
+                continue;
+            }
+
+            if (!charOnBlackList(m_CurrentChar, {T_SPACE})) {
+                m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), UNKNOWN, INVALID);
+            }
         } while (true);
     }
 
@@ -72,6 +79,11 @@ namespace davincpp::davscript
             return;
         }
 
+        if (m_CurrentChar == T_QUOTE) {
+            lexStringToken();
+            return;
+        }
+
         if (charInCharList(m_CurrentChar, NUMBER_CHARACTERS) && m_CurrentChar != T_DOT) {
             lexNumberToken();
             return;
@@ -107,7 +119,7 @@ namespace davincpp::davscript
         while (true) {
             char nextChar = peakNextChar();
 
-            if (charOnBlackList(peakNextChar(), {T_EOF, T_SPACE}) || !charInCharList(nextChar, ALPHABET)) {
+            if (!charInCharList(nextChar, ALPHABET)) {
                 break;
             }
 
@@ -180,7 +192,32 @@ namespace davincpp::davscript
             numberStr << advanceChar();
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, numberStr.str(), hasDecimalPoint ? FLOATTYPE : INTTYPE, DATAVALUE);
+        m_Tokens.emplace_back(m_CurrentCharPosition, numberStr.str(), hasDecimalPoint ? NUMBERFLOAT : NUMBERINT, DATAVALUE);
+    }
+
+    void DavScriptLexer::lexStringToken()
+    {
+        std::ostringstream string;
+
+        while (true) {
+            char nextChar = peakNextChar();
+
+            if (nextChar == T_QUOTE) {
+                advanceChar();
+                break;
+            }
+
+            if (charOnBlackList(nextChar, {T_NEWLINE, T_EOF})) {
+                m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), STRING, INVALID);
+                return;
+            }
+
+            advanceChar();
+
+            string << m_CurrentChar;
+        }
+
+        m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), STRING, DATAVALUE);
     }
 
 
@@ -215,6 +252,11 @@ namespace davincpp::davscript
     bool DavScriptLexer::isSingleCharToken() const
     {
         return SINGLE_CHAR_TOKENS.find(m_CurrentChar) != SINGLE_CHAR_TOKENS.end();
+    }
+
+    bool DavScriptLexer::isMultiCharToken() const
+    {
+        return MULTI_CHAR_TOKEN_CHARACTERS.find(m_CurrentChar) != std::string::npos;
     }
 
     bool DavScriptLexer::isOperatorToken() const

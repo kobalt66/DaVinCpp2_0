@@ -19,7 +19,8 @@ namespace davincpp::davscript
         NEWLINE,        // \n
 
         // Data tokens
-        NUMBER,         // ... , -2.01, -1, 0, 1, 2.2, ...
+        NUMBERINT,      // ... , -2, -1, 0, 1, 2, ...
+        NUMBERFLOAT,    // ... , -2.21, -1.53, 0.03, 1.02, 2.2, ...
         STRING,         // "This is a string"
         NULL_,
         TRUE,
@@ -78,6 +79,8 @@ namespace davincpp::davscript
 
     enum TokenRole
     {
+        INVALID,
+
         // Special roles
         COMMENT,            // # this is a comment
         FUNCTIONDOC,        // **This is how you add multiple lines to the description**
@@ -90,7 +93,6 @@ namespace davincpp::davscript
         VARIABLETYPE,       // @var, @const, ...
         VALUETYPE,          // int, string, bool, ...
         OPERATOR,           // +, -, *, /, ...
-        SPECIAL,            // ß, ¼, ſ, \0, ...
     };
 
     static const char T_COMMA                   = ',';
@@ -154,9 +156,10 @@ namespace davincpp::davscript
     static const std::string T_GREATEREQ        = ">=";
     static const std::string T_LESSEQ           = "<=";
 
-    static const std::string ALPHABET           = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
-    static const std::string NUMBER_CHARACTERS  = "1234567890.-";
-    static const std::string WORD_ChARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890";
+    static const std::string ALPHABET                       = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+    static const std::string NUMBER_CHARACTERS              = "1234567890.-";
+    static const std::string WORD_ChARACTERS                = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890";
+    static const std::string MULTI_CHAR_TOKEN_CHARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890#@\"";
 
     static const std::unordered_map<char, TokenType> SINGLE_CHAR_TOKENS = {
         {  T_COMMA,     COMMA    },

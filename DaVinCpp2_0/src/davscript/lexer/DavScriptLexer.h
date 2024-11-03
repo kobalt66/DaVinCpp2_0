@@ -21,12 +21,14 @@ namespace davincpp::davscript
         void lexVariableTypeToken();
         void lexWordToken();
         void lexNumberToken();
+        void lexStringToken();
 
         char advanceChar();
         char peakNextChar();
         [[nodiscard]] CharPosition getNextcharPosition() const;
 
         [[nodiscard]] bool isSingleCharToken() const;
+        [[nodiscard]] bool isMultiCharToken() const;
         [[nodiscard]] bool isOperatorToken() const;
 
         static bool charOnBlackList(char character, const std::vector<char>& blackList);

@@ -16,6 +16,7 @@ namespace davincpp::davscript
         assertTestStep(testWrongVariableType());
         assertTestStep(testWords());
         assertTestStep(testNumbers());
+        assertTestStep(testStrings());
     }
 
 
@@ -92,6 +93,27 @@ namespace davincpp::davscript
         std::vector<Token> tokens = lexer.getTokens();
 
         assertEquals(10, getTokenCountByTokenRole(DATAVALUE, tokens));
+
+        std::vector<TokenType> expectedTypes{ NUMBERINT, NUMBERFLOAT };
+
+        for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
+            assertTrue(std::find(expectedTypes.begin(), expectedTypes.end(), token.getTokenType()) != expectedTypes.end());
+        }
+    }
+
+    void DavScriptLexerTest::testStrings()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/strings.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+
+        assertEquals(4, getTokenCountByTokenRole(DATAVALUE, tokens));
+
+        for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
+            assertTrue(token.getTokenType() == STRING);
+        }
     }
 
 
@@ -117,6 +139,19 @@ namespace davincpp::davscript
         }
 
         return totalTokenCount;
+    }
+
+    std::vector<Token> DavScriptLexerTest::getTokensByTokenRole(TokenRole role, const std::vector<Token>& tokens)
+    {
+        std::vector<Token> filteredTokenList;
+
+        for (const Token& token : tokens) {
+            if (token.getTokenRole() == role) {
+                filteredTokenList.emplace_back(token);
+            }
+        }
+
+        return filteredTokenList;
     }
 
     bool DavScriptLexerTest::findTokenInWhiteListExept(const std::unordered_map<std::string, TokenType>& whiteList, std::vector<TokenType>&& exept, const Token& token)
