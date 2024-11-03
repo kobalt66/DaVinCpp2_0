@@ -20,7 +20,7 @@ namespace davincpp::davscript
         static void testNumbers();
 
         static int getTokenCountByTokenRole(TokenRole role, const std::vector<Token>& tokens);
-        static int getTokenCountByTokenRole(std::vector<TokenRole>&& roles, const std::vector<Token>& tokens);
+        static int getTokenCountByTokenRoles(std::vector<TokenRole>&& roles, const std::vector<Token>& tokens);
         static bool findTokenInWhiteListExept(const std::unordered_map<std::string, TokenType>& whiteList, std::vector<TokenType>&& exept, const Token& token);
     };
 }

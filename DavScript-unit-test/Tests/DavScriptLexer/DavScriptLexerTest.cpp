@@ -27,7 +27,7 @@ namespace davincpp::davscript
 
         std::vector<Token> tokens = lexer.getTokens();
 
-        assertEquals(SINGLE_CHAR_TOKENS.size(), getTokenCountByTokenRole({NORMAL, OPERATOR}, tokens));
+        assertEquals(SINGLE_CHAR_TOKENS.size(), getTokenCountByTokenRoles({NORMAL, OPERATOR}, tokens));
 
         for (Token& token : tokens) {
             assertEquals(1, token.getActualValue().size());
@@ -91,7 +91,7 @@ namespace davincpp::davscript
 
         std::vector<Token> tokens = lexer.getTokens();
 
-        assertEquals(9, getTokenCountByTokenRole(DATAVALUE, tokens));
+        assertEquals(10, getTokenCountByTokenRole(DATAVALUE, tokens));
     }
 
 
@@ -106,7 +106,7 @@ namespace davincpp::davscript
         return totalTokenCount;
     }
 
-    int DavScriptLexerTest::getTokenCountByTokenRole(std::vector<TokenRole>&& roles, const std::vector<Token>& tokens)
+    int DavScriptLexerTest::getTokenCountByTokenRoles(std::vector<TokenRole>&& roles, const std::vector<Token>& tokens)
     {
         int totalTokenCount = 0;
 

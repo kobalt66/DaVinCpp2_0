@@ -24,23 +24,11 @@ namespace davincpp::davscript
 
             advanceChar();
 
-            // Lexing number tokens
-            if (charInCharList(m_CurrentChar, NUMBER_CHARACTERS)) {
-                char nextChar = peakNextChar();
-
-                if (!charOnBlackList(nextChar, {T_MINUS, T_DOT})) {
-                    lexNumberToken();
-                    return;
-                }
-            }
-
-            // Lexing simple tokens
             if (isSingleCharToken()) {
                 lexSingleCharTokens();
                 continue;
             }
 
-            // Lexing more complex tokens
             lexMultiCharTokens();
         } while (true);
     }
@@ -55,6 +43,16 @@ namespace davincpp::davscript
     void DavScriptLexer::lexSingleCharTokens()
     {
         if (isOperatorToken()) {
+            char nextChar = peakNextChar();
+
+            if (m_CurrentChar == T_MINUS &&
+                charInCharList(nextChar,  NUMBER_CHARACTERS) &&
+                !charOnBlackList(nextChar, {T_MINUS, T_DOT})
+            ) {
+                lexNumberToken();
+                return;
+            }
+
             m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), SINGLE_CHAR_TOKENS.at(m_CurrentChar), OPERATOR);
             return;
         }
@@ -74,6 +72,11 @@ namespace davincpp::davscript
             return;
         }
 
+        if (charInCharList(m_CurrentChar, NUMBER_CHARACTERS) && m_CurrentChar != T_DOT) {
+            lexNumberToken();
+            return;
+        }
+
         if (charInCharList(m_CurrentChar, ALPHABET)) {
             lexWordToken();
             return;
@@ -86,9 +89,7 @@ namespace davincpp::davscript
         comment << m_CurrentChar;
 
         while (true) {
-            char nextChar = peakNextChar();
-
-            if (charOnBlackList(nextChar, {T_EOF, T_NEWLINE})) {
+            if (charOnBlackList(peakNextChar(), {T_EOF, T_NEWLINE})) {
                 break;
             }
 
@@ -106,7 +107,7 @@ namespace davincpp::davscript
         while (true) {
             char nextChar = peakNextChar();
 
-            if (charOnBlackList(nextChar, {T_EOF, T_SPACE}) || !charInCharList(nextChar, ALPHABET)) {
+            if (charOnBlackList(peakNextChar(), {T_EOF, T_SPACE}) || !charInCharList(nextChar, ALPHABET)) {
                 break;
             }
 
@@ -122,14 +123,13 @@ namespace davincpp::davscript
         m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, VARIABLE_TYPE_TOKENS.at(variableTypeValue), VARIABLETYPE);
     }
 
-    void DavScriptLexer::lexWordToken() {
+    void DavScriptLexer::lexWordToken()
+    {
         std::ostringstream word;
         word << m_CurrentChar;
 
         while (true) {
-            char nextChar = peakNextChar();
-
-            if (!charInCharList(nextChar, WORD_ChARACTERS)) {
+            if (!charInCharList(peakNextChar(), WORD_ChARACTERS)) {
                 break;
             }
 
@@ -158,7 +158,29 @@ namespace davincpp::davscript
 
     void DavScriptLexer::lexNumberToken()
     {
-        throw davincpp::not_implemented(__LINE__, __FILE__);
+        std::ostringstream numberStr;
+        numberStr << m_CurrentChar;
+
+        bool hasDecimalPoint = false;
+        while (true) {
+            char nextChar = peakNextChar();
+
+            if (!charInCharList(nextChar, NUMBER_CHARACTERS)) {
+                break;
+            }
+
+            if (nextChar == T_DOT) {
+                if (hasDecimalPoint) {
+                    break;
+                }
+
+                hasDecimalPoint = true;
+            }
+
+            numberStr << advanceChar();
+        }
+
+        m_Tokens.emplace_back(m_CurrentCharPosition, numberStr.str(), hasDecimalPoint ? FLOATTYPE : INTTYPE, DATAVALUE);
     }
 
 

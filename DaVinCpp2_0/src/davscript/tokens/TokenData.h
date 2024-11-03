@@ -155,8 +155,8 @@ namespace davincpp::davscript
     static const std::string T_LESSEQ           = "<=";
 
     static const std::string ALPHABET           = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
-    static const std::string NUMBER_CHARACTERS  = "0123456789.-";
-    static const std::string WORD_ChARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
+    static const std::string NUMBER_CHARACTERS  = "1234567890.-";
+    static const std::string WORD_ChARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890";
 
     static const std::unordered_map<char, TokenType> SINGLE_CHAR_TOKENS = {
         {  T_COMMA,     COMMA    },
