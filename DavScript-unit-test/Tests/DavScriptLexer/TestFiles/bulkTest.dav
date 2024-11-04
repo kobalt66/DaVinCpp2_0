@@ -75,6 +75,14 @@ public function closeGame(): void
     @var num = 1 [int]
     num += 1
     num -= 1
+    num *= 2
+    num /= 2
+
+    if num <= 1
+        print("num <= 1")
+    elif num >= 2
+        print("num >= 2")
+    end
 
     @array list1 = [ "asdf", 0, b, 1 ] [mixed]
     @array list3 = [ 1, 2, 3, 4, 5, 7, 6, 5, 3, 2, 1, 9 ] [int]
