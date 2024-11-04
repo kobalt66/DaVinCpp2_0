@@ -1,0 +1,157 @@
+# This is a comment
+use other_module  # use namespaces
+
+module test       # define a namespace
+
+internal @ref this_obj  # Reference to the game object the script is attached to.
+                        # The 'internal' keyword tells the engine that this reference variable is an internal
+                        # used variable that has to be initialized by the engine itself. This will not work with
+                        # custom variables
+
+@var simple_var = 1 [int]           # Specifying the type of a variable/parameter is only meant for clarity. You could still overwrite this variable with a string. Thus specification of the variable type is not required.
+@const simple_constant = 420 [int]
+
+@refcomp physics_component = this_obj.getCompRef("physics_component")   # Referencing different script components attached
+                                                                        # This way you can access global variables and call public functions
+
+@const useless # This will cause an error because the variable will always be and will always stay 'null'
+@var undefined # This is fine because the variable can be set to something else later
+
+# This is an internal function. Internal functions are engine specific functions,
+# which cannot be called manually but only by the engine itself.
+# When initializing the script the engine will check the functions that are labeled as 'internal'
+# if they are registered as internal functions. If they are not then the script will not compile.
+internal function onReady(): void # The return type is not required and is rather just a clarification of the functions purpose. You could still return something else. Though it would be pretty confusing if the types don't match
+    this_obj.setPosition(1, 1)
+    this_obj.addVelocity(-1, -1)
+end # The 'end' keyword has to be always used to end statements and functions
+
+**This is a description. If placed above a function it will show up as the functions description**
+**This is how you add multiple lines to the description**
+internal function onUpdate(@var deltaTime [float]): void
+    print("Hello from " . this_obj.getName())
+    physics_component.setGravity(randf(0.0, 1.0))
+end
+
+
+# A public function can be called from anywhere
+public function publicFunction(): bool, string # This means that the function could return a 'bool' or a 'string'. Btw 'void, string, etc.' does work as well. This way the function does not always have return anything. Though when working with the return value you would have to check if the value is NOT 'null'.
+    print("This is a public function!")
+    return true
+end
+
+# A private function can only be called inside the script it is defined in.
+private function privateFunction(): void
+    print("This is a private function")
+end
+
+public function closeGame(): void
+    if Input.keyPressed("escape")
+        Engine.abort()  # Closing the game
+                        # The 'Engine' object is a global engine specific class which hold onto some engine specific functions.
+    elif Input.keyPressed("w")
+        print("Move player forward...")
+    else
+        print("No valid input executed...")
+    end
+
+    for i(0, 10, 1) do # Declares variable which loops through the range of 0 to 10 with a step size of 1. (Loop from 10 to 0 with step size of -1)
+        print("Loop iteration " . i)
+    end
+
+    while Input.keyPressed("s") do
+        if Input.keyDown("l")
+            break
+        else
+            continue
+        end
+
+        print("Key 's' pressed")
+    end
+
+    @var a = "hello" [string]
+    @var b = null
+
+    @var num = 1 [int]
+    num += 1
+    num -= 1
+
+    @array list1 = [ "asdf", 0, b, 1 ] [mixed]
+    @array list3 = [ 1, 2, 3, 4, 5, 7, 6, 5, 3, 2, 1, 9 ] [int]
+
+    @array list2 = {
+        "asdf" >> "asdf",
+        "asdf2" >> 1234,
+        "asdf3" >> true
+    } [key >> string, value >> mixed] # Keytype cannot be 'mixed'
+
+    foreach x in list1 do
+        if !is_string(x) # Negate a condition
+            print("value is string")
+        end
+    end
+
+    foreach key >> value in list2 do
+        if key == "asdf" and value != 1234  # The '==' operator will always compare the two values with their types and makes a string comparision (beacause all values are gonna be stored as a string internally)
+            print("Match!")
+        end
+    end
+
+    list1.add("asdf")   # A '.' means that I want to access some internal property of the variable.
+                        # The engine will first check the type and then check if there is any property
+                        # of the same name (like here 'add') that is registered for this type of variable.
+    list1.remove("asdf")    # Removes all elements with the given value
+    list1.remove_at(0)      # Removes the element at the specified index (throws an 'index out of range' exception if the index is outside the range of the array)
+    list1.size()            # Returns the size of the array
+    list1.empty()           # Will return 'true' if the array is empty
+    list1.add_range([1, 2, list1, list2, false]) # This will basically try to merge the two arrays
+    list3.sort(
+        function (@var a [int], @var b [int]): bool
+            return a < b    # Will throw an exception if one of the values is not compareable or if the comparision doesn't work on the two values
+        end
+    )
+    list1.get_at(0)             # Returns the value at the specified index
+    list1.get_index_of("asdf")  # Returns the index of the element which is equal to the specified value (will only return the index of the first element that matches; any other will not be recognized)
+    list1.clear()
+
+    list2.add("key", "value")
+    list2.remove("asdf")    # Removes the key-value-set that has a key value equal to the specified value
+    list2.remove_at(0)      # Removes the key-value-set at the specified index (throws an 'index out of range' exception if the index is outside the range of the array)
+    list2.size()            # Returns the size of the dictionary
+    list2.empty()           # Will return 'true' if the dictionary is empty
+    list2.sort_by_key(
+        function (@var a [string], @var b [string]): bool
+            a.after(b) # The 'after' function only works for strings and will return true if the target string value would alphabetically be sorted after the specified value. (a="b", b="a" => a.after(b) > true)
+        end
+    )
+    list2.sort_by_value(
+        function (@var a [mixed], @var b [mixed]): bool
+            a != b
+        end
+    )
+    list2.get_at("key") # Returns the value of the key-value-pair where the key is equal to the specified value
+    list2.get_keys()    # Returns an array of all the keys inside the dictionary
+    list2.get_values()  # Returns an array of all the values inside the dictionary
+    list2.clear()
+
+    list2.get_values().size()           # Doesn't work
+
+    @var values = list2.get_values()    # First store the value inside a variable
+    values.size()                       # then you can access it's properties
+
+    # Casting functions will always return 'null' if the cast was not successful
+    @var c = to_int("1")
+    @var d = to_string(c)   # Because a variable always has 'null' as a default, this value cast can always return a string value
+    @var e = to_bool("true") # Only casts '1', '0', "true" "false" but not "1" or "0"
+    @var f = to_float("0.0")
+
+    throw("Exception message") # There are no exception classes/objects, only string messages
+
+    try
+        throw(OUT_OF_RANGE_EXCEPTION)   # Internal exceptions are sotred as global string constants
+    catch OUT_OF_RANGE_EXCEPTION        # Yes you have to specify the exact exception message to define a catch block
+        print("Ops!")
+    finally                             # Triggers whenever an unexpected exception got thrown
+        print("Idk...")
+    end
+end

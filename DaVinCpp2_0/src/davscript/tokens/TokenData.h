@@ -16,6 +16,8 @@ namespace davincpp::davscript
         RPARAN,         // )
         LBRAKET,        // [
         RBRAKET,        // ]
+        LCURLY,         // {
+        RCURLY,         // }
         NEWLINE,        // \n
 
         // Data tokens
@@ -67,8 +69,13 @@ namespace davincpp::davscript
         LESS,           // <
         GREATER,        // >
         EQUALS,         // =
+        NOT,            // !
         ASSOSIATE,      // >>
         EQUALSTO,       // ==
+        MINUSEQ,        // -=
+        PLUSEQ,         // +=
+        DIVIDEEQ,       // /=
+        ASTRIXEQ,       // *=
         NOTEQ,          // !=
         GREATEREQ,      // >=
         LESSEQ,         // <=
@@ -88,7 +95,7 @@ namespace davincpp::davscript
 
         // Regular roles
         NORMAL,             // ., :, [, ...
-        DATAVALUE,          // "asdf", 123, -12, ...
+        DATAVALUE,          // "asdf", 123, true, ...
         KEYWORD,            // if, else, function, ...
         VARIABLETYPE,       // @var, @const, ...
         VALUETYPE,          // int, string, bool, ...
@@ -106,6 +113,8 @@ namespace davincpp::davscript
     static const char T_RPARAN                  = ')';
     static const char T_LBRAKET                 = '[';
     static const char T_RBRAKET                 = ']';
+    static const char T_LCURLY                  = '{';
+    static const char T_RCURLY                  = '}';
     static const char T_NEWLINE                 = '\n';
     static const char T_EOF                     = '\0';
 
@@ -150,8 +159,13 @@ namespace davincpp::davscript
     static const std::string T_LESS             = "<";
     static const std::string T_GREATER          = ">";
     static const std::string T_EQUALS           = "=";
+    static const std::string T_NOT              = "!";
     static const std::string T_ASSOSIATE        = ">>";
     static const std::string T_EQUALSTO         = "==";
+    static const std::string T_MINUSEQ          = "+=";
+    static const std::string T_PLUSEQ           = "-=";
+    static const std::string T_DIVIDEEQ         = "/=";
+    static const std::string T_ASTRIXEQ         = "*=";
     static const std::string T_NOTEQ            = "!=";
     static const std::string T_GREATEREQ        = ">=";
     static const std::string T_LESSEQ           = "<=";
@@ -159,7 +173,7 @@ namespace davincpp::davscript
     static const std::string ALPHABET                       = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
     static const std::string NUMBER_CHARACTERS              = "1234567890.-";
     static const std::string WORD_ChARACTERS                = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890";
-    static const std::string MULTI_CHAR_TOKEN_CHARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890#@\"";
+    static const std::string MULTI_CHAR_TOKEN_CHARACTERS    = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890#@\"-+/*=!<>";
 
     static const std::unordered_map<char, TokenType> SINGLE_CHAR_TOKENS = {
         {  T_COMMA,     COMMA    },
@@ -169,11 +183,9 @@ namespace davincpp::davscript
         {  T_RPARAN,    RPARAN   },
         {  T_LBRAKET,   LBRAKET  },
         {  T_RBRAKET,   RBRAKET  },
+        {  T_LCURLY,    LCURLY   },
+        {  T_RCURLY,    RCURLY   },
         {  T_NEWLINE,   NEWLINE  },
-        {  T_PLUS,      PLUS     },
-        {  T_MINUS,     MINUS    },
-        {  T_ASTRIX,    ASTRIX   },
-        {  T_DIVIDE,    DIVIDE   },
     };
 
     static const std::unordered_map<std::string, TokenType> BUILTIN_VALUE_TOKENS = {
@@ -226,8 +238,13 @@ namespace davincpp::davscript
         { T_LESS,                       LESS      },
         { T_GREATER,                    GREATER   },
         { T_EQUALS,                     EQUALS    },
+        { T_NOT,                        NOT       },
         { T_ASSOSIATE,                  ASSOSIATE },
         { T_EQUALSTO,                   EQUALSTO  },
+        { T_MINUSEQ,                    MINUSEQ   },
+        { T_PLUSEQ,                     PLUSEQ    },
+        { T_DIVIDEEQ,                   DIVIDEEQ  },
+        { T_ASTRIXEQ,                   ASTRIXEQ  },
         { T_NOTEQ,                      NOTEQ     },
         { T_GREATEREQ,                  GREATEREQ },
         { T_LESSEQ,                     LESSEQ    },

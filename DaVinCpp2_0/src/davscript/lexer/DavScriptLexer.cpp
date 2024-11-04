@@ -1,7 +1,6 @@
 #include "DavScriptLexer.h"
 #include <algorithm>
 #include <Console.h>
-#include <DaVinCppExceptions.h>
 #include <utility>
 
 namespace davincpp::davscript
@@ -49,27 +48,6 @@ namespace davincpp::davscript
 
     void DavScriptLexer::lexSingleCharTokens()
     {
-        if (isOperatorToken()) {
-            char nextChar = peakNextChar();
-
-            if (m_CurrentChar == T_MINUS &&
-                charInCharList(nextChar,  NUMBER_CHARACTERS) &&
-                !charOnBlackList(nextChar, {T_MINUS, T_DOT})
-            ) {
-                lexNumberToken();
-                return;
-            }
-
-            if (m_CurrentChar == T_ASTRIX && nextChar == T_ASTRIX) {
-                advanceChar();
-                lexFunctionDoc();
-                return;
-            }
-
-            m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), SINGLE_CHAR_TOKENS.at(m_CurrentChar), OPERATOR);
-            return;
-        }
-
         m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), SINGLE_CHAR_TOKENS.at(m_CurrentChar));
     }
 
@@ -87,6 +65,11 @@ namespace davincpp::davscript
 
         if (m_CurrentChar == T_QUOTE) {
             lexStringToken();
+            return;
+        }
+
+        if (tokenValueOnWhiteList(std::string(1, m_CurrentChar), OPERATOR_TOKENS)) {
+            lexOperators();
             return;
         }
 
@@ -119,6 +102,7 @@ namespace davincpp::davscript
 
     void DavScriptLexer::lexFunctionDoc()
     {
+        advanceChar();
         std::ostringstream string;
 
         while (true) {
@@ -251,6 +235,39 @@ namespace davincpp::davscript
         m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), STRING, DATAVALUE);
     }
 
+    void DavScriptLexer::lexOperators()
+    {
+        char nextChar = peakNextChar();
+
+        if (m_CurrentChar == T_MINUS &&
+            charInCharList(nextChar,  NUMBER_CHARACTERS) &&
+            !charOnBlackList(nextChar, {T_MINUS, T_DOT})
+        ) {
+            lexNumberToken();
+            return;
+        }
+
+        if (m_CurrentChar == T_ASTRIX && nextChar == T_ASTRIX) {
+            lexFunctionDoc();
+            return;
+        }
+
+        std::ostringstream operatorString;
+        operatorString << m_CurrentChar;
+
+        if (tokenValueOnWhiteList(std::string(1, peakNextChar()), OPERATOR_TOKENS)) {
+            operatorString << advanceChar();
+        }
+
+        std::string operatorValue = operatorString.str();
+
+        bool validOperator = OPERATOR_TOKENS.find(operatorValue) != OPERATOR_TOKENS.end();
+        TokenType type = validOperator ? OPERATOR_TOKENS.at(operatorValue) : UNKNOWN;
+        TokenRole role = validOperator ? OPERATOR : INVALID;
+
+        m_Tokens.emplace_back(m_CurrentCharPosition, operatorValue, type, role);
+    }
+
 
     char DavScriptLexer::advanceChar(int positionAdvanceStep)
     {
@@ -303,9 +320,14 @@ namespace davincpp::davscript
     }
 
 
+    bool DavScriptLexer::charOnWhiteList(char character, const std::vector<char>& whiteList)
+    {
+        return std::find(whiteList.begin(), whiteList.end(), character) != whiteList.end();
+    }
+
     bool DavScriptLexer::charOnBlackList(char character, const std::vector<char>& blackList)
     {
-        return std::find(blackList.begin(), blackList.end(), character) != blackList.end();
+        return charOnWhiteList(character, blackList);
     }
 
     bool DavScriptLexer::tokenValueOnWhiteList(std::string_view tokenValue, const std::unordered_map<std::string, TokenType>& whiteList)

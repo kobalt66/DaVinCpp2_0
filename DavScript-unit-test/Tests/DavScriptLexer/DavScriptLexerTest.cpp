@@ -20,6 +20,7 @@ namespace davincpp::davscript
         assertTestStep(testWrongStrings());
         assertTestStep(testFunctionDoc());
         assertTestStep(testWrongFunctionDoc());
+        assertTestStep(testBulk());
     }
 
 
@@ -158,6 +159,34 @@ namespace davincpp::davscript
         std::vector<Token> tokens = lexer.getTokens();
 
         assertEquals(2, getTokenCountByTokenRole(INVALID, tokens));
+    }
+
+    void DavScriptLexerTest::testBulk()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/bulkTest.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> invalidTokens = getTokensByTokenRole(INVALID, lexer.getTokens());
+
+        bool foundInvalidTokens = !invalidTokens.empty();
+        if (foundInvalidTokens) {
+            Console::newline();
+            Console::raw(Console::RED, "-------------------------------------------");
+            Console::raw(Console::RED, "INVALID TOKENS FOUND:");
+            Console::raw(Console::RED, "-------------------------------------------");
+            Console::newline();
+        }
+
+        for (Token& token : invalidTokens) {
+            Console::err(token.getActualValue());
+        }
+
+        if (foundInvalidTokens) {
+            Console::newline();
+            Console::raw(Console::RED, "Invalid tokens found in total: ", invalidTokens.size());
+            Console::newline();
+        }
     }
 
 
