@@ -60,6 +60,12 @@ namespace davincpp::davscript
                 return;
             }
 
+            if (m_CurrentChar == T_ASTRIX && nextChar == T_ASTRIX) {
+                advanceChar();
+                lexFunctionDoc();
+                return;
+            }
+
             m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), SINGLE_CHAR_TOKENS.at(m_CurrentChar), OPERATOR);
             return;
         }
@@ -111,15 +117,39 @@ namespace davincpp::davscript
         m_Tokens.emplace_back(m_CurrentCharPosition, comment.str(), NONE, COMMENT);
     }
 
+    void DavScriptLexer::lexFunctionDoc()
+    {
+        std::ostringstream string;
+
+        while (true) {
+            char nextChar = peakNextChar();
+            char secondNextChar = peakNextChar(2);
+
+            if (nextChar == T_ASTRIX && secondNextChar == T_ASTRIX) {
+                advanceChar(2);
+                break;
+            }
+
+            if (charOnBlackList(nextChar, {T_NEWLINE, T_EOF})) {
+                m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), NONE, INVALID);
+                return;
+            }
+
+            advanceChar();
+
+            string << m_CurrentChar;
+        }
+
+        m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), NONE, FUNCTIONDOC);
+    }
+
     void DavScriptLexer::lexVariableTypeToken()
     {
         std::ostringstream variableType;
         variableType << m_CurrentChar;
 
         while (true) {
-            char nextChar = peakNextChar();
-
-            if (!charInCharList(nextChar, ALPHABET)) {
+            if (!charInCharList(peakNextChar(), ALPHABET)) {
                 break;
             }
 
@@ -129,7 +159,8 @@ namespace davincpp::davscript
         std::string variableTypeValue = variableType.str();
 
         if (VARIABLE_TYPE_TOKENS.find(variableTypeValue) == VARIABLE_TYPE_TOKENS.end()) {
-            throw std::runtime_error("TODO: CHANGE ERROR MESSAGE TO SPECIAL DAVSCRIPT ERROR OUTPUT! Undefined variable type was used.");
+            m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, NONE, INVALID);
+            return;
         }
 
         m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, VARIABLE_TYPE_TOKENS.at(variableTypeValue), VARIABLETYPE);
@@ -221,28 +252,35 @@ namespace davincpp::davscript
     }
 
 
-    char DavScriptLexer::advanceChar()
+    char DavScriptLexer::advanceChar(int positionAdvanceStep)
     {
-        m_CurrentCharPosition = getNextcharPosition();
+        m_CurrentCharPosition = getNextcharPosition(positionAdvanceStep);
 
         m_CurrentChar = m_DavScript.getCharByPosition(m_CurrentCharPosition);
 
         return m_CurrentChar;
     }
 
-    char DavScriptLexer::peakNextChar()
+    char DavScriptLexer::peakNextChar(int peakAheadStep)
     {
-        return m_DavScript.getCharByPosition(getNextcharPosition());
+        return m_DavScript.getCharByPosition(getNextcharPosition(peakAheadStep));
     }
 
-    CharPosition DavScriptLexer::getNextcharPosition() const
+    CharPosition DavScriptLexer::getNextcharPosition(int positionAdvanceStep) const
     {
         CharPosition nextCharPostion = m_CurrentCharPosition;
-        nextCharPostion.CharIdx += 1;
 
-        if (m_DavScript.atEndOfLine(nextCharPostion)) {
-            nextCharPostion.CharIdx = 0;
-            nextCharPostion.Line += 1;
+        for (int i = 0; i < positionAdvanceStep; i++) {
+            nextCharPostion.CharIdx += 1;
+
+            if (m_DavScript.atEndOfFile(nextCharPostion)) {
+                return nextCharPostion;
+            }
+
+            if (m_DavScript.atEndOfLine(nextCharPostion)) {
+                nextCharPostion.CharIdx = 0;
+                nextCharPostion.Line += 1;
+            }
         }
 
         return nextCharPostion;

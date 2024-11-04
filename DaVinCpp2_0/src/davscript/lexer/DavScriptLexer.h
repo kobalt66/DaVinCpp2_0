@@ -18,14 +18,15 @@ namespace davincpp::davscript
         void lexSingleCharTokens();
         void lexMultiCharTokens();
         void lexCommentToken();
+        void lexFunctionDoc();
         void lexVariableTypeToken();
         void lexWordToken();
         void lexNumberToken();
         void lexStringToken();
 
-        char advanceChar();
-        char peakNextChar();
-        [[nodiscard]] CharPosition getNextcharPosition() const;
+        char advanceChar(int positionAdvanceStep = 1);
+        char peakNextChar(int peakAheadStep = 1);
+        [[nodiscard]] CharPosition getNextcharPosition(int positionAdvanceStep = 1) const;
 
         [[nodiscard]] bool isSingleCharToken() const;
         [[nodiscard]] bool isMultiCharToken() const;

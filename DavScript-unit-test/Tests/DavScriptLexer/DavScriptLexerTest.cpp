@@ -17,6 +17,9 @@ namespace davincpp::davscript
         assertTestStep(testWords());
         assertTestStep(testNumbers());
         assertTestStep(testStrings());
+        assertTestStep(testWrongStrings());
+        assertTestStep(testFunctionDoc());
+        assertTestStep(testWrongFunctionDoc());
     }
 
 
@@ -67,7 +70,11 @@ namespace davincpp::davscript
     {
         DavScript davScript("../Tests/DavScriptLexer/TestFiles/wrongVariableTypes.dav");
         DavScriptLexer lexer(davScript);
-        assertGetException(lexer.generateTokens(), "TODO: CHANGE ERROR MESSAGE TO SPECIAL DAVSCRIPT ERROR OUTPUT! Undefined variable type was used.");
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+
+        assertEquals(1, getTokensByTokenRole(INVALID, tokens).size());
     }
 
     void DavScriptLexerTest::testWords()
@@ -114,6 +121,43 @@ namespace davincpp::davscript
         for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
             assertTrue(token.getTokenType() == STRING);
         }
+    }
+
+    void DavScriptLexerTest::testWrongStrings()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/wrongStrings.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+
+        assertEquals(2, getTokenCountByTokenRole(INVALID, tokens));
+
+        for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
+            assertTrue(token.getTokenType() == STRING);
+        }
+    }
+
+    void DavScriptLexerTest::testFunctionDoc()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/functionDoc.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+
+        assertEquals(2, getTokenCountByTokenRole(FUNCTIONDOC, tokens));
+    }
+
+    void DavScriptLexerTest::testWrongFunctionDoc()
+    {
+        DavScript davScript("../Tests/DavScriptLexer/TestFiles/wrongFunctionDoc.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        std::vector<Token> tokens = lexer.getTokens();
+
+        assertEquals(2, getTokenCountByTokenRole(INVALID, tokens));
     }
 
 

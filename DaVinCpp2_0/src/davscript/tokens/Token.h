@@ -6,14 +6,14 @@ namespace davincpp::davscript
 {
     struct TokenSpan
     {
-        uint32_t StartIdx = 0;
-        uint32_t EndIdx = 0;
+        int StartIdx = 0;
+        int EndIdx = 0;
     };
 
     struct CharPosition
     {
-        uint32_t Line = 0;
-        uint32_t CharIdx = 0;
+        int Line = 0;
+        int CharIdx = 0;
 
         void reset();
     };

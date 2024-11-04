@@ -19,6 +19,9 @@ namespace davincpp::davscript
         static void testWords();
         static void testNumbers();
         static void testStrings();
+        static void testWrongStrings();
+        static void testFunctionDoc();
+        static void testWrongFunctionDoc();
 
         static int getTokenCountByTokenRole(TokenRole role, const std::vector<Token>& tokens);
         static int getTokenCountByTokenRoles(std::vector<TokenRole>&& roles, const std::vector<Token>& tokens);
