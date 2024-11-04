@@ -1,5 +1,4 @@
 #include "Window.h"
-#include <DaVinCppExceptions.h>
 #include <events/EventHandler.h>
 #include <rendering/Texture2D.h>
 #include <OpenGLUtils.h>
@@ -7,13 +6,12 @@
 
 namespace davincpp
 {
-	Window::Window(uint32_t width, uint32_t height, const char* title)
-		: m_GameWindow()
-	{ 
-		m_Width = width;
-		m_Height = height;
-		m_Title = title;
-	}
+	Window::Window(const ProjectConfig& projectConfig)
+		: m_GameWindow(projectConfig),
+		m_Width(projectConfig.ScreenResolution.x),
+		m_Height(projectConfig.ScreenResolution.y),
+		m_Title(projectConfig.ProjectName)
+	{ }
 
 
 	void Window::onResize(GLFWwindow* windowID, int width, int height)
@@ -39,7 +37,7 @@ namespace davincpp
 		OpenGLUtils::setGLErrorCallback();
 		OpenGLUtils::setWindowHints(4, 4, GLFW_OPENGL_CORE_PROFILE);
 		
-		m_WindowPtr = OpenGLUtils::createWindow(m_Width, m_Height, m_Title);
+		m_WindowPtr = OpenGLUtils::createWindow(m_Width, m_Height, m_Title.c_str());
 
 		glfwMakeContextCurrent(m_WindowPtr);
 
@@ -106,7 +104,7 @@ namespace davincpp
 
 
 
-	void Window::updateViewport()
+	void Window::updateViewport() const
 	{
 		GLCall(glViewport(0, 0, m_Width, m_Height));
 	}
@@ -134,7 +132,7 @@ namespace davincpp
 	{
 		EventHandler::addEvent(Event([&]() {
 			if (!m_ShowFps) {
-				glfwSetWindowTitle(m_WindowPtr, m_Title);
+				glfwSetWindowTitle(m_WindowPtr, m_Title.c_str());
 				return;
 			}
 

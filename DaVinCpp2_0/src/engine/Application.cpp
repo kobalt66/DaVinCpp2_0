@@ -11,8 +11,11 @@ namespace davincpp
 	{
 		ASSERT_ENGINE_CALL(Console::onLoad(), "onStartEngine: loading console");
 
+		ASSERT_ENGINE_CALL(m_ProjectManager = std::make_shared<ProjectManager>("[TEST_ENV]/davincpp.yaml"), "onStartEngine: creating project manager");
+		ASSERT_ENGINE_CALL(m_ProjectManager->loadProjectList(), "onStartEngine: loading projects");
+
 		ASSERT_ENGINE_CALL({
-			m_SelectionMenu = std::make_unique<SelectionMenu>();
+			m_SelectionMenu = std::make_unique<SelectionMenu>(m_ProjectManager);
 			m_SelectionMenu->onLoad();
 			}, "onStartEngine: creating selection menu");
 
@@ -26,13 +29,19 @@ namespace davincpp
 	void Application::onLoad()
 	{
 		Console::log("Loading application...");
+
+		Console::log("Loading DaVinCpp project...");
+		ASSERT_LETHAL_ENGINE_CALL(loadSelectedProject(), "onLoad: loading DaVinCpp project");
+
 		ASSERT_ENGINE_CALL({
-			m_Window = std::make_unique<Window>(1200, 740, "DaVinCpp 2.0");
+			const ProjectConfig& projectConfig = m_DaVinCppProject->getProjectConfig();
+			m_Window = std::make_unique<Window>(projectConfig);
 			m_Window->onSetup();
-			m_Window->showCursor(false);
-			m_Window->setVsync(false);
-			m_Window->showFps(true);
-			m_Window->flipTexturesH(true);
+
+			Window::flipTexturesH(m_DaVinCppProject->getProjectConfig().FlipTexturesH);
+			m_Window->setVsync(projectConfig.Vsync);
+			m_Window->showCursor(projectConfig.ShowCursor);
+			m_Window->showFps(projectConfig.DebugMode);
 		}, "onLoad: creating window");
 
 		ASSERT_ENGINE_CALL(m_GameObjectManager = std::make_unique<GameObjectManager>(), "onLoad: creating game object manager");
@@ -104,5 +113,22 @@ namespace davincpp
 	bool Application::shouldShutdown()
 	{
 		return m_Window->shouldClose();
+	}
+
+
+	void Application::loadSelectedProject()
+	{
+		if (m_ProjectManager->getProjectList().empty()) {
+			throw davincpp_error("Failed to load DaVinCpp project: no projects are registered!");
+		}
+
+		int projectIdx = m_SelectionMenu->getSelectedProjectIdx();
+
+		if (projectIdx >= m_ProjectManager->getProjectList().size()) {
+			throw davincpp_error("Failed to load DaVinCpp project: project index out of project list range!");
+		}
+
+		m_DaVinCppProject = std::make_shared<Project>(m_ProjectManager->getProjectList().at(projectIdx));
+		Console::log("Successfully loaded DaVinCpp project '", m_DaVinCppProject->getProjectConfig().ProjectName, "'...");
 	}
 }

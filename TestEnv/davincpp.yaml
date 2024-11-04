@@ -1,0 +1,13 @@
+davincppVersion: "0.1_alpha"
+
+legacyVersions:
+  [
+        "0.1_alpha",
+        "0.0_alpha"
+  ]
+
+registeredProjects:
+  [
+        "/home/lephobix/CLionProjects/DaVinCpp2_0/TestEnv/testProject.yaml",
+        "/home/lephobix/CLionProjects/DaVinCpp2_0/TestEnv/testProject2.yaml"
+  ]

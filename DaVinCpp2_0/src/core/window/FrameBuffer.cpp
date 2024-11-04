@@ -5,9 +5,7 @@
 namespace davincpp
 {
 	FrameBuffer::FrameBuffer(uint32_t pixelSizeX, uint32_t pixelSizeY, uint32_t bytesPerPixel)
-		: m_FrameWidth(0),
-		m_FrameHeight(0),
-		m_PixelSizeX(pixelSizeX),
+		: m_PixelSizeX(pixelSizeX),
 		m_PixelSizeY(pixelSizeY),
 		m_BytesPerPixel(bytesPerPixel)
 	{ }
@@ -15,6 +13,10 @@ namespace davincpp
 
 	void FrameBuffer::onResize(uint32_t windowSizeX, uint32_t windowSizeY)
 	{
+		if (windowSizeX < MIN_FRAMEBUFFER_SIZEX || windowSizeY < MIN_FRAMEBUFFER_SIZEY) {
+			return;
+		}
+
 		m_FrameWidth = windowSizeX / m_PixelSizeX;
 		m_FrameHeight = windowSizeY / m_PixelSizeY;
 
@@ -28,7 +30,7 @@ namespace davincpp
 			return;
 		}
 
-		memset(m_FrameBuffer.get(), 0, static_cast<size_t>(m_FrameWidth * m_FrameHeight * m_BytesPerPixel));
+		memset(m_FrameBuffer.get(), 0, m_FrameWidth * m_FrameHeight * m_BytesPerPixel);
 	}
 
 
@@ -73,21 +75,21 @@ namespace davincpp
 
 	size_t FrameBuffer::getPixelCount() const
 	{
-		return static_cast<size_t>(m_FrameWidth * m_FrameHeight);
+		return m_FrameWidth * m_FrameHeight;
 	}
 
 
 	glm::uvec2 FrameBuffer::getPixelSize() const
 	{
-		return glm::uvec2(m_PixelSizeX, m_PixelSizeY);
+		return {m_PixelSizeX, m_PixelSizeY};
 	}
 
 	glm::uvec2 FrameBuffer::getFrameSize() const
 	{
-		return glm::uvec2(m_FrameWidth, m_FrameHeight);
+		return {m_FrameWidth, m_FrameHeight};
 	}
 
-	const std::shared_ptr<GLubyte[]> FrameBuffer::getBufferPtr() const
+	std::shared_ptr<GLubyte[]> FrameBuffer::getBufferPtr() const
 	{
 		return m_FrameBuffer;
 	}

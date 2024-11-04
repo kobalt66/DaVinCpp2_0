@@ -1,0 +1,5 @@
+module testEnv
+
+internal function onReady(): void
+    print("Hello World")
+end

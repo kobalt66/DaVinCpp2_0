@@ -3,13 +3,14 @@
 #include <texture/Texture.h>
 #include <FrameBuffer.h>
 #include <gameobjects/GameObject.h>
+#include <gameprojects/ProjectConfig.h>
 
 namespace davincpp
 {
 	class GameWindow
 	{
 	public:
-		GameWindow();
+		explicit GameWindow(const ProjectConfig& projectConfig);
 
 		void onSetup();
 		void onClear();

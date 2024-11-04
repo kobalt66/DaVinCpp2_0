@@ -1,6 +1,9 @@
 #include "MenuPage.h"
 #include <ui/menu/SelectionMenu.h>
 #include <DaVinCppString.h>
+#include <ui/menu/BreakElement.h>
+#include <ui/menu/TextElement.h>
+#include <Console.h>
 
 namespace davincpp
 {
@@ -19,44 +22,78 @@ namespace davincpp
 #else
 		onRenderHeader();
 
-		for (std::shared_ptr<MenuElement> menuElement : m_MenuElements) {
-			menuElement->setPosition(advanceRow(), 0);
+		for (const std::shared_ptr<MenuElement>& menuElement : m_MenuElements) {
+			menuElement->setCliY(advanceRow());
 			menuElement->onRender(m_SelectedElement.get() == menuElement.get());
 		}
 
 		m_CurrentRow = 0;
-
-		//Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
 #endif
+	}
+
+	void MenuPage::onUpdate(SelectionMenu* selectionMenu, int input)
+	{
+		SelectionMenu::displayDescription(Console::fmtTxt(SelectionMenu::WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "), Console::BLACK_YELLOW_PAIR);
 	}
 
 
 	void MenuPage::switchElement(int switchDirection)
 	{
-		if (m_MenuElements.size() == 0) {
-			return;
-		}
+		while (true) {
+			if (m_MenuElements.empty()) {
+				return;
+			}
 
-		if ((m_SelectedElementIdx + switchDirection) < 0) {
-			m_SelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
-		}
-		else if ((m_SelectedElementIdx + switchDirection) >= m_MenuElements.size()) {
-			m_SelectedElementIdx = 0;
-		}
-		else {
-			m_SelectedElementIdx += switchDirection;
-		}
+			int newSelectedElementIdx = m_SelectedElementIdx;
+			if ((m_SelectedElementIdx + switchDirection) < 0) {
+				newSelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
+			}
+			else if ((m_SelectedElementIdx + switchDirection) >= m_MenuElements.size()) {
+				newSelectedElementIdx = 0;
+			}
+			else {
+				newSelectedElementIdx += switchDirection;
+			}
 
-		m_SelectedElement = m_MenuElements.at(m_SelectedElementIdx);
+			m_SelectedElementIdx = newSelectedElementIdx;
+
+			if (auto textElement = dynamic_cast<TextElement*>(m_MenuElements.at(newSelectedElementIdx).get())) {
+				if (textElement->isSkippable()) {
+					continue;
+				}
+			}
+			else if (dynamic_cast<BreakElement*>(m_MenuElements.at(newSelectedElementIdx).get()) != nullptr) {
+				continue;
+			}
+
+			m_SelectedElement = m_MenuElements.at(m_SelectedElementIdx);
+			break;
+		}
 	}
 
-	void MenuPage::interact(SelectionMenu* selectionPage)
+	void MenuPage::interact(SelectionMenu* selectionMenu)
 	{
 		if (m_SelectedElement == nullptr) {
 			return;
 		}
 
-		m_SelectedElement->onInteraction(selectionPage);
+		m_SelectedElement->onInteraction(selectionMenu);
+	}
+
+
+	void MenuPage::addMenuElement(const std::shared_ptr<MenuElement>& menuElement)
+	{
+		m_MenuElements.emplace_back(menuElement);
+	}
+
+
+	int MenuPage::getStartCliY() const
+	{
+		if (m_MenuElements.empty()) {
+			return 0;
+		}
+
+		return m_MenuElements.at(0)->getCliY();
 	}
 
 
@@ -83,7 +120,7 @@ namespace davincpp
 			Console::printCenteredText(headerLine, Console::GREEN_BLACK_PAIR, advanceRow());
 		}
 
-		Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 2, 1, advanceRow());
+		Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 1, 1, advanceRow());
 #endif
 	}
 

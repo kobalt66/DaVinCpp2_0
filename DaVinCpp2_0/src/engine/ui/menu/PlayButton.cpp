@@ -3,8 +3,8 @@
 
 namespace davincpp
 {
-    PlayButton::PlayButton(std::string_view displayText)
-        : MenuElement(displayText)
+    PlayButton::PlayButton(const std::string& displayText, const std::string& uniqueTag)
+        : MenuElement(displayText, uniqueTag)
     { }
 
     void PlayButton::onInteraction(SelectionMenu* selectionMenu)

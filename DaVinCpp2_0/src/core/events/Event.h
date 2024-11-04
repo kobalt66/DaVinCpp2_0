@@ -1,16 +1,9 @@
 #pragma once
-
-#include <chrono>
+#include <DaVinCppTypes.h>
 #include <functional>
 
 namespace davincpp
 {
-	typedef std::chrono::system_clock		clock;
-	typedef std::chrono::time_point<clock>	timestamp;
-	typedef std::chrono::milliseconds		msc;
-	typedef std::chrono::seconds			sec;
-	typedef std::chrono::minutes			min;
-
 	class Event
 	{
 	public:

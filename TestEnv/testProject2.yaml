@@ -1,0 +1,12 @@
+davincppVersion: 0.1_alpha
+name: Crazy test project!
+pixelSize: [2, 2]
+resolution: [1000, 800]
+vsync: true
+showCursor: false
+flipTexturesH: false
+debugMode: true
+scripts: [
+]
+textures: [
+]

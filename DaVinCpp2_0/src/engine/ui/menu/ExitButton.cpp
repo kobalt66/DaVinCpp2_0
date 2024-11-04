@@ -3,7 +3,7 @@
 
 namespace davincpp
 {
-    ExitButton::ExitButton(std::string_view displayText)
+    ExitButton::ExitButton(const std::string& displayText)
         : MenuElement(displayText)
     { }
 

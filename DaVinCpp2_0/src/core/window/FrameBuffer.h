@@ -15,16 +15,16 @@ namespace davincpp
 
 		void setPixel(int pixelX, int pixelY, glm::vec4 color);
 		void setPixelSize(glm::ivec2 pixelSize);
-		glm::vec4 getPixel(int pixelX, int pixelY) const;
-		size_t getPixelCount() const;
+		[[nodiscard]] glm::vec4 getPixel(int pixelX, int pixelY) const;
+		[[nodiscard]] size_t getPixelCount() const;
 
-		glm::uvec2 getPixelSize() const;
-		glm::uvec2 getFrameSize() const;
-		const std::shared_ptr<GLubyte[]> getBufferPtr() const;
+		[[nodiscard]] glm::uvec2 getPixelSize() const;
+		[[nodiscard]] glm::uvec2 getFrameSize() const;
+		[[nodiscard]] std::shared_ptr<GLubyte[]> getBufferPtr() const;
 
 	private:
-		inline bool isPixelInBoundry(int pixelX, int pixelY) const;
-		inline uint32_t getPixelIndex(int pixelX, int pixelY) const;
+		[[nodiscard]] inline bool isPixelInBoundry(int pixelX, int pixelY) const;
+		[[nodiscard]] inline uint32_t getPixelIndex(int pixelX, int pixelY) const;
 
 	private:
 		std::shared_ptr<GLubyte[]> m_FrameBuffer = nullptr;
