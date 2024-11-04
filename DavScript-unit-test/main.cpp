@@ -3,6 +3,7 @@
 #include <UnitTestEnvironment.h>
 #include <DavScriptFiles/DavScriptFileTest.h>
 #include <DavScriptLexer/DavScriptLexerTest.h>
+#include <DavScriptParser/DavScriptParserTest.h>
 
 int main()
 {
@@ -11,6 +12,7 @@ int main()
 
         testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptFileTest>());
         testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptLexerTest>());
+        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptParserTest>());
 
         testEnvironment.execute();
     } catch (std::exception& exception) {
