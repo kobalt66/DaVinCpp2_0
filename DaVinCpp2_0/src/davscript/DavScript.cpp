@@ -1,6 +1,7 @@
 #include "DavScript.h"
 #include <DaVinCppFileSystem.h>
 #include <DaVinCppString.h>
+#include <tokens/Token.h>
 #include <utility>
 
 namespace davincpp::davscript
@@ -52,6 +53,15 @@ namespace davincpp::davscript
     bool DavScript::atEndOfFile(CharPosition position) const
     {
         return position.Line >= RefinedContent.size() || (position.Line == RefinedContent.size() - 1 && atEndOfLine(position));
+    }
+
+    std::string DavScript::getLineByTokenPosition(CharPosition position) const
+    {
+        if (atEndOfFile(position)) {
+            return "";
+        }
+
+        return RefinedContent.at(position.Line);
     }
 }
 

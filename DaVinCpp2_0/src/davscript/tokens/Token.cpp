@@ -1,4 +1,7 @@
 #include "Token.h"
+#include <Console.h>
+
+#include <utility>
 
 namespace davincpp::davscript
 {
@@ -10,20 +13,36 @@ namespace davincpp::davscript
 
 
     Token::Token(
+        DavScript davScript,
         CharPosition position,
         std::string value,
         TokenType type,
         TokenRole role
-        ) : m_Position(position),
+        ) : m_DavScript(std::move(davScript)),
+            m_Position(position),
             m_ActualValue(std::move(value)),
             m_Type(type),
             m_Role(role)
+    { }
+
+    Token::Token(
+        TokenType type,
+        TokenRole role,
+        std::string specificValue
+    ): m_Type(type),
+        m_Role(role),
+        m_ActualValue(std::move(specificValue))
+    { }
+
+    bool Token::operator==(const Token& other) const
     {
-        // Adjust the line number: Otherwise the first line would be 0 continuing with 1, 2, 3, ...
-        // What we want though is to start counting from 1. That's why I have to adjust the line count.
-        m_Position.Line += 1;
+        return m_Role == other.m_Role && m_Type == other.m_Type && m_ActualValue == other.m_ActualValue;
     }
 
+    DavScript Token::getDavScript() const
+    {
+        return m_DavScript;
+    }
 
     std::string Token::getActualValue() const
     {
@@ -40,7 +59,6 @@ namespace davincpp::davscript
         return m_Role;
     }
 
-
     int Token::getTokenLength() const
     {
         return static_cast<int>(m_ActualValue.size());
@@ -54,5 +72,16 @@ namespace davincpp::davscript
     CharPosition Token::getTokenPosition() const
     {
         return m_Position;
+    }
+
+    std::string Token::toString() const
+    {
+        std::string_view type = TOKEN_TYPE2STRING.at(m_Type);
+
+        if (m_ActualValue == ANY_VALUE || m_ActualValue == type) {
+            return Console::fmtTxt("Role: '", TOKEN_ROLE2STRING.at(m_Role), "', Type: '", TOKEN_TYPE2STRING.at(m_Type), "'");
+        }
+
+        return Console::fmtTxt("Role: '", TOKEN_ROLE2STRING.at(m_Role), "', Type: '", type, "', Value: '", m_ActualValue, "'");
     }
 }

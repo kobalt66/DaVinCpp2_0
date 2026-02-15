@@ -87,6 +87,7 @@ namespace davincpp::davscript
     enum TokenRole
     {
         INVALID,
+        ENDOFFILE,
 
         // Special roles
         COMMENT,            // # this is a comment
@@ -101,6 +102,8 @@ namespace davincpp::davscript
         VALUETYPE,          // int, string, bool, ...
         OPERATOR,           // +, -, *, /, ...
     };
+
+    static const std::string ANY_VALUE          = "[non-specific]";
 
     static const char T_COMMA                   = ',';
     static const char T_QUOTE                   = '"';
@@ -248,5 +251,81 @@ namespace davincpp::davscript
         { T_NOTEQ,                      NOTEQ     },
         { T_GREATEREQ,                  GREATEREQ },
         { T_LESSEQ,                     LESSEQ    },
+    };
+
+    static const std::unordered_map<TokenType, std::string> TOKEN_TYPE2STRING = {
+        { NONE,        ANY_VALUE                       },
+        { COMMA,       std::string(1, T_COMMA)   },
+        { DOT,         std::string(1, T_DOT)     },
+        { COLON,       std::string(1, T_COLON)   },
+        { LPARAN,      std::string(1, T_LPARAN)  },
+        { RPARAN,      std::string(1, T_RPARAN)  },
+        { LBRAKET,     std::string(1, T_LBRAKET) },
+        { RBRAKET,     std::string(1, T_RBRAKET) },
+        { LCURLY,      std::string(1, T_LCURLY)  },
+        { RCURLY,      std::string(1, T_RCURLY)  },
+        { NEWLINE,     "\\n"                           },
+        { NUMBERINT,   "e.g. 123"                      },
+        { NUMBERFLOAT, "e.g. 1.2"                      },
+        { STRING,      T_STRING                        },
+        { NULL_,       T_NULL                          },
+        { TRUE,        T_TRUE                          },
+        { FALSE,       T_FALSE                         },
+        { USE,         T_USE                           },
+        { MODULE,      T_MODULE                        },
+        { INTERNAL,    T_INTERNAL                      },
+        { PRIVATE,     T_PRIVATE                       },
+        { PUBLIC,      T_PUBLIC                        },
+        { FUNCTION,    T_FUNCTION                      },
+        { END,         T_END                           },
+        { IF,          T_IF                            },
+        { ELIF,        T_ELIF                          },
+        { ELSE,        T_ELSE                          },
+        { WHILE,       T_WHILE                         },
+        { DO,          T_DO                            },
+        { THROW,       T_THROW                         },
+        { TRY,         T_TRY                           },
+        { CATCH,       T_CATCH                         },
+        { FINALLY,     T_FINALLY                       },
+        { REF,         T_REF                           },
+        { VAR,         T_VAR                           },
+        { CONST,       T_CONST                         },
+        { REFCOMP,     T_REFCOMP                       },
+        { ARRAY,       T_ARRAY                         },
+        { VOIDTYPE,    T_VOID                          },
+        { INTTYPE,     T_INT                           },
+        { FLOATTYPE,   T_FLOAT                         },
+        { STRINGTYPE,  T_STRING                        },
+        { BOOLTYPE,    T_BOOL                          },
+        { MIXEDTYPE,   T_MIXED                         },
+        { PLUS,        std::string(1, T_PLUS)    },
+        { MINUS,       std::string(1, T_MINUS)   },
+        { ASTRIX,      std::string(1, T_ASTRIX)  },
+        { DIVIDE,      std::string(1, T_DIVIDE)  },
+        { LESS,        T_LESS                          },
+        { GREATER,     T_GREATER                       },
+        { EQUALS,      T_EQUALS                        },
+        { NOT,         T_NOT                           },
+        { ASSOSIATE,   T_ASSOSIATE                     },
+        { EQUALSTO,    T_EQUALSTO                      },
+        { MINUSEQ,     T_MINUSEQ                       },
+        { PLUSEQ,      T_PLUSEQ                        },
+        { DIVIDEEQ,    T_DIVIDEEQ                      },
+        { ASTRIXEQ,    T_ASTRIXEQ                      },
+        { NOTEQ,       T_NOTEQ                         },
+        { GREATEREQ,   T_GREATEREQ                     },
+        { LESSEQ,      T_LESSEQ                        },
+    };
+
+    static const std::unordered_map<TokenRole, std::string> TOKEN_ROLE2STRING = {
+        { COMMENT,      "comment"                },
+        { FUNCTIONDOC,  "function documentation" },
+        { IDENTIFIER,   "identifier"             },
+        { NORMAL,       "character"              },
+        { DATAVALUE,    "value"                  },
+        { KEYWORD,      "keyword"                },
+        { VARIABLETYPE, "variable type"          },
+        { VALUETYPE,    "type"                   },
+        { OPERATOR,     "operator"               },
     };
 }

@@ -10,5 +10,9 @@ namespace davincpp::davscript
         explicit DavScriptParserTest();
 
         void execute() override;
+
+    private:
+        static void testAssignmentNodeSuccess();
+        static void testAssignmentNodeFailure();
     };
 }

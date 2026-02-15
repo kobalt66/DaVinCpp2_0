@@ -18,6 +18,7 @@ namespace davincpp::davscript
 
         do {
             if (peakNextChar() == T_EOF) {
+                m_Tokens.emplace_back(m_DavScript, m_CurrentCharPosition, std::string(1, T_EOF), NONE, ENDOFFILE);
                 break;
             }
 
@@ -34,7 +35,7 @@ namespace davincpp::davscript
             }
 
             if (!charOnBlackList(m_CurrentChar, {T_SPACE})) {
-                m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), UNKNOWN, INVALID);
+                m_Tokens.emplace_back(m_DavScript, m_CurrentCharPosition, std::string(1, m_CurrentChar), UNKNOWN, INVALID);
             }
         } while (true);
     }
@@ -48,7 +49,7 @@ namespace davincpp::davscript
 
     void DavScriptLexer::lexSingleCharTokens()
     {
-        m_Tokens.emplace_back(m_CurrentCharPosition, std::string(1, m_CurrentChar), SINGLE_CHAR_TOKENS.at(m_CurrentChar));
+        m_Tokens.emplace_back(m_DavScript, m_CurrentCharPosition, std::string(1, m_CurrentChar), SINGLE_CHAR_TOKENS.at(m_CurrentChar));
     }
 
     void DavScriptLexer::lexMultiCharTokens()
@@ -86,6 +87,8 @@ namespace davincpp::davscript
 
     void DavScriptLexer::lexCommentToken()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         std::ostringstream comment;
         comment << m_CurrentChar;
 
@@ -97,11 +100,13 @@ namespace davincpp::davscript
             comment << advanceChar();
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, comment.str(), NONE, COMMENT);
+        m_Tokens.emplace_back(m_DavScript, startPosition, comment.str(), NONE, COMMENT);
     }
 
     void DavScriptLexer::lexFunctionDoc()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         advanceChar();
         std::ostringstream string;
 
@@ -115,7 +120,7 @@ namespace davincpp::davscript
             }
 
             if (charOnBlackList(nextChar, {T_NEWLINE, T_EOF})) {
-                m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), NONE, INVALID);
+                m_Tokens.emplace_back(m_DavScript, startPosition, string.str(), NONE, INVALID);
                 return;
             }
 
@@ -124,11 +129,13 @@ namespace davincpp::davscript
             string << m_CurrentChar;
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), NONE, FUNCTIONDOC);
+        m_Tokens.emplace_back(m_DavScript, startPosition, string.str(), NONE, FUNCTIONDOC);
     }
 
     void DavScriptLexer::lexVariableTypeToken()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         std::ostringstream variableType;
         variableType << m_CurrentChar;
 
@@ -143,15 +150,17 @@ namespace davincpp::davscript
         std::string variableTypeValue = variableType.str();
 
         if (VARIABLE_TYPE_TOKENS.find(variableTypeValue) == VARIABLE_TYPE_TOKENS.end()) {
-            m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, NONE, INVALID);
+            m_Tokens.emplace_back(m_DavScript, startPosition, variableTypeValue, NONE, INVALID);
             return;
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, variableTypeValue, VARIABLE_TYPE_TOKENS.at(variableTypeValue), VARIABLETYPE);
+        m_Tokens.emplace_back(m_DavScript, startPosition, variableTypeValue, VARIABLE_TYPE_TOKENS.at(variableTypeValue), VARIABLETYPE);
     }
 
     void DavScriptLexer::lexWordToken()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         std::ostringstream word;
         word << m_CurrentChar;
 
@@ -180,11 +189,13 @@ namespace davincpp::davscript
             role = IDENTIFIER;
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, wordValue, type, role);
+        m_Tokens.emplace_back(m_DavScript, startPosition, wordValue, type, role);
     }
 
     void DavScriptLexer::lexNumberToken()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         std::ostringstream numberStr;
         numberStr << m_CurrentChar;
 
@@ -207,11 +218,13 @@ namespace davincpp::davscript
             numberStr << advanceChar();
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, numberStr.str(), hasDecimalPoint ? NUMBERFLOAT : NUMBERINT, DATAVALUE);
+        m_Tokens.emplace_back(m_DavScript, startPosition, numberStr.str(), hasDecimalPoint ? NUMBERFLOAT : NUMBERINT, DATAVALUE);
     }
 
     void DavScriptLexer::lexStringToken()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         std::ostringstream string;
 
         while (true) {
@@ -223,7 +236,7 @@ namespace davincpp::davscript
             }
 
             if (charOnBlackList(nextChar, {T_NEWLINE, T_EOF})) {
-                m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), STRING, INVALID);
+                m_Tokens.emplace_back(m_DavScript, startPosition, string.str(), STRING, INVALID);
                 return;
             }
 
@@ -232,11 +245,13 @@ namespace davincpp::davscript
             string << m_CurrentChar;
         }
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, string.str(), STRING, DATAVALUE);
+        m_Tokens.emplace_back(m_DavScript, startPosition, string.str(), STRING, DATAVALUE);
     }
 
     void DavScriptLexer::lexOperators()
     {
+        CharPosition startPosition = m_CurrentCharPosition;
+
         char nextChar = peakNextChar();
 
         if (m_CurrentChar == T_MINUS &&
@@ -265,7 +280,7 @@ namespace davincpp::davscript
         TokenType type = validOperator ? OPERATOR_TOKENS.at(operatorValue) : UNKNOWN;
         TokenRole role = validOperator ? OPERATOR : INVALID;
 
-        m_Tokens.emplace_back(m_CurrentCharPosition, operatorValue, type, role);
+        m_Tokens.emplace_back(m_DavScript, startPosition, operatorValue, type, role);
     }
 
 
@@ -285,22 +300,22 @@ namespace davincpp::davscript
 
     CharPosition DavScriptLexer::getNextcharPosition(int positionAdvanceStep) const
     {
-        CharPosition nextCharPostion = m_CurrentCharPosition;
+        CharPosition nextCharPosition = m_CurrentCharPosition;
 
         for (int i = 0; i < positionAdvanceStep; i++) {
-            nextCharPostion.CharIdx += 1;
+            nextCharPosition.CharIdx += 1;
 
-            if (m_DavScript.atEndOfFile(nextCharPostion)) {
-                return nextCharPostion;
+            if (m_DavScript.atEndOfFile(nextCharPosition)) {
+                return nextCharPosition;
             }
 
-            if (m_DavScript.atEndOfLine(nextCharPostion)) {
-                nextCharPostion.CharIdx = 0;
-                nextCharPostion.Line += 1;
+            if (m_DavScript.atEndOfLine(nextCharPosition)) {
+                nextCharPosition.CharIdx = 0;
+                nextCharPosition.Line += 1;
             }
         }
 
-        return nextCharPostion;
+        return nextCharPosition;
     }
 
 

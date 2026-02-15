@@ -5,10 +5,11 @@
 #else
 #include <DaVinCppFileSystem.h>
 #endif
-#include <tokens/Token.h>
 
 namespace davincpp::davscript
 {
+    class CharPosition;
+
     struct DavScript
     {
         DavScript() = default;
@@ -19,6 +20,7 @@ namespace davincpp::davscript
         [[nodiscard]] char getCharByPosition(CharPosition position) const;
         [[nodiscard]] bool atEndOfLine(CharPosition position) const;
         [[nodiscard]] bool atEndOfFile(CharPosition position) const;
+        [[nodiscard]] std::string getLineByTokenPosition(CharPosition position) const;
 
         std::string RawContent;
         std::vector<std::string> RefinedContent;

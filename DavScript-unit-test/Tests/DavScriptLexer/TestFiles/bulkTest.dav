@@ -8,14 +8,14 @@ internal @ref this_obj  # Reference to the game object the script is attached to
                         # used variable that has to be initialized by the engine itself. This will not work with
                         # custom variables
 
-@var simple_var = 1 [int]           # Specifying the type of a variable/parameter is only meant for clarity. You could still overwrite this variable with a string. Thus specification of the variable type is not required.
-@const simple_constant = 420 [int]
+@var simple_var [int] = 1          # Always specify the variable type
+@const simple_constant [int] = 420
 
-@refcomp physics_component = this_obj.getCompRef("physics_component")   # Referencing different script components attached
-                                                                        # This way you can access global variables and call public functions
+@refcomp physics_component [mixed] = this_obj.getCompRef("physics_component")   # Referencing different script components attached
+                                                                                # This way you can access global variables and call public functions
 
 @const useless # This will cause an error because the variable will always be and will always stay 'null'
-@var undefined # This is fine because the variable can be set to something else later
+@var num [int] = 0 # You always have to initialize a variable with a value
 
 # This is an internal function. Internal functions are engine specific functions,
 # which cannot be called manually but only by the engine itself.
@@ -69,10 +69,10 @@ public function closeGame(): void
         print("Key 's' pressed")
     end
 
-    @var a = "hello" [string]
-    @var b = null
+    @var [string] a = "hello"
+    @var [mixed] b = null
 
-    @var num = 1 [int]
+    @var [int] num = 1
     num += 1
     num -= 1
     num *= 2
@@ -84,14 +84,15 @@ public function closeGame(): void
         print("num >= 2")
     end
 
-    @array list1 = [ "asdf", 0, b, 1 ] [mixed]
-    @array list3 = [ 1, 2, 3, 4, 5, 7, 6, 5, 3, 2, 1, 9 ] [int]
+    @array list1 [mixed] = [ "asdf", 0, b, 1 ]
+    @array list3 [int] = [ 1, 2, 3, 4, 5, 7, 6, 5, 3, 2, 1, 9 ]
 
-    @array list2 = {
+    # Keytype cannot be 'mixed'
+    @array list2 [key >> string, value >> mixed] = {
         "asdf" >> "asdf",
         "asdf2" >> 1234,
         "asdf3" >> true
-    } [key >> string, value >> mixed] # Keytype cannot be 'mixed'
+    }
 
     foreach x in list1 do
         if !is_string(x) # Negate a condition
@@ -144,14 +145,14 @@ public function closeGame(): void
 
     list2.get_values().size()           # Doesn't work
 
-    @var values = list2.get_values()    # First store the value inside a variable
+    @var [mixed] values = list2.get_values()    # First store the value inside a variable
     values.size()                       # then you can access it's properties
 
     # Casting functions will always return 'null' if the cast was not successful
-    @var c = to_int("1")
-    @var d = to_string(c)   # Because a variable always has 'null' as a default, this value cast can always return a string value
-    @var e = to_bool("true") # Only casts '1', '0', "true" "false" but not "1" or "0"
-    @var f = to_float("0.0")
+    @var [int] c = to_int("1")
+    @var [string] d = to_string(c)   # Because a variable always has 'null' as a default, this value cast can always return a string value
+    @var [bool] e = to_bool("true") # Only casts '1', '0', "true" "false" but not "1" or "0"
+    @var [float] f = to_float("0.0")
 
     throw("Exception message") # There are no exception classes/objects, only string messages
 
