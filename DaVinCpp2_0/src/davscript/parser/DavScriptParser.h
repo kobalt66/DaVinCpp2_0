@@ -10,17 +10,10 @@ namespace davincpp::davscript
 {
     class DavScriptParser final
     {
-        friend class BaseNodeParser;
-
     public:
         explicit DavScriptParser(const std::vector<Token>& tokens);
 
         void generateAst();
-
-        [[nodiscard]] std::shared_ptr<Ast> getAst() const;
-
-    private:
-        void checkForErrors() const;
 
         void skipNewLines();
         void skipUntilNextLine();
@@ -29,6 +22,11 @@ namespace davincpp::davscript
 
         void logUnexpectedTokenError(const Token& actualToken, const Token& expectedToken);
         void logInvalidValueTypeError(const Token& valueToken, TokenType expectedToken);
+
+        [[nodiscard]] std::shared_ptr<Ast> getAst() const;
+
+    private:
+        void checkForErrors() const;
 
     private:
         DavScriptAssignmentParser m_AssignmentParser;

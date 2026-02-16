@@ -1,6 +1,6 @@
 #pragma once
-#include <ast/AstNode.h>
 #include <memory>
+#include <ast/AstNode.h>
 
 namespace davincpp::davscript
 {
@@ -11,11 +11,11 @@ namespace davincpp::davscript
 
         void addNode(const std::shared_ptr<AstNode>& node);
 
-        std::vector<char> generateByteCode() override { return {}; }
+        std::vector<uint8_t> generateByteCode(DavScriptInterpreter* interpreter) override;
 
         [[nodiscard]] const std::vector<std::shared_ptr<AstNode>>& getCallStack() const;
 
-    private:
+    protected:
         std::vector<std::shared_ptr<AstNode>> m_CallStack;
     };
 }

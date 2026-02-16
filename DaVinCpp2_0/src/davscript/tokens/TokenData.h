@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -35,7 +36,7 @@ namespace davincpp::davscript
         PRIVATE,
         PUBLIC,
         FUNCTION,
-        END,
+        END_STMT,
         IF,
         ELIF,
         ELSE,
@@ -204,7 +205,7 @@ namespace davincpp::davscript
         { T_PRIVATE,    PRIVATE  },
         { T_PUBLIC,     PUBLIC   },
         { T_FUNCTION,   FUNCTION },
-        { T_END,        END      },
+        { T_END,        END_STMT      },
         { T_IF,         IF       },
         { T_ELIF,       ELIF     },
         { T_ELSE,       ELSE     },
@@ -277,7 +278,7 @@ namespace davincpp::davscript
         { PRIVATE,     T_PRIVATE                       },
         { PUBLIC,      T_PUBLIC                        },
         { FUNCTION,    T_FUNCTION                      },
-        { END,         T_END                           },
+        { END_STMT,         T_END                           },
         { IF,          T_IF                            },
         { ELIF,        T_ELIF                          },
         { ELSE,        T_ELSE                          },

@@ -7,21 +7,21 @@ namespace davincpp::davscript
 {
     std::shared_ptr<AstNode> DavScriptAssignmentParser::parseNode(DavScriptParser* scriptParser)
     {
-        assert(assertTokenRole(scriptParser, peakNextToken(scriptParser), Token(NONE, VARIABLETYPE)));
-        Token variableType = advanceToken(scriptParser);
+        assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, VARIABLETYPE)));
+        Token variableType = scriptParser->advanceToken();
 
-        assert(assertTokenRole(scriptParser, peakNextToken(scriptParser), Token(NONE, IDENTIFIER)));
-        Token variableName = advanceToken(scriptParser);
+        assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
+        Token variableName = scriptParser->advanceToken();
 
-        assert(assertTokenRole(scriptParser, advanceToken(scriptParser), Token(LBRAKET)));
-        assert(assertTokenRole(scriptParser, peakNextToken(scriptParser), Token(NONE, VALUETYPE)));
-        std::shared_ptr<ValueTypeNode> valueType = std::make_shared<ValueTypeNode>(advanceToken(scriptParser));
-        assert(assertTokenRole(scriptParser, advanceToken(scriptParser), Token(RBRAKET)));
+        assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token(LBRAKET)));
+        assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, VALUETYPE)));
+        std::shared_ptr<ValueTypeNode> valueType = std::make_shared<ValueTypeNode>(scriptParser->advanceToken());
+        assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token(RBRAKET)));
 
-        assert(assertTokenRole(scriptParser, advanceToken(scriptParser), Token( EQUALS, OPERATOR)));
+        assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token( EQUALS, OPERATOR)));
 
         // todo: allow expressions
-        Token value = advanceToken(scriptParser);
+        Token value = scriptParser->advanceToken();
 
         assert(assertTokenValue(scriptParser, value, valueType->getType()));
 

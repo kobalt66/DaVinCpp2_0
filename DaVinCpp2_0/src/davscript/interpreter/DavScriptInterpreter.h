@@ -1,8 +1,11 @@
 #pragma once
+#include <DavScript.h>
 #include <memory>
 #include <stack>
+#include <unordered_map>
 #include <ast/Ast.h>
 #include <interpreter/dto/StackValue.h>
+#include <tokens/Token.h>
 
 namespace davincpp::davscript
 {
@@ -13,17 +16,28 @@ namespace davincpp::davscript
 
         void run();
 
+        [[nodiscard]] uint8_t registerRuntimeConstant(StackValue value);
+
+        void logCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType);
+
+        [[nodiscard]] const std::stack<StackValue>& getStack() const;
+
     private:
         void compile();
         void execute();
 
-        void allocateValue(StackValue value);
-        void getStackTop(StackValue& value);
+        void checkForCompilationErrors() const;
+
+        void processStoreIntOperation(uint8_t* operationPtr);
 
     private:
-        std::stack<StackValue> m_Stack;
-        std::unique_ptr<char[]> m_CallStack;
-
         std::shared_ptr<Ast> m_Ast;
+        std::stack<StackValue> m_Stack;
+        std::unordered_map<uint8_t, StackValue> m_RuntimeConstants;
+        std::vector<uint8_t> m_CallStack;
+
+        uint8_t m_ExitCode;
+
+        std::vector<std::string> m_CompilerErrorMessages;
     };
 }

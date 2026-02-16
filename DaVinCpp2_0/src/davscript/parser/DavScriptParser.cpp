@@ -43,11 +43,6 @@ namespace davincpp::davscript
         checkForErrors();
     }
 
-    std::shared_ptr<Ast> DavScriptParser::getAst() const
-    {
-        return m_Ast;
-    }
-
     void DavScriptParser::skipNewLines()
     {
         while (peakNextToken().getTokenType() == NEWLINE) {
@@ -82,6 +77,26 @@ namespace davincpp::davscript
         return m_CurrentToken;
     }
 
+    Token DavScriptParser::peakNextToken() const
+    {
+        return m_Tokens.at(m_CurrentTokenIdx + static_cast<int>(m_CurrentTokenIdx + 1 < m_Tokens.size()));
+    }
+
+    void DavScriptParser::logUnexpectedTokenError(const Token& actualToken, const Token& expectedToken)
+    {
+        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateUnexpectedTokenError(actualToken, expectedToken));
+    }
+
+    void DavScriptParser::logInvalidValueTypeError(const Token& valueToken, TokenType expectedToken)
+    {
+        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateInvalidValueTypeError(valueToken, expectedToken));
+    }
+
+    std::shared_ptr<Ast> DavScriptParser::getAst() const
+    {
+        return m_Ast;
+    }
+
     void DavScriptParser::checkForErrors() const
     {
         if (m_ErrorMessages.empty()) {
@@ -102,20 +117,5 @@ namespace davincpp::davscript
             errorOutput.str(),
             m_ErrorMessages.size(), " error(s) occurred during the parsing phase.")
         );
-    }
-
-    Token DavScriptParser::peakNextToken() const
-    {
-        return m_Tokens.at(m_CurrentTokenIdx + static_cast<int>(m_CurrentTokenIdx + 1 < m_Tokens.size()));
-    }
-
-    void DavScriptParser::logUnexpectedTokenError(const Token& actualToken, const Token& expectedToken)
-    {
-        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateUnexpectedTokenError(actualToken, expectedToken));
-    }
-
-    void DavScriptParser::logInvalidValueTypeError(const Token& valueToken, TokenType expectedToken)
-    {
-        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateInvalidValueTypeError(valueToken, expectedToken));
     }
 }

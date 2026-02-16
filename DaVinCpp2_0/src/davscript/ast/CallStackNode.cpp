@@ -1,4 +1,5 @@
 #include "CallStackNode.h"
+#include <interpreter/DavScriptInterpreter.h>
 
 namespace davincpp::davscript
 {
@@ -25,6 +26,18 @@ namespace davincpp::davscript
     void CallStackNode::addNode(const std::shared_ptr<AstNode>& node)
     {
         m_CallStack.push_back(node);
+    }
+
+    std::vector<uint8_t> CallStackNode::generateByteCode(DavScriptInterpreter* interpreter)
+    {
+        std::vector<uint8_t> byteCode;
+
+        for (const auto& node: m_CallStack) {
+            std::vector<uint8_t> nodeByteCode = node->generateByteCode(interpreter);
+            byteCode.insert(byteCode.end(), nodeByteCode.begin(), nodeByteCode.end());
+        }
+
+        return byteCode;
     }
 
     const std::vector<std::shared_ptr<AstNode>>& CallStackNode::getCallStack() const

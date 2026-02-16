@@ -9,13 +9,8 @@ namespace davincpp::davscript
     public:
         [[nodiscard]] bool operator==(const AstNode& other) const override;
 
-        std::vector<char> generateByteCode() override;
+        std::vector<uint8_t> generateByteCode(DavScriptInterpreter* interpreter) override;
 
-        [[nodiscard]] int getEntryPoint() const;
         [[nodiscard]] const std::unordered_map<std::string, int>& getFunctionIndexMap() const;
-
-    private:
-        int m_EntryPoint = 0;
-        std::unordered_map<std::string, int> m_FunctionIndexMap;
     };
 }

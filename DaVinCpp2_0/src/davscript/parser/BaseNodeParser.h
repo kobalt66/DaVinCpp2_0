@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 #include <ast/AstNode.h>
+#include <tokens/Token.h>
 
 #include <ast/InvalidNode.h>
-#include <tokens/Token.h>
 #define assert(assertion) if (!(assertion)) return std::make_shared<InvalidNode>()
 
 namespace davincpp::davscript
@@ -18,10 +18,6 @@ namespace davincpp::davscript
         [[nodiscard]] virtual std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) = 0;
 
     protected:
-        static void skipNewLines(DavScriptParser* scriptParser);
-        static Token advanceToken(DavScriptParser* scriptParser);
-        [[nodiscard]] static Token peakNextToken(DavScriptParser* scriptParser);
-
         static bool checkToken(const Token& actualToken, const Token& expectedToken);
         static bool checkTokenRole(const Token& actualToken, const Token& expectedToken);
         static bool checkType(const Token& actualToken, const Token& expectedToken);

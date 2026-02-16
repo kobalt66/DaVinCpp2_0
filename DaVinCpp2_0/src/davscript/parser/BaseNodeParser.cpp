@@ -3,21 +3,6 @@
 
 namespace davincpp::davscript
 {
-    void BaseNodeParser::skipNewLines(DavScriptParser* scriptParser)
-    {
-        scriptParser->skipNewLines();
-    }
-
-    Token BaseNodeParser::advanceToken(DavScriptParser* scriptParser)
-    {
-        return scriptParser->advanceToken();
-    }
-
-    Token BaseNodeParser::peakNextToken(DavScriptParser* scriptParser)
-    {
-        return scriptParser->peakNextToken();
-    }
-
     bool BaseNodeParser::checkToken(const Token& actualToken, const Token& expectedToken)
     {
         return actualToken == expectedToken;

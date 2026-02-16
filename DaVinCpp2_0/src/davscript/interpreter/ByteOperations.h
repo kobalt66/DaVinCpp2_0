@@ -1,0 +1,23 @@
+#pragma once
+#include <cstdint>
+
+namespace davincpp::davscript
+{
+    constexpr uint8_t NUL           = 0x00;
+    constexpr uint8_t SUB           = 0x01;
+    constexpr uint8_t MUL           = 0x02;
+    constexpr uint8_t DIV           = 0x03;
+    constexpr uint8_t MOD           = 0x04;
+    constexpr uint8_t ST_INT        = 0x05;
+    constexpr uint8_t LD_INT        = 0x06;
+    constexpr uint8_t ST_BOOL       = 0x07;
+    constexpr uint8_t LD_BOOL       = 0x08;
+    constexpr uint8_t ST_DOUBLE     = 0x09;
+    constexpr uint8_t LD_DOUBLE     = 0x0A;
+    constexpr uint8_t ST_STRING     = 0x0B;
+    constexpr uint8_t LD_STRING     = 0x0C;
+    constexpr uint8_t ST_OBJECT     = 0x0D;
+    constexpr uint8_t LD_OBJECT     = 0x0E;
+    constexpr uint8_t RET           = 0x0F;
+    constexpr uint8_t END           = 0x10;
+}

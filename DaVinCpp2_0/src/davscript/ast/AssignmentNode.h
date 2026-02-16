@@ -23,7 +23,7 @@ namespace davincpp::davscript
         [[nodiscard]] std::shared_ptr<ValueTypeNode> getType() const;
         [[nodiscard]] std::shared_ptr<AstNode> getValue() const;
 
-        std::vector<char> generateByteCode() override { return {}; }
+        std::vector<uint8_t> generateByteCode(DavScriptInterpreter* interpreter) override;
 
     private:
         Token m_VariableType;

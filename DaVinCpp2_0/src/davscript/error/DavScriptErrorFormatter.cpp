@@ -1,5 +1,6 @@
 #include "DavScriptErrorFormatter.h"
 #include <Console.h>
+#include <interpreter/DavScriptInterpreter.h>
 
 namespace davincpp::davscript
 {
@@ -27,6 +28,29 @@ namespace davincpp::davscript
             "Actual value type: ", TOKEN_TYPE2STRING.at(valueToken.getTokenType()), '\n',
             "Expected value type: ", TOKEN_TYPE2STRING.at(expectedToken)
         );
+    }
+
+    std::string DavScriptErrorFormatter::generateCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType)
+    {
+        std::string info = generateErrorLocationInfo(typeToken.getDavScript(), typeToken.getTokenPosition());
+        return Console::fmtTxt(
+            generateErrorSeparator(info.size()),
+            info,
+            "Compiler error: Invalid type: \n",
+            generateErrorCodeLine(typeToken), '\n',
+            "Actual type: ", typeToken.getActualValue(), '\n',
+            "Expected type: ", STACK_VALUE_TYPE2STRING.at(expectedType)
+        );
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidOperation(uint8_t operation)
+    {
+        return Console::fmtTxt("\nRuntime error: Invalid operation: ", static_cast<int>(operation), "\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorFailureCode(uint8_t exitCode)
+    {
+        return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode), "\n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorSeparator(size_t length)

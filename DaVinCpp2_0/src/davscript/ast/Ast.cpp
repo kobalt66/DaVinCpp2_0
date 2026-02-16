@@ -1,4 +1,6 @@
 #include "Ast.h"
+#include <interpreter/ByteOperations.h>
+#include <interpreter/DavScriptInterpreter.h>
 
 namespace davincpp::davscript
 {
@@ -9,29 +11,21 @@ namespace davincpp::davscript
             return false;
         }
 
-        if (m_EntryPoint != otherAst->m_EntryPoint) {
-            return false;
-        }
-
-        if (m_FunctionIndexMap != otherAst->m_FunctionIndexMap) {
-            return false;
-        }
-
         return CallStackNode::operator==(other);
     }
 
-    std::vector<char> Ast::generateByteCode()
+    std::vector<uint8_t> Ast::generateByteCode(DavScriptInterpreter* interpreter)
     {
-        return {};
-    }
+        std::vector<uint8_t> byteCode;
+        byteCode.push_back(NUL);
 
-    int Ast::getEntryPoint() const
-    {
-        return m_EntryPoint;
-    }
+        for (const auto& node: m_CallStack) {
+            std::vector<uint8_t> nodeByteCode = node->generateByteCode(interpreter);
+            byteCode.insert(byteCode.end(), nodeByteCode.begin(), nodeByteCode.end());
+        }
 
-    const std::unordered_map<std::string, int>& Ast::getFunctionIndexMap() const
-    {
-        return m_FunctionIndexMap;
+        byteCode.push_back(END);
+        byteCode.push_back(NUL);
+        return byteCode;
     }
 }
