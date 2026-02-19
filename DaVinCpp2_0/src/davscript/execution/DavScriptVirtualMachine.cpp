@@ -96,7 +96,7 @@ namespace davincpp::davscript
         uint8_t variablePtr = advanceOperationPtr();
         uint32_t valuePtr = getVariablePtrFromCallStack();
 
-        allocateMemory();
+        allocateMemory(variablePtr);
         writeMemory(variablePtr, m_RuntimeConstantsPool.at(valuePtr));
     }
 
@@ -110,9 +110,13 @@ namespace davincpp::davscript
         return m_CallStack.at(m_OperationPtr);
     }
 
-    void DavScriptVirtualMachine::allocateMemory()
+    void DavScriptVirtualMachine::allocateMemory(uint8_t variablePtr)
     {
-        m_Memory.resize(m_Memory.size() + 1);
+        if (variablePtr < m_Memory.size()) {
+            return;
+        }
+
+        m_Memory.resize(variablePtr + 1);
     }
 
     uint32_t DavScriptVirtualMachine::getVariablePtrFromCallStack()

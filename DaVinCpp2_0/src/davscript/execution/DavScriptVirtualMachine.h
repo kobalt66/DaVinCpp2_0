@@ -32,7 +32,7 @@ namespace davincpp::davscript
 
         uint8_t advanceOperationPtr();
 
-        void allocateMemory();
+        void allocateMemory(uint8_t variablePtr);
         [[nodiscard]] uint32_t getVariablePtrFromCallStack();
 
         void logRuntimeErrorInvalidOperation(uint8_t operation);
@@ -41,7 +41,7 @@ namespace davincpp::davscript
     private:
         std::vector<StackValue> m_RuntimeConstantsPool;
 
-        size_t m_OperationPtr = 0;
+        size_t m_OperationPtr = -1;
         std::vector<uint8_t> m_CallStack;
 
         std::stack<StackValue> m_Stack;

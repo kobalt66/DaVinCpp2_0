@@ -17,35 +17,23 @@ namespace davincpp::davscript
         : type(type), data({})
     {
         data.int_t = value;
-        data.bool_t = false;
-        data.double_t = 0.0;
-        data.object_t = nullptr;
     }
 
     StackValue::StackValue(StackValueType type, bool value)
         : type(type), data({})
     {
-        data.int_t = 0;
         data.bool_t = value;
-        data.double_t = 0.0;
-        data.object_t = nullptr;
     }
 
     StackValue::StackValue(StackValueType type, double value)
         : type(type), data({})
     {
-        data.int_t = 0;
-        data.bool_t = false;
         data.double_t = value;
-        data.object_t = nullptr;
     }
 
     StackValue::StackValue(StackValueType type, void* value)
         : type(type), data({})
     {
-        data.int_t = 0;
-        data.bool_t = false;
-        data.double_t = 0.0;
         data.object_t = value;
     }
 
