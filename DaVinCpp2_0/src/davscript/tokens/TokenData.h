@@ -46,6 +46,8 @@ namespace davincpp::davscript
         TRY,
         CATCH,
         FINALLY,
+        AND,
+        OR,
 
         // Variable types
         REF,
@@ -138,6 +140,8 @@ namespace davincpp::davscript
     static const std::string T_TRY              = "try";
     static const std::string T_CATCH            = "catch";
     static const std::string T_FINALLY          = "finally";
+    static const std::string T_AND              = "and";
+    static const std::string T_OR               = "or";
 
     static const std::string T_REF              = "@ref";
     static const std::string T_VAR              = "@var";
@@ -215,6 +219,8 @@ namespace davincpp::davscript
         { T_TRY,        TRY      },
         { T_CATCH,      CATCH    },
         { T_FINALLY,    FINALLY  },
+        { T_AND,        AND      },
+        { T_OR,         OR       },
     };
 
     static const std::unordered_map<std::string, TokenType> VARIABLE_TYPE_TOKENS = {
@@ -278,7 +284,7 @@ namespace davincpp::davscript
         { PRIVATE,     T_PRIVATE                       },
         { PUBLIC,      T_PUBLIC                        },
         { FUNCTION,    T_FUNCTION                      },
-        { END_STMT,         T_END                           },
+        { END_STMT,    T_END                           },
         { IF,          T_IF                            },
         { ELIF,        T_ELIF                          },
         { ELSE,        T_ELSE                          },
@@ -288,6 +294,8 @@ namespace davincpp::davscript
         { TRY,         T_TRY                           },
         { CATCH,       T_CATCH                         },
         { FINALLY,     T_FINALLY                       },
+        { AND,         T_AND                           },
+        { OR,          T_OR                            },
         { REF,         T_REF                           },
         { VAR,         T_VAR                           },
         { CONST,       T_CONST                         },

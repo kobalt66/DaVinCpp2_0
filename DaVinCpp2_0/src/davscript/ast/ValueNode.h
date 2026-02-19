@@ -13,7 +13,7 @@ namespace davincpp::davscript
 
         [[nodiscard]] Token getValue() const;
 
-        std::vector<uint8_t> generateByteCode(DavScriptInterpreter* interpreter) override { return {}; }
+        std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override { return {}; }
 
     private:
         Token m_Value;

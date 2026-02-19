@@ -1,6 +1,5 @@
 #include "ValueNode.h"
 #include <utility>
-#include <interpreter/DavScriptInterpreter.h>
 
 namespace davincpp::davscript
 {

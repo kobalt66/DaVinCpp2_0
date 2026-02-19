@@ -11,7 +11,7 @@ namespace davincpp::davscript
 
         void addNode(const std::shared_ptr<AstNode>& node);
 
-        std::vector<uint8_t> generateByteCode(DavScriptInterpreter* interpreter) override;
+        std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override;
 
         [[nodiscard]] const std::vector<std::shared_ptr<AstNode>>& getCallStack() const;
 

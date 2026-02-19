@@ -1,5 +1,5 @@
 #pragma once
-#include <interpreter/dto/StackValue.h>
+#include <execution/dto/StackValue.h>
 #include <tokens/Token.h>
 
 namespace davincpp::davscript
@@ -14,6 +14,7 @@ namespace davincpp::davscript
 
         static std::string generateRuntimeErrorInvalidOperation(uint8_t operation);
         static std::string generateRuntimeErrorFailureCode(uint8_t exitCode);
+        static std::string generateRuntimeErrorInvalidMemoryAccess(uint32_t ptr);
 
     private:
         static std::string generateErrorSeparator(size_t length);

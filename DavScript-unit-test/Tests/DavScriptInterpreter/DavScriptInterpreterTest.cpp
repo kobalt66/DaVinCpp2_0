@@ -3,12 +3,12 @@
 #include <DavScript.h>
 #include <lexer/DavScriptLexer.h>
 #include <parser/DavScriptParser.h>
-#include <interpreter/DavScriptInterpreter.h>
+#include <execution/DavScriptCodeExecution.h>
 
 namespace davincpp::davscript
 {
     DavScriptInterpreterTest::DavScriptInterpreterTest()
-        : UnitTest("Testing the functionality of the DavScript interpreter/ VM")
+        : UnitTest("Testing the functionality of the DavScript interpreter")
     { }
 
     void DavScriptInterpreterTest::execute()
@@ -18,6 +18,11 @@ namespace davincpp::davscript
 
     void DavScriptInterpreterTest::testVariableAssignment()
     {
+        StackValue expectedIntValue(StackValueType::INT, 1);
+        StackValue expectedBoolValue(StackValueType::BOOL, false);
+        StackValue expectedFloatValue(StackValueType::DOUBLE, 0.123);
+        StackValue expectedStringValue(StackValueType::STRING, (void*) "Hello World!");
+
         DavScript davScript("../Tests/DavScriptParser/TestFiles/AssignmentSuccess.dav");
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
@@ -25,13 +30,17 @@ namespace davincpp::davscript
         DavScriptParser parser(lexer.getTokens());
         parser.generateAst();
 
-        DavScriptInterpreter interpreter(parser.getAst());
+        DavScriptCodeExecution interpreter(parser.getAst());
         interpreter.run();
 
-        StackValue expectedStackValue(StackValueType::INT, {1});
+        StackValue actualIntStackValue = interpreter.getVM().readMemory(0);
+        StackValue actualBoolStackValue = interpreter.getVM().readMemory(1);
+        StackValue actualFloatStackValue = interpreter.getVM().readMemory(2);
+        StackValue actualStringStackValue = interpreter.getVM().readMemory(3);
 
-        StackValue actualStackValue = interpreter.getStack().top();
-
-        assertTrue(expectedStackValue == actualStackValue);
+        assertTrue(expectedIntValue == actualIntStackValue);
+        assertTrue(expectedBoolValue == actualBoolStackValue);
+        assertTrue(expectedFloatValue == actualFloatStackValue);
+        assertTrue(expectedStringValue == actualStringStackValue);
     }
 }

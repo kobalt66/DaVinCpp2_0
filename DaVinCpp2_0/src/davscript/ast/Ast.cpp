@@ -1,6 +1,6 @@
 #include "Ast.h"
-#include <interpreter/ByteOperations.h>
-#include <interpreter/DavScriptInterpreter.h>
+#include <execution/ByteOperations.h>
+#include <execution/DavScriptCompiler.h>
 
 namespace davincpp::davscript
 {
@@ -14,13 +14,13 @@ namespace davincpp::davscript
         return CallStackNode::operator==(other);
     }
 
-    std::vector<uint8_t> Ast::generateByteCode(DavScriptInterpreter* interpreter)
+    std::vector<uint8_t> Ast::generateByteCode(DavScriptCompiler* compiler)
     {
         std::vector<uint8_t> byteCode;
         byteCode.push_back(NUL);
 
         for (const auto& node: m_CallStack) {
-            std::vector<uint8_t> nodeByteCode = node->generateByteCode(interpreter);
+            std::vector<uint8_t> nodeByteCode = node->generateByteCode(compiler);
             byteCode.insert(byteCode.end(), nodeByteCode.begin(), nodeByteCode.end());
         }
 

@@ -2,8 +2,9 @@
 
 #include <utility>
 #include <ast/ValueNode.h>
-#include <interpreter/ByteOperations.h>
-#include <interpreter/DavScriptInterpreter.h>
+#include <execution/ByteCastHelper.h>
+#include <execution/ByteOperations.h>
+#include <execution/DavScriptCompiler.h>
 
 namespace davincpp::davscript
 {
@@ -52,9 +53,11 @@ namespace davincpp::davscript
         return m_Value;
     }
 
-    std::vector<uint8_t> AssignmentNode::generateByteCode(DavScriptInterpreter* interpreter)
+    std::vector<uint8_t> AssignmentNode::generateByteCode(DavScriptCompiler* compiler)
     {
-        StackValue staticValue(StackValueType::NONE, {});
+        std::vector<uint8_t> byteCode;
+
+        StackValue staticValue;
         staticValue.data.object_t = nullptr;
 
         uint8_t storeByteOperation = NUL;
@@ -89,19 +92,20 @@ namespace davincpp::davscript
                     storeByteOperation = NUL;
                     break;
                 default:
-                    interpreter->logCompilerErrorInvalidValueType(m_Type->getType(), StackValueType::OBJECT);
+                    compiler->logCompilerErrorInvalidValueType(m_Type->getType(), StackValueType::OBJECT);
                     return { };
             }
         }
 
-        uint8_t ptr = interpreter->registerRuntimeConstant(staticValue);
+        uint8_t variablePtr = compiler->registerVariableScope(m_Identifier.getActualValue());
+        uint32_t valuePtr = compiler->registerRuntimeConstant(staticValue);
+        std::array<uint8_t, 4> valuePtrBytes = ByteCastHelper::split32Bit(valuePtr);
 
-        std::vector bytecode = {
-            storeByteOperation,
-            ptr,
-        };
+        byteCode.push_back(storeByteOperation);
+        byteCode.push_back(variablePtr);
+        byteCode.insert(byteCode.end(), valuePtrBytes.begin(), valuePtrBytes.end());
 
-        return bytecode;
+        return byteCode;
     }
 }
 

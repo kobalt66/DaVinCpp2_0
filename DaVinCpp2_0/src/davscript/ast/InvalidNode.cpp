@@ -1,6 +1,6 @@
 #include "InvalidNode.h"
 #include <stdexcept>
-#include <interpreter/DavScriptInterpreter.h>
+#include <execution/DavScriptCompiler.h>
 
 namespace davincpp::davscript
 {
@@ -9,7 +9,7 @@ namespace davincpp::davscript
         return dynamic_cast<const InvalidNode*>(&other) != nullptr;
     }
 
-    std::vector<uint8_t> InvalidNode::generateByteCode(DavScriptInterpreter* interpreter)
+    std::vector<uint8_t> InvalidNode::generateByteCode(DavScriptCompiler* compiler)
     {
         throw std::runtime_error("Invalid node");
     }

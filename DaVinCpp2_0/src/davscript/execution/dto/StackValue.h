@@ -15,6 +15,12 @@ namespace davincpp::davscript
 
     struct StackValue
     {
+        explicit StackValue();
+        StackValue(StackValueType type, int value);
+        StackValue(StackValueType type, bool value);
+        StackValue(StackValueType type, double value);
+        StackValue(StackValueType type, void* value);
+
         StackValueType type;
         union {
             int64_t int_t;

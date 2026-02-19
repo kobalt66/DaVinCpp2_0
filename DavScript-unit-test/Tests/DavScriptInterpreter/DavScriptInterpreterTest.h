@@ -11,6 +11,6 @@ namespace davincpp::davscript
         void execute() override;
 
     private:
-        void testVariableAssignment();
+        static void testVariableAssignment();
     };
 }

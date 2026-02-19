@@ -1,6 +1,8 @@
 #include "DavScriptErrorFormatter.h"
 #include <Console.h>
-#include <interpreter/DavScriptInterpreter.h>
+#include <execution/DavScriptCodeExecution.h>
+#include <sstream>
+#include <iomanip>
 
 namespace davincpp::davscript
 {
@@ -51,6 +53,16 @@ namespace davincpp::davscript
     std::string DavScriptErrorFormatter::generateRuntimeErrorFailureCode(uint8_t exitCode)
     {
         return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode), "\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryAccess(uint32_t ptr)
+    {
+        std::stringstream ss;
+        ss  << "0x"
+            << std::setfill('0') << std::setw(8)
+            << std::hex << ptr;
+
+        return Console::fmtTxt("\nRuntime error: Invalid memory access (at ", ss.str(), ")\n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorSeparator(size_t length)
