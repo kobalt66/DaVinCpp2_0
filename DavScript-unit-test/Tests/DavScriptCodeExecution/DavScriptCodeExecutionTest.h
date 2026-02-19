@@ -3,10 +3,10 @@
 
 namespace davincpp::davscript
 {
-    class DavScriptInterpreterTest final : public unittest::UnitTest
+    class DavScriptCodeExecutionTest final : public unittest::UnitTest
     {
     public:
-        explicit DavScriptInterpreterTest();
+        explicit DavScriptCodeExecutionTest();
 
         void execute() override;
 

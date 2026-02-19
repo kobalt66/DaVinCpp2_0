@@ -17,7 +17,6 @@ namespace davincpp::davscript
     std::vector<uint8_t> Ast::generateByteCode(DavScriptCompiler* compiler)
     {
         std::vector<uint8_t> byteCode;
-        byteCode.push_back(NUL);
 
         for (const auto& node: m_CallStack) {
             std::vector<uint8_t> nodeByteCode = node->generateByteCode(compiler);

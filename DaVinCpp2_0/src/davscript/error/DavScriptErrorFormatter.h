@@ -12,9 +12,11 @@ namespace davincpp::davscript
 
         static std::string generateCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType);
 
+        static std::string generateRuntimeExitCode(uint8_t exitCode);
+        static std::string generateRuntimeUnexpectedError(std::string_view errorMessage);
         static std::string generateRuntimeErrorInvalidOperation(uint8_t operation);
-        static std::string generateRuntimeErrorFailureCode(uint8_t exitCode);
-        static std::string generateRuntimeErrorInvalidMemoryAccess(uint32_t ptr);
+        static std::string generateRuntimeErrorInvalidMemoryReadAccess(uint32_t ptr);
+        static std::string generateRuntimeErrorInvalidMemoryWriteAccess(uint32_t ptr);
 
     private:
         static std::string generateErrorSeparator(size_t length);

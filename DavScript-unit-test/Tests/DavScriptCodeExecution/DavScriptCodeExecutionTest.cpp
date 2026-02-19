@@ -1,4 +1,4 @@
-#include "DavScriptInterpreterTest.h"
+#include "DavScriptCodeExecutionTest.h"
 
 #include <DavScript.h>
 #include <lexer/DavScriptLexer.h>
@@ -7,23 +7,23 @@
 
 namespace davincpp::davscript
 {
-    DavScriptInterpreterTest::DavScriptInterpreterTest()
+    DavScriptCodeExecutionTest::DavScriptCodeExecutionTest()
         : UnitTest("Testing the functionality of the DavScript interpreter")
     { }
 
-    void DavScriptInterpreterTest::execute()
+    void DavScriptCodeExecutionTest::execute()
     {
         assertTestStep(testVariableAssignment());
     }
 
-    void DavScriptInterpreterTest::testVariableAssignment()
+    void DavScriptCodeExecutionTest::testVariableAssignment()
     {
         StackValue expectedIntValue(StackValueType::INT, 1);
         StackValue expectedBoolValue(StackValueType::BOOL, false);
         StackValue expectedFloatValue(StackValueType::DOUBLE, 0.123);
         StackValue expectedStringValue(StackValueType::STRING, (void*) "Hello World!");
 
-        DavScript davScript("../Tests/DavScriptParser/TestFiles/AssignmentSuccess.dav");
+        DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/Assignment.dav");
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 

@@ -45,24 +45,39 @@ namespace davincpp::davscript
         );
     }
 
+    std::string DavScriptErrorFormatter::generateRuntimeExitCode(uint8_t exitCode)
+    {
+        return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode), "\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeUnexpectedError(std::string_view errorMessage)
+    {
+        return Console::fmtTxt("\nRuntime error: Unexpected error: ", errorMessage, "\n");
+    }
+
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidOperation(uint8_t operation)
     {
         return Console::fmtTxt("\nRuntime error: Invalid operation: ", static_cast<int>(operation), "\n");
     }
 
-    std::string DavScriptErrorFormatter::generateRuntimeErrorFailureCode(uint8_t exitCode)
-    {
-        return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode), "\n");
-    }
-
-    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryAccess(uint32_t ptr)
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryReadAccess(uint32_t ptr)
     {
         std::stringstream ss;
         ss  << "0x"
             << std::setfill('0') << std::setw(8)
             << std::hex << ptr;
 
-        return Console::fmtTxt("\nRuntime error: Invalid memory access (at ", ss.str(), ")\n");
+        return Console::fmtTxt("\nRuntime error: Invalid memory read access (at ", ss.str(), ")\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryWriteAccess(uint32_t ptr)
+    {
+        std::stringstream ss;
+        ss  << "0x"
+            << std::setfill('0') << std::setw(8)
+            << std::hex << ptr;
+
+        return Console::fmtTxt("\nRuntime error: Invalid memory write access (at ", ss.str(), ")\n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorSeparator(size_t length)

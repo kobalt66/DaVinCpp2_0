@@ -20,4 +20,5 @@ namespace davincpp::davscript
     constexpr uint8_t LD_OBJECT     = 0x0E;
     constexpr uint8_t RET           = 0x0F;
     constexpr uint8_t END           = 0x10;
+    constexpr uint8_t DIE           = 0x11;
 }
