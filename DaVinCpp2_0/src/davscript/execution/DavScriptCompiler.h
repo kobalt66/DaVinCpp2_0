@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <ast/Ast.h>
-#include <execution/dto/StackValue.h>
+#include <execution/dto/Value.h>
 #include <execution/dto/VariableScope.h>
 #include <tokens/Token.h>
 
@@ -18,11 +18,11 @@ namespace davincpp::davscript
         uint8_t registerVariableScope(std::string_view variableName);
         [[nodiscard]] bool canAccessVariable(std::string_view variableName) const;
 
-        [[nodiscard]] uint32_t registerRuntimeConstant(StackValue value);
+        [[nodiscard]] uint32_t registerRuntimeConstant(Value value);
 
-        [[nodiscard]] const std::vector<StackValue>& getRuntimeConstantsPool() const;
+        [[nodiscard]] const std::vector<Value>& getRuntimeConstantsPool() const;
 
-        void logCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType);
+        void logCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType);
 
     private:
         void enterScope();
@@ -36,7 +36,7 @@ namespace davincpp::davscript
         std::vector<VariableScope> m_VariableScopes;
         int m_CurrentScopeDepth = 0;
 
-        std::vector<StackValue> m_RuntimeConstantsPool;
+        std::vector<Value> m_RuntimeConstantsPool;
 
         std::vector<std::string> m_CompilerErrorMessages;
     };

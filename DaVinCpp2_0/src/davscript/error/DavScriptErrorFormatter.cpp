@@ -32,7 +32,7 @@ namespace davincpp::davscript
         );
     }
 
-    std::string DavScriptErrorFormatter::generateCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType)
+    std::string DavScriptErrorFormatter::generateCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType)
     {
         std::string info = generateErrorLocationInfo(typeToken.getDavScript(), typeToken.getTokenPosition());
         return Console::fmtTxt(

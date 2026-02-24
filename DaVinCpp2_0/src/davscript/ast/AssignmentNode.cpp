@@ -1,5 +1,6 @@
 #include "AssignmentNode.h"
 
+#include <string.h>
 #include <utility>
 #include <ast/ValueNode.h>
 #include <execution/ByteCastHelper.h>
@@ -57,7 +58,7 @@ namespace davincpp::davscript
     {
         std::vector<uint8_t> byteCode;
 
-        StackValue staticValue;
+        Value staticValue;
         staticValue.data.object_t = nullptr;
 
         uint8_t storeByteOperation = NUL;
@@ -67,32 +68,32 @@ namespace davincpp::davscript
 
             switch (m_Type->getType().getTokenType()) {
                 case INTTYPE:
-                    staticValue.type = StackValueType::INT;
+                    staticValue.type = ValueType::INT;
                     staticValue.data.int_t = std::stoi(actualValue);
                     storeByteOperation = ST_INT;
                     break;
                 case BOOLTYPE:
-                    staticValue.type = StackValueType::BOOL;
+                    staticValue.type = ValueType::BOOL;
                     staticValue.data.bool_t = actualValue == T_TRUE;
                     storeByteOperation = ST_BOOL;
                     break;
                 case FLOATTYPE:
-                    staticValue.type = StackValueType::DOUBLE;
+                    staticValue.type = ValueType::DOUBLE;
                     staticValue.data.double_t = std::stod(actualValue);
                     storeByteOperation = ST_DOUBLE;
                     break;
                 case STRINGTYPE:
-                    staticValue.type = StackValueType::STRING;
-                    staticValue.data.object_t = const_cast<char*>(actualValue.c_str());
+                    staticValue.type = ValueType::STRING;
+                    staticValue.data.object_t = strdup(actualValue.c_str());
                     storeByteOperation = ST_STRING;
                     break;
                 case MIXEDTYPE:
-                    staticValue.type = StackValueType::OBJECT;
+                    staticValue.type = ValueType::OBJECT;
                     staticValue.data.object_t = nullptr;
                     storeByteOperation = NUL;
                     break;
                 default:
-                    compiler->logCompilerErrorInvalidValueType(m_Type->getType(), StackValueType::OBJECT);
+                    compiler->logCompilerErrorInvalidValueType(m_Type->getType(), ValueType::OBJECT);
                     return { };
             }
         }

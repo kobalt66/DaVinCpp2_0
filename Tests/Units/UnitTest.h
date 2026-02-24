@@ -34,7 +34,7 @@ namespace davincpp::unittest {
     if (!(expression)) { \
         DEBUG_BREAK; \
         throw davincpp::system_error(davincpp::Console::fmtTxt( \
-            "Failed to assert that the expression is true! \n\n\tExpression: '", #expression, "' was '", expression, "' \n\tFailed assertion at (", __FILE__, ":", __LINE__, ")") \
+            "Failed to assert that the expression is true! \n\n\tExpression: '", #expression, "' was ", expression ? "true" : "false", " \n\tFailed assertion at (", __FILE__, ":", __LINE__, ")") \
         ); \
     }
 

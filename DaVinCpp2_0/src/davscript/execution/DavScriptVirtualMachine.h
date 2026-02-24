@@ -2,7 +2,7 @@
 #include <memory>
 #include <stack>
 #include <execution/ByteOperations.h>
-#include <execution/dto/StackValue.h>
+#include <execution/dto/Value.h>
 
 namespace davincpp::davscript
 {
@@ -17,13 +17,13 @@ namespace davincpp::davscript
         void reset();
         void execute();
 
-        [[nodiscard]] StackValue popStackValue();
+        [[nodiscard]] Value popStackValue();
 
-        [[nodiscard]] StackValue readMemory(uint32_t ptr) const;
-        void writeMemory(uint32_t ptr, StackValue value);
+        [[nodiscard]] Value readMemory(uint32_t ptr) const;
+        void writeMemory(uint32_t ptr, Value value);
 
         void loadByteCode(const std::vector<uint8_t>& byteCode);
-        void registerRuntimeConstantsPool(std::vector<StackValue> runtimeConstantsPool);
+        void registerRuntimeConstantsPool(std::vector<Value> runtimeConstantsPool);
 
     private:
         bool interpretOperation();
@@ -39,13 +39,13 @@ namespace davincpp::davscript
         void checkForCompilationErrors() const;
 
     private:
-        std::vector<StackValue> m_RuntimeConstantsPool;
+        std::vector<Value> m_RuntimeConstantsPool;
 
         size_t m_OperationPtr = -1;
         std::vector<uint8_t> m_CallStack;
 
-        std::stack<StackValue> m_Stack;
-        std::vector<StackValue> m_Memory;
+        std::stack<Value> m_Stack;
+        std::vector<Value> m_Memory;
 
         uint8_t m_ExitCode = NUL;
 

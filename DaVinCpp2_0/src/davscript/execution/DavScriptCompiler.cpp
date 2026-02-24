@@ -40,7 +40,7 @@ namespace davincpp::davscript
         return false;
     }
 
-    uint32_t DavScriptCompiler::registerRuntimeConstant(StackValue value)
+    uint32_t DavScriptCompiler::registerRuntimeConstant(Value value)
     {
         for (int i = 0; i < m_RuntimeConstantsPool.size(); i++) {
             if (m_RuntimeConstantsPool.at(i) == value) {
@@ -53,12 +53,12 @@ namespace davincpp::davscript
         return ptr;
     }
 
-    const std::vector<StackValue>& DavScriptCompiler::getRuntimeConstantsPool() const
+    const std::vector<Value>& DavScriptCompiler::getRuntimeConstantsPool() const
     {
         return m_RuntimeConstantsPool;
     }
 
-    void DavScriptCompiler::logCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType)
+    void DavScriptCompiler::logCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType)
     {
         m_CompilerErrorMessages.push_back(DavScriptErrorFormatter::generateCompilerErrorInvalidValueType(typeToken, expectedType));
     }

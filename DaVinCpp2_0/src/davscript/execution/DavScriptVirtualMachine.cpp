@@ -31,14 +31,14 @@ namespace davincpp::davscript
         }
     }
 
-    StackValue DavScriptVirtualMachine::popStackValue()
+    Value DavScriptVirtualMachine::popStackValue()
     {
-        const StackValue value = m_Stack.top();
+        const Value value = m_Stack.top();
         m_Stack.pop();
         return value;
     }
 
-    StackValue DavScriptVirtualMachine::readMemory(uint32_t ptr) const
+    Value DavScriptVirtualMachine::readMemory(uint32_t ptr) const
     {
         if (ptr >= m_Memory.size()) {
             throw std::runtime_error(DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryReadAccess(ptr));
@@ -47,7 +47,7 @@ namespace davincpp::davscript
         return m_Memory.at(ptr);
     }
 
-    void DavScriptVirtualMachine::writeMemory(uint32_t ptr, StackValue value)
+    void DavScriptVirtualMachine::writeMemory(uint32_t ptr, Value value)
     {
         if (ptr >= m_Memory.size()) {
             throw std::runtime_error(DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryWriteAccess(ptr));
@@ -61,7 +61,7 @@ namespace davincpp::davscript
         m_CallStack = byteCode;
     }
 
-    void DavScriptVirtualMachine::registerRuntimeConstantsPool(std::vector<StackValue> runtimeConstantsPool)
+    void DavScriptVirtualMachine::registerRuntimeConstantsPool(std::vector<Value> runtimeConstantsPool)
     {
         m_RuntimeConstantsPool = std::move(runtimeConstantsPool);
     }

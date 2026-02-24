@@ -1,5 +1,5 @@
 #pragma once
-#include <execution/dto/StackValue.h>
+#include <execution/dto/Value.h>
 #include <tokens/Token.h>
 
 namespace davincpp::davscript
@@ -10,7 +10,7 @@ namespace davincpp::davscript
         static std::string generateUnexpectedTokenError(const Token& actualToken, const Token& expectedToken);
         static std::string generateInvalidValueTypeError(const Token& valueToken, TokenType expectedToken);
 
-        static std::string generateCompilerErrorInvalidValueType(const Token& typeToken, StackValueType expectedType);
+        static std::string generateCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType);
 
         static std::string generateRuntimeExitCode(uint8_t exitCode);
         static std::string generateRuntimeUnexpectedError(std::string_view errorMessage);
