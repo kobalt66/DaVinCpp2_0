@@ -57,7 +57,12 @@ namespace davincpp::davscript
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidOperation(uint8_t operation)
     {
-        return Console::fmtTxt("\nRuntime error: Invalid operation: ", static_cast<int>(operation), "\n");
+        std::stringstream ss;
+        ss  << "0x"
+            << std::setfill('0') << std::setw(4)
+            << std::hex << static_cast<uint32_t>(operation);
+
+        return Console::fmtTxt("\nRuntime error: Invalid operation: ", ss.str(), "\n");
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryReadAccess(uint32_t ptr)

@@ -13,7 +13,6 @@ namespace davincpp::davscript
 
         std::vector<uint8_t> byteCode = m_Compiler.compile();
         m_VM.loadByteCode(byteCode);
-        m_VM.registerRuntimeConstantsPool(m_Compiler.getRuntimeConstantsPool());
         m_VM.execute();
     }
 

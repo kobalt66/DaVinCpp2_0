@@ -1,6 +1,6 @@
 #pragma once
-#include <ast/AstNode.h>
-#include <ast/ValueTypeNode.h>
+#include <parser/ast/AstNode.h>
+#include <parser/ast/ValueTypeNode.h>
 #include <tokens/Token.h>
 #include <memory>
 

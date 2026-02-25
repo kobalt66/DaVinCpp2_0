@@ -1,11 +1,10 @@
 #include "AssignmentNode.h"
-
-#include <string.h>
+#include <DaVinCppString.h>
 #include <utility>
-#include <ast/ValueNode.h>
 #include <execution/ByteCastHelper.h>
 #include <execution/ByteOperations.h>
 #include <execution/DavScriptCompiler.h>
+#include <parser/ast/ValueNode.h>
 
 namespace davincpp::davscript
 {
@@ -16,8 +15,8 @@ namespace davincpp::davscript
         std::shared_ptr<AstNode> value
     ) : m_VariableType(std::move(variableType)),
         m_Identifier(std::move(identifier)),
-        m_Type(std::move(type)),
-        m_Value(std::move(value))
+        m_Value(std::move(value)),
+        m_Type(std::move(type))
     { }
 
     bool AssignmentNode::operator==(const AstNode& other) const
@@ -62,34 +61,38 @@ namespace davincpp::davscript
         staticValue.data.object_t = nullptr;
 
         uint8_t storeByteOperation = NUL;
+        std::vector<uint8_t> valueBytes{};
 
         if (const auto valueNode = std::dynamic_pointer_cast<ValueNode>(m_Value)) {
             std::string actualValue = valueNode->getValue().getActualValue();
 
             switch (m_Type->getType().getTokenType()) {
                 case INTTYPE:
-                    staticValue.type = ValueType::INT;
-                    staticValue.data.int_t = std::stoi(actualValue);
+                {
                     storeByteOperation = ST_INT;
+                    valueBytes = ByteCastHelper::nativeToBytes(std::stol(actualValue));
                     break;
+                }
                 case BOOLTYPE:
-                    staticValue.type = ValueType::BOOL;
-                    staticValue.data.bool_t = actualValue == T_TRUE;
+                {
                     storeByteOperation = ST_BOOL;
+                    valueBytes = ByteCastHelper::nativeToBytes(actualValue == T_TRUE);
                     break;
+                }
                 case FLOATTYPE:
-                    staticValue.type = ValueType::DOUBLE;
-                    staticValue.data.double_t = std::stod(actualValue);
-                    storeByteOperation = ST_DOUBLE;
+                {
+                    storeByteOperation = ST_FLOAT;
+                    valueBytes = ByteCastHelper::nativeToBytes(std::stol(actualValue));
                     break;
+                }
                 case STRINGTYPE:
-                    staticValue.type = ValueType::STRING;
-                    staticValue.data.object_t = strdup(actualValue.c_str());
+                {
                     storeByteOperation = ST_STRING;
+                    valueBytes = ByteCastHelper::stringToBytes(actualValue);
+                    valueBytes.push_back(NUL);
                     break;
+                }
                 case MIXEDTYPE:
-                    staticValue.type = ValueType::OBJECT;
-                    staticValue.data.object_t = nullptr;
                     storeByteOperation = NUL;
                     break;
                 default:
@@ -98,13 +101,12 @@ namespace davincpp::davscript
             }
         }
 
-        uint8_t variablePtr = compiler->registerVariableScope(m_Identifier.getActualValue());
-        uint32_t valuePtr = compiler->registerRuntimeConstant(staticValue);
-        std::array<uint8_t, 4> valuePtrBytes = ByteCastHelper::split32Bit(valuePtr);
+        uint32_t variablePtr = compiler->registerVariableScope(m_Identifier.getActualValue());
+        std::vector<uint8_t> variablePtrBytes = ByteCastHelper::nativeToBytes(variablePtr);
 
         byteCode.push_back(storeByteOperation);
-        byteCode.push_back(variablePtr);
-        byteCode.insert(byteCode.end(), valuePtrBytes.begin(), valuePtrBytes.end());
+        byteCode.insert(byteCode.end(), variablePtrBytes.begin(), variablePtrBytes.end());
+        byteCode.insert(byteCode.end(), valueBytes.begin(), valueBytes.end());
 
         return byteCode;
     }

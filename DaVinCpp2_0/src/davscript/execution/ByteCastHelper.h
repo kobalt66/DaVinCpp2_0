@@ -1,13 +1,20 @@
 #pragma once
-#include <array>
 #include <cstdint>
+#include <string>
+#include <vector>
 
 namespace davincpp::davscript
 {
     class ByteCastHelper final
     {
     public:
-        static std::array<uint8_t, 4> split32Bit(uint32_t value);
-        static uint32_t join32Bit(const std::array<uint8_t, 4>& bytes);
+        template<typename T> static std::vector<uint8_t> nativeToBytes(const T& value);
+        static std::vector<uint8_t> stringToBytes(const std::string& str);
+
+        static uint32_t bytesToUint32(const uint8_t* bytePtr);
+        static int64_t bytesToInt(const uint8_t* bytePtr);
+        static bool bytesToBool(const uint8_t* bytePtr);
+        static double bytesToFloat(const uint8_t* bytePtr);
+        static std::string bytesToString(const uint8_t* bytePtr);
     };
 }

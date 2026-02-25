@@ -1,11 +1,11 @@
-#include "DavScriptAssignmentParser.h"
-#include <ast/AssignmentNode.h>
+#include "AssignmentParser.h"
+#include <parser/ast/AssignmentNode.h>
 #include <parser/DavScriptParser.h>
-#include <ast/ValueNode.h>
+#include <parser/ast/ValueNode.h>
 
 namespace davincpp::davscript
 {
-    std::shared_ptr<AstNode> DavScriptAssignmentParser::parseNode(DavScriptParser* scriptParser)
+    std::shared_ptr<AstNode> AssignmentParser::parseNode(DavScriptParser* scriptParser)
     {
         assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, VARIABLETYPE)));
         Token variableType = scriptParser->advanceToken();

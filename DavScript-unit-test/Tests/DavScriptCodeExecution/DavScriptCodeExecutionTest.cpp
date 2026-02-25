@@ -8,7 +8,7 @@
 namespace davincpp::davscript
 {
     DavScriptCodeExecutionTest::DavScriptCodeExecutionTest()
-        : UnitTest("Testing the functionality of the DavScript interpreter")
+        : UnitTest("Testing the functionality of the DavScript compilation and code execution")
     { }
 
     void DavScriptCodeExecutionTest::execute()
@@ -18,10 +18,10 @@ namespace davincpp::davscript
 
     void DavScriptCodeExecutionTest::testVariableAssignment()
     {
-        Value expectedIntValue(ValueType::INT, 1);
+        Value expectedIntValue(ValueType::INT, 1L);
         Value expectedBoolValue(ValueType::BOOL, false);
         Value expectedFloatValue(ValueType::DOUBLE, 0.123);
-        Value expectedStringValue(ValueType::STRING, (void*) "Hello World!");
+        Value expectedStringValue(ValueType::STRING, std::string("Hello World!"));
 
         DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/Assignment.dav");
         DavScriptLexer lexer(davScript);
@@ -30,13 +30,13 @@ namespace davincpp::davscript
         DavScriptParser parser(lexer.getTokens());
         parser.generateAst();
 
-        DavScriptCodeExecution interpreter(parser.getAst());
-        interpreter.run();
+        DavScriptCodeExecution codeExecution(parser.getAst());
+        codeExecution.run();
 
-        Value actualIntStackValue = interpreter.getVM().readMemory(0);
-        Value actualBoolStackValue = interpreter.getVM().readMemory(1);
-        Value actualFloatStackValue = interpreter.getVM().readMemory(2);
-        Value actualStringStackValue = interpreter.getVM().readMemory(3);
+        Value actualIntStackValue = codeExecution.getVM().readMemory(0);
+        Value actualBoolStackValue = codeExecution.getVM().readMemory(1);
+        Value actualFloatStackValue = codeExecution.getVM().readMemory(2);
+        Value actualStringStackValue = codeExecution.getVM().readMemory(3);
 
         assertTrue(expectedIntValue == actualIntStackValue);
         assertTrue(expectedBoolValue == actualBoolStackValue);

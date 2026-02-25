@@ -12,7 +12,7 @@ namespace davincpp::davscript
     constexpr uint8_t LD_INT        = 0x06;
     constexpr uint8_t ST_BOOL       = 0x07;
     constexpr uint8_t LD_BOOL       = 0x08;
-    constexpr uint8_t ST_DOUBLE     = 0x09;
+    constexpr uint8_t ST_FLOAT     = 0x09;
     constexpr uint8_t LD_DOUBLE     = 0x0A;
     constexpr uint8_t ST_STRING     = 0x0B;
     constexpr uint8_t LD_STRING     = 0x0C;
@@ -21,4 +21,5 @@ namespace davincpp::davscript
     constexpr uint8_t RET           = 0x0F;
     constexpr uint8_t END           = 0x10;
     constexpr uint8_t DIE           = 0x11;
+    constexpr uint8_t CALL          = 0x12;
 }

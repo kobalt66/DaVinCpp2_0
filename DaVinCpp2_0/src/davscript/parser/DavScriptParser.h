@@ -2,9 +2,9 @@
 #include <DavScript.h>
 #include <memory>
 #include <vector>
-#include <ast/Ast.h>
+#include <parser/ast/Ast.h>
+#include <parser/nodeParser/AssignmentParser.h>
 #include <tokens/Token.h>
-#include <parser/DavScriptAssignmentParser.h>
 
 namespace davincpp::davscript
 {
@@ -29,7 +29,7 @@ namespace davincpp::davscript
         void checkForErrors() const;
 
     private:
-        DavScriptAssignmentParser m_AssignmentParser;
+        AssignmentParser m_AssignmentParser;
 
         std::vector<std::string> m_ErrorMessages;
 

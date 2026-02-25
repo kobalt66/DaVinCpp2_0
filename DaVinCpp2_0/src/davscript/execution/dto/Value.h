@@ -17,18 +17,24 @@ namespace davincpp::davscript
     struct Value
     {
         explicit Value();
-        Value(ValueType type, int value);
+        Value(ValueType type, int64_t value);
         Value(ValueType type, bool value);
         Value(ValueType type, double value);
         Value(ValueType type, const std::string& value);
         Value(ValueType type, void* value);
+        ~Value();
+
+        Value(const Value& other);
+        Value& operator=(const Value& other);
+        Value(Value&& other) noexcept;
+        Value& operator=(Value&& other) noexcept;
 
         ValueType type;
         union {
             int64_t int_t;
             bool bool_t;
             double double_t;
-            const char* string_t;
+            void* string_t;
             void* object_t;
         } data;
 

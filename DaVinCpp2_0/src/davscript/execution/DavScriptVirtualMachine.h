@@ -23,14 +23,17 @@ namespace davincpp::davscript
         void writeMemory(uint32_t ptr, Value value);
 
         void loadByteCode(const std::vector<uint8_t>& byteCode);
-        void registerRuntimeConstantsPool(std::vector<Value> runtimeConstantsPool);
 
     private:
         bool interpretOperation();
 
-        void processStoreNativeValueOperation();
+        void processStoreIntValueOperation();
+        void processStoreBoolValueOperation();
+        void processStoreFloatValueOperation();
+        void processStoreStringValueOperation();
 
         uint8_t advanceOperationPtr();
+        void advanceOperationPtrByN(size_t n);
 
         void allocateMemory(uint8_t variablePtr);
         [[nodiscard]] uint32_t getVariablePtrFromCallStack();
@@ -39,9 +42,7 @@ namespace davincpp::davscript
         void checkForCompilationErrors() const;
 
     private:
-        std::vector<Value> m_RuntimeConstantsPool;
-
-        size_t m_OperationPtr = -1;
+        uint8_t* m_OperationPtr = nullptr;
         std::vector<uint8_t> m_CallStack;
 
         std::stack<Value> m_Stack;

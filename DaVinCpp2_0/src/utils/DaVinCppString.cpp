@@ -36,14 +36,16 @@ namespace davincpp
 
 	std::string DaVinCppString::findReplaceAll(std::string_view input, std::string_view find, std::string_view replace)
 	{
-		std::string str = input.data();
+		if (find.empty()) {
+			return std::string(input);
+		}
 
-		while (size_t pos = str.find(find.data()) != std::string::npos) {
+		std::string str(input);
+		size_t pos = 0;
+
+		while ((pos = str.find(find, pos)) != std::string::npos) {
 			str.replace(pos, find.length(), replace);
-
-			if (str.at(pos) == '\0') {
-				str.erase(pos);
-			}
+			pos += replace.length();
 		}
 
 		return str;

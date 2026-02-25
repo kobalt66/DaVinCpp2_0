@@ -1,5 +1,5 @@
 #pragma once
-#include <ast/AstNode.h>
+#include <parser/ast/AstNode.h>
 #include <tokens/Token.h>
 
 namespace davincpp::davscript

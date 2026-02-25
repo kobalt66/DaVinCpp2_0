@@ -1,8 +1,8 @@
 #include "DavScriptParserTest.h"
 #include <DavScript.h>
-#include <ast/AssignmentNode.h>
-#include <ast/Ast.h>
-#include <ast/ValueNode.h>
+#include <parser/ast/AssignmentNode.h>
+#include <parser/ast/Ast.h>
+#include <parser/ast/ValueNode.h>
 #include <lexer/DavScriptLexer.h>
 #include <parser/DavScriptParser.h>
 

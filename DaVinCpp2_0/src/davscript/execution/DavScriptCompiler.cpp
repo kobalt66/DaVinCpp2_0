@@ -1,7 +1,7 @@
 #include "DavScriptCompiler.h"
-
 #include <Console.h>
 #include <error/DavScriptErrorFormatter.h>
+#include <libraries/DavScriptStd.h>
 
 namespace davincpp::davscript
 {
@@ -13,20 +13,25 @@ namespace davincpp::davscript
     {
         m_VariableScopes.clear();
         m_CurrentScopeDepth = 0;
-        m_RuntimeConstantsPool.clear();
+    }
+
+    void DavScriptCompiler::loadStdLibraries()
+    {
+        m_RegisteredCppFunctions.emplace_back(stdlib::io::print);
     }
 
     std::vector<uint8_t> DavScriptCompiler::compile()
     {
+        loadStdLibraries();
         std::vector<uint8_t> callStack = m_Ast->generateByteCode(this);
         checkForCompilationErrors();
         return callStack;
     }
 
-    uint8_t DavScriptCompiler::registerVariableScope(std::string_view variableName)
+    uint32_t DavScriptCompiler::registerVariableScope(std::string_view variableName)
     {
         m_VariableScopes.emplace_back(variableName.data(), m_CurrentScopeDepth);
-        return static_cast<uint8_t>(m_VariableScopes.size() - 1);
+        return static_cast<uint32_t>(m_VariableScopes.size() - 1);
     }
 
     bool DavScriptCompiler::canAccessVariable(std::string_view variableName) const
@@ -40,22 +45,9 @@ namespace davincpp::davscript
         return false;
     }
 
-    uint32_t DavScriptCompiler::registerRuntimeConstant(Value value)
+    const std::vector<std::function<void(DavScriptVirtualMachine*)>>& DavScriptCompiler::getRegisteredCppFunctions() const
     {
-        for (int i = 0; i < m_RuntimeConstantsPool.size(); i++) {
-            if (m_RuntimeConstantsPool.at(i) == value) {
-                return static_cast<uint32_t>(i);
-            }
-        }
-
-        const auto ptr = static_cast<uint32_t>(m_RuntimeConstantsPool.size());
-        m_RuntimeConstantsPool.push_back(value);
-        return ptr;
-    }
-
-    const std::vector<Value>& DavScriptCompiler::getRuntimeConstantsPool() const
-    {
-        return m_RuntimeConstantsPool;
+        return m_RegisteredCppFunctions;
     }
 
     void DavScriptCompiler::logCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType)

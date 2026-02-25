@@ -1,10 +1,7 @@
 #include "DavScriptParser.h"
-#include <algorithm>
 #include <Console.h>
 #include <iostream>
-#include <ast/Ast.h>
 #include <error/DavScriptErrorFormatter.h>
-#include <parser/DavScriptAssignmentParser.h>
 
 namespace davincpp::davscript
 {

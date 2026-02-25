@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
-#include <ast/AstNode.h>
+#include <parser/ast/AstNode.h>
 #include <tokens/Token.h>
 
-#include <ast/InvalidNode.h>
+#include <parser/ast/InvalidNode.h>
 #define assert(assertion) if (!(assertion)) return std::make_shared<InvalidNode>()
 
 namespace davincpp::davscript
@@ -13,6 +13,7 @@ namespace davincpp::davscript
     class BaseNodeParser
     {
     public:
+        BaseNodeParser() = default;
         virtual ~BaseNodeParser() = default;
 
         [[nodiscard]] virtual std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) = 0;

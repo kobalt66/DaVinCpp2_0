@@ -1,7 +1,7 @@
 #pragma once
-#include <ast/AstNode.h>
-#include <ast/CallStackNode.h>
-#include <ast/ExpressionNode.h>
+#include <parser/ast/AstNode.h>
+#include <parser/ast/CallStackNode.h>
+#include <parser/ast/ExpressionNode.h>
 #include <memory>
 
 namespace davincpp::davscript
