@@ -1,4 +1,6 @@
 #include "BaseNodeParser.h"
+
+#include <algorithm>
 #include <parser/DavScriptParser.h>
 
 namespace davincpp::davscript
@@ -13,7 +15,7 @@ namespace davincpp::davscript
         return actualToken.getTokenRole() == expectedToken.getTokenRole();
     }
 
-    bool BaseNodeParser::checkType(const Token& actualToken, const Token& expectedToken)
+    bool BaseNodeParser::checkTokenType(const Token& actualToken, const Token& expectedToken)
     {
         return checkTokenRole(actualToken, expectedToken) && actualToken.getTokenType() == expectedToken.getTokenType();
     }
@@ -56,7 +58,17 @@ namespace davincpp::davscript
 
     bool BaseNodeParser::assertToken(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
     {
-        if (actualToken == expectedToken) {
+        if (checkToken(actualToken, expectedToken)) {
+            return true;
+        }
+
+        scriptParser->logUnexpectedTokenError(actualToken, expectedToken);
+        return false;
+    }
+
+    bool BaseNodeParser::assertNotToken(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
+    {
+        if (!checkToken(actualToken, expectedToken)) {
             return true;
         }
 
@@ -66,7 +78,7 @@ namespace davincpp::davscript
 
     bool BaseNodeParser::assertTokenRole(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
     {
-        if (actualToken.getTokenRole() == expectedToken.getTokenRole()) {
+        if (checkTokenRole(actualToken, expectedToken)) {
             return true;
         }
 
@@ -74,13 +86,77 @@ namespace davincpp::davscript
         return false;
     }
 
-    bool BaseNodeParser::assertType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
+    bool BaseNodeParser::assertNotTokenRole(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
     {
-        if (assertTokenRole(scriptParser, actualToken, expectedToken) && actualToken.getTokenType() == expectedToken.getTokenType()) {
+        if (!checkTokenRole(actualToken, expectedToken)) {
             return true;
         }
 
         scriptParser->logUnexpectedTokenError(actualToken, expectedToken);
+        return false;
+    }
+
+    bool BaseNodeParser::assertTokenType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
+    {
+        if (assertTokenRole(scriptParser, actualToken, expectedToken) && checkTokenType(actualToken, expectedToken)) {
+            return true;
+        }
+
+        scriptParser->logUnexpectedTokenError(actualToken, expectedToken);
+        return false;
+    }
+
+    bool BaseNodeParser::assertNotTokenType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken)
+    {
+        if (assertNotTokenRole(scriptParser, actualToken, expectedToken) && !checkTokenType(actualToken, expectedToken)) {
+            return true;
+        }
+
+        scriptParser->logUnexpectedTokenError(actualToken, expectedToken);
+        return false;
+    }
+
+    bool BaseNodeParser::assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType)
+    {
+        if (scriptParser->validateSymbol(symbolToken.getActualValue(), symbolType)) {
+            return true;
+        }
+
+        scriptParser->logInaccessibleSymbolError(symbolToken, symbolType);
+        return false;
+    }
+
+    bool BaseNodeParser::assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType)
+    {
+        if (!scriptParser->validateSymbol(symbolToken.getActualValue(), symbolType)) {
+            return true;
+        }
+
+        scriptParser->logInaccessibleSymbolError(symbolToken, symbolType);
+        return false;
+    }
+
+    bool BaseNodeParser::assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes)
+    {
+        return std::ranges::any_of(symbolTypes.begin(), symbolTypes.end(), [&scriptParser, &symbolToken](SymbolType type) {
+            return assertSymbolAccess(scriptParser, symbolToken, type);
+        });
+    }
+
+    bool BaseNodeParser::assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes)
+    {
+        return std::ranges::any_of(symbolTypes.begin(), symbolTypes.end(), [&scriptParser, &symbolToken](SymbolType type) {
+            return assertSymbolNoAccess(scriptParser, symbolToken, type);
+        });
+    }
+
+    bool BaseNodeParser::assertSymbolDoesntExist(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType)
+    {
+        if (!scriptParser->doesVariableAlreadyExist(symbolToken)) {
+            return true;
+        }
+
+        scriptParser->logDuplicateSymbolName(symbolToken, symbolType);
         return false;
     }
 }

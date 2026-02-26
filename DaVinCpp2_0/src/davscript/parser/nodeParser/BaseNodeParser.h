@@ -21,11 +21,19 @@ namespace davincpp::davscript
     protected:
         static bool checkToken(const Token& actualToken, const Token& expectedToken);
         static bool checkTokenRole(const Token& actualToken, const Token& expectedToken);
-        static bool checkType(const Token& actualToken, const Token& expectedToken);
+        static bool checkTokenType(const Token& actualToken, const Token& expectedToken);
 
         static bool assertTokenValue(DavScriptParser* scriptParser, const Token& value, const Token& valueType);
         static bool assertToken(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
+        static bool assertNotToken(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
         static bool assertTokenRole(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
-        static bool assertType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
+        static bool assertNotTokenRole(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
+        static bool assertTokenType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
+        static bool assertNotTokenType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
+        static bool assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType);
+        static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType);
+        static bool assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes);
+        static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes);
+        static bool assertSymbolDoesntExist(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType);
     };
 }

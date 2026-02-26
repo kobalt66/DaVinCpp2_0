@@ -1,5 +1,5 @@
 # This is a comment
-use other_module  # use namespaces
+use other.module  # use namespaces
 
 module test       # define a namespace
 

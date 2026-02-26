@@ -1,5 +1,6 @@
 #include "DavScriptErrorFormatter.h"
 #include <Console.h>
+#include <DaVinCppString.h>
 #include <execution/DavScriptCodeExecution.h>
 #include <sstream>
 #include <iomanip>
@@ -29,6 +30,44 @@ namespace davincpp::davscript
             generateErrorCodeLine(valueToken), '\n',
             "Actual value type: ", TOKEN_TYPE2STRING.at(valueToken.getTokenType()), '\n',
             "Expected value type: ", TOKEN_TYPE2STRING.at(expectedToken)
+        );
+    }
+
+    std::string DavScriptErrorFormatter::generateInaccessibleSymbolError(const Token& symbolToken, SymbolType symbolType)
+    {
+        std::string info = generateErrorLocationInfo(symbolToken.getDavScript(), symbolToken.getTokenPosition());
+        return Console::fmtTxt(
+            generateErrorSeparator(info.size()),
+            info,
+            "Parsing error: Inaccessible symbol: \n",
+            generateErrorCodeLine(symbolToken), '\n',
+            "Symbol name: ", symbolToken.getActualValue(), '\n',
+            "Symbol type: ", SYMBOL_TYPE2STRING.at(symbolType)
+        );
+    }
+
+    std::string DavScriptErrorFormatter::generateNamespaceNotFoundError(const Token& useToken, std::string_view namespaceName)
+    {
+        std::string info = generateErrorLocationInfo(useToken.getDavScript(), useToken.getTokenPosition());
+        return Console::fmtTxt(
+            generateErrorSeparator(info.size()),
+            info,
+            "Parsing error: Namespace not found: \n",
+            generateErrorCodeLine(useToken), '\n',
+            "Namespace name: ", namespaceName
+        );
+    }
+
+    std::string DavScriptErrorFormatter::generateDuplicateSymbolName(const Token& symbolToken, SymbolType symbolType)
+    {
+        std::string info = generateErrorLocationInfo(symbolToken.getDavScript(), symbolToken.getTokenPosition());
+        return Console::fmtTxt(
+            generateErrorSeparator(info.size()),
+            info,
+            "Parsing error: Symbol name already exists somewhere else: \n",
+            generateErrorCodeLine(symbolToken), '\n',
+            "Symbol name: ", symbolToken.getActualValue(), '\n',
+            "Symbol type: ", SYMBOL_TYPE2STRING.at(symbolType)
         );
     }
 
@@ -92,7 +131,7 @@ namespace davincpp::davscript
 
     std::string DavScriptErrorFormatter::generateErrorLocationInfo(const DavScript& davScript, CharPosition position)
     {
-        return Console::fmtTxt("Script: ", davScript.Location, " (ln: ", position.Line + 1, ", char: ", position.CharIdx + 2, "): \n");
+        return Console::fmtTxt("Script: ", davScript.Location, " (ln: ", position.Line + 1, ", char: ", position.CharIdx + 1, "): \n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorCodeLine(const Token& token)
@@ -106,9 +145,13 @@ namespace davincpp::davscript
             return "";
         }
 
+        line = DaVinCppString::findReplace(line, "\n", "");
+
+        std::string lineNumber = std::to_string(token.getTokenPosition().Line + 1);
+
         return Console::fmtTxt(
-            '\t', line,
-            '\t', std::string(token.getTokenPosition().CharIdx, ' '), std::string(token.getTokenLength(), '^')
+            lineNumber, " | ", line, '\n',
+            std::string(lineNumber.length(), ' '), " | ", std::string(token.getTokenPosition().CharIdx, ' '), std::string(token.getTokenLength(), '^'), '\n'
         );
     }
 }

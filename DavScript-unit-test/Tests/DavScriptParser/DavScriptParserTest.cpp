@@ -5,6 +5,8 @@
 #include <parser/ast/ValueNode.h>
 #include <lexer/DavScriptLexer.h>
 #include <parser/DavScriptParser.h>
+#include <parser/ast/FunctionCallNode.h>
+#include <parser/ast/UseNode.h>
 
 namespace davincpp::davscript
 {
@@ -15,6 +17,7 @@ namespace davincpp::davscript
     void DavScriptParserTest::execute()
     {
         assertTestStep(testAssignmentNodeSuccess());
+        assertTestStep(testFunctionCallNodeSuccess());
         assertTestStep(testAssignmentNodeFailure());
     }
 
@@ -50,5 +53,30 @@ namespace davincpp::davscript
 
         DavScriptParser parser(lexer.getTokens());
         parser.generateAst();
+    }
+
+    void DavScriptParserTest::testFunctionCallNodeSuccess()
+    {
+        DavScript davScript("../Tests/DavScriptParser/TestFiles/FunctionCallSuccess.dav");
+
+        auto expectedAst = std::make_shared<Ast>();
+        expectedAst->addNode(std::make_shared<UseNode>("std.io"));
+        expectedAst->addNode(std::make_shared<FunctionCallNode>(
+            Token(davScript, CharPosition(2, 0), "print", NONE, IDENTIFIER),
+            std::vector<std::shared_ptr<AstNode>>
+            {
+                std::make_shared<ValueNode>(Token(davScript, CharPosition(2, 6), "1", NUMBERINT, DATAVALUE))
+            }
+        ));
+
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        DavScriptParser parser(lexer.getTokens());
+        parser.generateAst();
+
+        auto ast = parser.getAst();
+
+        assertTrue(*expectedAst == *ast);
     }
 }

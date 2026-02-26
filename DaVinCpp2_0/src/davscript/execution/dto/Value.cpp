@@ -1,6 +1,5 @@
 #include "Value.h"
 #include <cstring>
-#include <memory>
 
 namespace davincpp::davscript
 {

@@ -106,6 +106,14 @@ namespace davincpp::davscript
         OPERATOR,           // +, -, *, /, ...
     };
 
+    enum class SymbolType
+    {
+        VARIABLE,
+        CONSTANT,
+        FUNCTION,
+        STRUCT
+    };
+
     static const std::string ANY_VALUE          = "[non-specific]";
 
     static const char T_COMMA                   = ',';
@@ -272,8 +280,8 @@ namespace davincpp::davscript
         { LCURLY,      std::string(1, T_LCURLY)  },
         { RCURLY,      std::string(1, T_RCURLY)  },
         { NEWLINE,     "\\n"                           },
-        { NUMBERINT,   "e.g. 123"                      },
-        { NUMBERFLOAT, "e.g. 1.2"                      },
+        { NUMBERINT,   "Integer number"                },
+        { NUMBERFLOAT, "Floating point number"         },
         { STRING,      T_STRING                        },
         { NULL_,       T_NULL                          },
         { TRUE,        T_TRUE                          },
@@ -324,6 +332,7 @@ namespace davincpp::davscript
         { NOTEQ,       T_NOTEQ                         },
         { GREATEREQ,   T_GREATEREQ                     },
         { LESSEQ,      T_LESSEQ                        },
+        { UNKNOWN,     "unknown token"                 },
     };
 
     static const std::unordered_map<TokenRole, std::string> TOKEN_ROLE2STRING = {
@@ -336,5 +345,13 @@ namespace davincpp::davscript
         { VARIABLETYPE, "variable type"          },
         { VALUETYPE,    "type"                   },
         { OPERATOR,     "operator"               },
+        { INVALID,      "invalid"                },
+    };
+
+    static const std::unordered_map<SymbolType, std::string> SYMBOL_TYPE2STRING = {
+        { SymbolType::VARIABLE, "variable" },
+        { SymbolType::CONSTANT, "constant" },
+        { SymbolType::FUNCTION, "function" },
+        { SymbolType::STRUCT,   "struct"   },
     };
 }

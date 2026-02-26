@@ -7,6 +7,11 @@ namespace davincpp::davscript
         : m_Type(std::move(type))
     { }
 
+    Token ValueTypeNode::getType() const
+    {
+        return m_Type;
+    }
+
     bool ValueTypeNode::operator==(const AstNode& other) const
     {
         const auto* otherNode = dynamic_cast<const ValueTypeNode*>(&other);
@@ -15,10 +20,5 @@ namespace davincpp::davscript
         }
 
         return m_Type == otherNode->m_Type;
-    }
-
-    Token ValueTypeNode::getType() const
-    {
-        return m_Type;
     }
 }

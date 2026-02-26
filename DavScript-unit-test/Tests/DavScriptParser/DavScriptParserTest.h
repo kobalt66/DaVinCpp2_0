@@ -14,5 +14,6 @@ namespace davincpp::davscript
     private:
         static void testAssignmentNodeSuccess();
         static void testAssignmentNodeFailure();
+        static void testFunctionCallNodeSuccess();
     };
 }

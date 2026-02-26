@@ -9,9 +9,9 @@ namespace davincpp::davscript
     public:
         explicit ValueTypeNode(Token type);
 
-        [[nodiscard]] bool operator==(const AstNode& other) const override;
-
         [[nodiscard]] Token getType() const;
+
+        [[nodiscard]] bool operator==(const AstNode& other) const override;
 
         std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override { return {}; }
 
