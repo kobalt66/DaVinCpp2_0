@@ -14,9 +14,15 @@ namespace davincpp::unittest
     {
         Timer timer;
 
+        int totalTestStepCount = 0;
+        for (const auto& unitTest : m_AvailableTests) {
+            unitTest->onSetup();
+            totalTestStepCount += unitTest->getTestStepCount();
+        }
+
         Console::raw(Console::GREEN, "Executing unit tests...");
         Console::raw(Console::GREEN, "------------------------------------------------------------------------------");
-        Console::raw(Console::GRAY, Console::fmtTxt("Available tests: ", m_AvailableTests.size()));
+        Console::raw(Console::GRAY, Console::fmtTxt("Available tests: ", totalTestStepCount));
         Console::raw(Console::GREEN, "------------------------------------------------------------------------------");
         Console::newline();
 
@@ -30,7 +36,6 @@ namespace davincpp::unittest
 
         for (const std::unique_ptr<UnitTest>& unitTest : m_AvailableTests) {
             try {
-                assertTestCall(unitTest->onSetup());
                 assertTestCall(unitTest->execute());
                 assertTestCall(unitTest->onCleanUp());
 
@@ -53,7 +58,7 @@ namespace davincpp::unittest
             }
 
             if (++unitTestCount == 40) {
-                std::cout << " (" << executedUnitTestCount << " / " << m_AvailableTests.size() << ")";
+                std::cout << " (" << executedUnitTestCount << " / " << totalTestStepCount << ")";
                 Console::newline();
                 unitTestCount = 0;
             }
@@ -84,6 +89,6 @@ namespace davincpp::unittest
 
         Console::newline();
         Console::raw(Console::GRAY, Console::fmtTxt("Total execution time: ", DaVinCppString::fmtTime(timer.fetchTimeMsc())));
-        Console::raw(Console::GRAY, Console::fmtTxt("Successfully executed tests: ", successfullyExecutedTestCount, "/", executedUnitTestCount));
+        Console::raw(Console::GRAY, Console::fmtTxt("Successfully executed tests: ", successfullyExecutedTestCount, "/", totalTestStepCount));
     }
 }

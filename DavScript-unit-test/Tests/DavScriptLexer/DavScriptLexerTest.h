@@ -9,7 +9,7 @@ namespace davincpp::davscript
     public:
         explicit DavScriptLexerTest();
 
-        void onSetup() override;
+        void onSetup() noexcept override;
 
     private:
         static void testSingleCharTokens();

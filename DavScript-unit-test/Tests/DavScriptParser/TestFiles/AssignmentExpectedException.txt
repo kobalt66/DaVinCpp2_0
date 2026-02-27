@@ -16,6 +16,6 @@ Parsing error: Invalid value type:
   |               ^
 
 Actual value type: newline
-Expected value type: mixed
+Expected value type: int
 
 2 error(s) occurred during the parsing phase.

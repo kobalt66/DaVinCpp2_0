@@ -61,12 +61,13 @@ namespace davincpp::davscript
 
     int Token::getTokenLength() const
     {
-        return static_cast<int>(m_ActualValue.size());
-    }
+        int valueLength = static_cast<int>(m_ActualValue.size());
 
-    TokenSpan Token::getTokenSpan() const
-    {
-        return { m_Position.CharIdx, m_Position.CharIdx + getTokenLength() - 1 };
+        if (m_Role == DATAVALUE && m_Type == STRING) {
+            return valueLength + 2;
+        }
+
+        return valueLength;
     }
 
     CharPosition Token::getTokenPosition() const

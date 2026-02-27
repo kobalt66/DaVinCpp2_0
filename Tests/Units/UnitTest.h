@@ -20,11 +20,12 @@ namespace davincpp::unittest {
         explicit UnitTest(std::string_view testName);
         virtual ~UnitTest();
 
-        virtual void onSetup() = 0;
+        virtual void onSetup() noexcept = 0;
         void execute();
-        virtual void onCleanUp() { }
+        virtual void onCleanUp() noexcept { }
 
         [[nodiscard]] std::string getTestName() const;
+        [[nodiscard]] int getTestStepCount() const;
         [[nodiscard]] const std::vector<TestResult>& getTestResult() const;
 
     protected:

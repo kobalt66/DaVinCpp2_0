@@ -20,29 +20,26 @@ namespace davincpp::davscript
         return checkTokenRole(actualToken, expectedToken) && actualToken.getTokenType() == expectedToken.getTokenType();
     }
 
-    bool BaseNodeParser::assertTokenValue(DavScriptParser* scriptParser, const Token& value, const Token& valueType)
+    bool BaseNodeParser::assertTokenValue(DavScriptParser* scriptParser, const Token& value, const Token& expectedValueType)
     {
+        TokenType tokenValueType = value.getTokenType();
+
         TokenType expectedTokenType = NONE;
-        TokenType specifiedTokenValueType = valueType.getTokenType();
-
-        if (specifiedTokenValueType == MIXEDTYPE) {
-            return true;
-        }
-
-        switch (value.getTokenType()) {
-            case NUMBERINT:
-                expectedTokenType = specifiedTokenValueType != INTTYPE ? INTTYPE : expectedTokenType;
+        switch (expectedValueType.getTokenType()) {
+            case INTTYPE:
+                expectedTokenType = tokenValueType != NUMBERINT ? INTTYPE : expectedTokenType;
                 break;
-            case NUMBERFLOAT:
-                expectedTokenType = specifiedTokenValueType != FLOATTYPE ? FLOATTYPE : expectedTokenType;
+            case FLOATTYPE:
+                expectedTokenType = tokenValueType != NUMBERFLOAT ? FLOATTYPE : expectedTokenType;
                 break;
-            case STRING:
-                expectedTokenType = specifiedTokenValueType != STRINGTYPE ? STRINGTYPE : expectedTokenType;
+            case STRINGTYPE:
+                expectedTokenType = tokenValueType != STRING? STRINGTYPE : expectedTokenType;
                 break;
-            case TRUE:
-            case FALSE:
-                expectedTokenType = specifiedTokenValueType != BOOLTYPE ? BOOLTYPE : expectedTokenType;
+            case BOOLTYPE:
+                expectedTokenType = tokenValueType != TRUE && tokenValueType != FALSE ? BOOLTYPE : expectedTokenType;
                 break;
+            case MIXEDTYPE:
+                return true;
             default:
                 expectedTokenType = MIXEDTYPE;
                 break;

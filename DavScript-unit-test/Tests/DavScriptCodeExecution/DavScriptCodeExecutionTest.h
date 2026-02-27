@@ -8,7 +8,7 @@ namespace davincpp::davscript
     public:
         explicit DavScriptCodeExecutionTest();
 
-        void onSetup() override;
+        void onSetup() noexcept override;
 
     private:
         static void testVariableAssignment();

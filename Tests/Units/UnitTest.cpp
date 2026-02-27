@@ -21,8 +21,9 @@ namespace davincpp::unittest
                     std::string actualException = DaVinCppString::findReplaceAllByRegex(exception.what(), std::regex(R"(\x1B\[[0-9;]*m|033\[[0-9;]*m)"), "");
 
                     if (m_ExpectedException == actualException) {
+                        m_TestResults.emplace_back(true, "");
                         m_ExpectedException.clear();
-                        return;
+                        continue;
                     }
 
                     std::string failedTestDescription = Console::fmtTxt(
@@ -48,6 +49,11 @@ namespace davincpp::unittest
     std::string UnitTest::getTestName() const
     {
         return m_TestName;
+    }
+
+    int UnitTest::getTestStepCount() const
+    {
+        return static_cast<int>(m_TestSteps.size());
     }
 
     const std::vector<TestResult>& UnitTest::getTestResult() const

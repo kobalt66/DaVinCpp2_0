@@ -5,12 +5,6 @@
 
 namespace davincpp::davscript
 {
-    struct TokenSpan
-    {
-        int StartIdx = 0;
-        int EndIdx = 0;
-    };
-
     struct CharPosition
     {
         int Line = 0;
@@ -31,7 +25,7 @@ namespace davincpp::davscript
             TokenRole role = NORMAL
             );
 
-        Token(
+        explicit Token(
             TokenType type,
             TokenRole role = NORMAL,
             std::string specificValue = ANY_VALUE
@@ -45,7 +39,6 @@ namespace davincpp::davscript
         [[nodiscard]] TokenRole getTokenRole() const;
 
         [[nodiscard]] int getTokenLength() const;
-        [[nodiscard]] TokenSpan getTokenSpan() const;
         [[nodiscard]] CharPosition getTokenPosition() const;
 
         [[nodiscard]] std::string toString() const;

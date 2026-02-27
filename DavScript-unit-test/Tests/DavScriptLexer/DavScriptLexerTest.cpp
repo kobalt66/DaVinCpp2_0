@@ -8,7 +8,7 @@ namespace davincpp::davscript
     { }
 
 
-    void DavScriptLexerTest::onSetup()
+    void DavScriptLexerTest::onSetup() noexcept
     {
         registerTestStep("lexing: single char tokens", [] { testSingleCharTokens(); });
         registerTestStep("lexing: comments", [] { testComments(); });
@@ -238,7 +238,7 @@ namespace davincpp::davscript
         for (const Token& token : tokens) {
             totalTokenCount += static_cast<int>(
                 std::find(roles.begin(), roles.end(), token.getTokenRole()) != roles.end()
-                    );
+                );
         }
 
         return totalTokenCount;

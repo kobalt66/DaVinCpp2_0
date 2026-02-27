@@ -8,7 +8,7 @@ namespace davincpp::davscript
     { }
 
 
-    void DavScriptFileTest::onSetup()
+    void DavScriptFileTest::onSetup() noexcept
     {
         registerTestStep("DavScript: loading script file", []
         {

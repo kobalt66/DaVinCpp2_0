@@ -23,7 +23,7 @@ namespace davincpp::davscript
         static bool checkTokenRole(const Token& actualToken, const Token& expectedToken);
         static bool checkTokenType(const Token& actualToken, const Token& expectedToken);
 
-        static bool assertTokenValue(DavScriptParser* scriptParser, const Token& value, const Token& valueType);
+        static bool assertTokenValue(DavScriptParser* scriptParser, const Token& value, const Token& expectedValueType);
         static bool assertToken(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
         static bool assertNotToken(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
         static bool assertTokenRole(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
