@@ -8,11 +8,14 @@ namespace davincpp::davscript
     { }
 
 
-    void DavScriptFileTest::execute()
+    void DavScriptFileTest::onSetup()
     {
-        DavScript davScript("../Tests/DavScriptFiles/TestFiles/test.dav");
-        davScript.loadFile();
+        registerTestStep("DavScript: loading script file", []
+        {
+            DavScript davScript("../Tests/DavScriptFiles/TestFiles/test.dav");
+            davScript.loadFile();
 
-        assertEquals(false, davScript.RawContent.empty());
+            assertEquals(false, davScript.RawContent.empty());
+        });
     }
 }

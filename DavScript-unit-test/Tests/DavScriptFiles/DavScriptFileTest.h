@@ -8,6 +8,6 @@ namespace davincpp::davscript
     public:
         explicit DavScriptFileTest();
 
-        void execute() override;
+        void onSetup() override;
     };
 }

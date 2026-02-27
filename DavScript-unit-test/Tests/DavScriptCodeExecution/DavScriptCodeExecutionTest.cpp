@@ -11,9 +11,9 @@ namespace davincpp::davscript
         : UnitTest("Testing the functionality of the DavScript compilation and code execution")
     { }
 
-    void DavScriptCodeExecutionTest::execute()
+    void DavScriptCodeExecutionTest::onSetup()
     {
-        assertTestStep(testVariableAssignment());
+        registerTestStep("vm: variable assignments", [] { testVariableAssignment(); });
     }
 
     void DavScriptCodeExecutionTest::testVariableAssignment()

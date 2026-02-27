@@ -8,19 +8,19 @@ namespace davincpp::davscript
     { }
 
 
-    void DavScriptLexerTest::execute()
+    void DavScriptLexerTest::onSetup()
     {
-        assertTestStep(testSingleCharTokens());
-        assertTestStep(testComments());
-        assertTestStep(testVariableType());
-        assertTestStep(testWrongVariableType());
-        assertTestStep(testWords());
-        assertTestStep(testNumbers());
-        assertTestStep(testStrings());
-        assertTestStep(testWrongStrings());
-        assertTestStep(testFunctionDoc());
-        assertTestStep(testWrongFunctionDoc());
-        assertTestStep(testBulk());
+        registerTestStep("lexing: single char tokens", [] { testSingleCharTokens(); });
+        registerTestStep("lexing: comments", [] { testComments(); });
+        registerTestStep("lexing: variable types", [] { testVariableType(); });
+        registerTestStep("lexing: wrong variable types", [] { testWrongVariableType(); });
+        registerTestStep("lexing: words", [] { testWords(); });
+        registerTestStep("lexing: numbers", [] { testNumbers(); });
+        registerTestStep("lexing: strings", [] { testStrings(); });
+        registerTestStep("lexing: wrong strings", [] { testWrongStrings(); });
+        registerTestStep("lexing: function documentation", [] { testFunctionDoc(); });
+        registerTestStep("lexing: wrong function documentation", [] { testWrongFunctionDoc(); });
+        registerTestStep("lexing: bulk test (big script)", [] { testBulk(); });
     }
 
 

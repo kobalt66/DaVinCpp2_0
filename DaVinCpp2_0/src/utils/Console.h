@@ -82,7 +82,6 @@ namespace davincpp
 			output << color;
 			(output << ... << args);
 			output << "\033[0m";
-			output << "\n";
 
 			return output.str().c_str();
 		}

@@ -34,14 +34,23 @@ namespace davincpp::unittest
                 assertTestCall(unitTest->execute());
                 assertTestCall(unitTest->onCleanUp());
 
-                successfullyExecutedTestCount++;
-                std::cout << ".";
-            } catch (std::runtime_error& exeption) {
-                errors.emplace_back(unitTest->getTestName(), exeption);
-                std::cout << "E";
-            }
+                for (const auto& testResult : unitTest->getTestResult()) {
+                    successfullyExecutedTestCount++;
+                    executedUnitTestCount++;
 
-            executedUnitTestCount++;
+                    if (testResult.success) {
+                        std::cout << ".";
+                        continue;
+                    }
+
+                    errors.emplace_back(unitTest->getTestName(), testResult.errorMsg);
+                    std::cout << Console::fmtRaw(Console::RED, "E");
+                }
+            } catch (std::runtime_error& exception) {
+                executedUnitTestCount++;
+                errors.emplace_back(unitTest->getTestName(), exception);
+                std::cout << Console::fmtRaw(Console::RED, "F");;
+            }
 
             if (++unitTestCount == 40) {
                 std::cout << " (" << executedUnitTestCount << " / " << m_AvailableTests.size() << ")";

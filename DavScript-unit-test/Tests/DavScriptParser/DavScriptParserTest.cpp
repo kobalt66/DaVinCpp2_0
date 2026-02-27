@@ -14,11 +14,11 @@ namespace davincpp::davscript
         : UnitTest("Testing the functionality of the DavScript parser")
     { }
 
-    void DavScriptParserTest::execute()
+    void DavScriptParserTest::onSetup()
     {
-        assertTestStep(testAssignmentNodeSuccess());
-        assertTestStep(testAssignmentNodeFailure());
-        assertTestStep(testFunctionCallNodeSuccess());
+        registerTestStep("parsing assignments: success", [] { testAssignmentNodeSuccess(); });
+        registerTestStep("parsing assignments: failure", [this] { testAssignmentNodeFailure(); });
+        registerTestStep("parsing function call: success: ", [] { testFunctionCallNodeSuccess(); });
     }
 
     void DavScriptParserTest::testAssignmentNodeSuccess()

@@ -1,25 +1,35 @@
 #pragma once
 #include <Console.h>
 #include <DaVinCppExceptions.h>
-#include <DaVinCppString.h>
 #include <DaVinCppMacros.h>
 #include <filesystem>
+#include <functional>
 #include <string>
+#include <unordered_map>
 
 namespace davincpp::unittest {
+    struct TestResult
+    {
+        bool success;
+        std::string errorMsg;
+    };
+
     class UnitTest
     {
     public:
         explicit UnitTest(std::string_view testName);
         virtual ~UnitTest();
 
-        virtual void onSetup() { }
-        virtual void execute() = 0;
+        virtual void onSetup() = 0;
+        void execute();
         virtual void onCleanUp() { }
 
         [[nodiscard]] std::string getTestName() const;
+        [[nodiscard]] const std::vector<TestResult>& getTestResult() const;
 
     protected:
+        void registerTestStep(const std::string& testStepName, const std::function<void()>& testStep);
+
         void expectException(std::string_view expectedException);
         void expectException(const std::filesystem::path& expectedExceptionTranscript);
 
@@ -27,33 +37,10 @@ namespace davincpp::unittest {
         std::string m_ExpectedException;
 
     private:
+        std::unordered_map<std::string, std::function<void()>> m_TestSteps;
+        std::vector<TestResult> m_TestResults;
         std::string m_TestName;
     };
-
-#define assertTestStep(test) \
-    try { test; } \
-    catch (std::exception& exception) { \
-        if (!m_ExpectedException.empty()) { \
-            std::string actualException = DaVinCppString::findReplaceAllByRegex(exception.what(), std::regex(R"(\x1B\[[0-9;]*m|\033\[[0-9;]*m)"), ""); \
-            if (m_ExpectedException == actualException) { \
-                m_ExpectedException.clear(); \
-                return; \
-            } \
-            if (m_ExpectedException != exception.what()) { \
-                std::string failedTestDescription = davincpp::Console::fmtTxt( \
-                    "\nTest step '", "testAssignmentNodeFailure()", "' failed: \n", "Expected exception was not thrown: \n", \
-                    "Actual exception: \n", actualException, "........................................\n", \
-                    "Expected exception: \n", m_ExpectedException); \
-                m_ExpectedException.clear(); \
-                DEBUG_BREAK; \
-                throw std::runtime_error(failedTestDescription); \
-            } \
-        } \
-        DEBUG_BREAK; \
-        throw std::runtime_error( \
-            davincpp::Console::fmtTxt("\nTest step '", #test, "' failed: \n", exception.what()) \
-        ); \
-    }
 
 #define assertTrue(expression) \
     if (!(expression)) { \
