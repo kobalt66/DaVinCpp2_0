@@ -1,6 +1,7 @@
 #pragma once
 #include <Console.h>
 #include <DaVinCppExceptions.h>
+#include <DaVinCppString.h>
 #include <DaVinCppMacros.h>
 #include <filesystem>
 #include <string>
@@ -33,18 +34,16 @@ namespace davincpp::unittest {
     try { test; } \
     catch (std::exception& exception) { \
         if (!m_ExpectedException.empty()) { \
-            if (m_ExpectedException == exception.what()) { \
+            std::string actualException = DaVinCppString::findReplaceAllByRegex(exception.what(), std::regex(R"(\x1B\[[0-9;]*m|\033\[[0-9;]*m)"), ""); \
+            if (m_ExpectedException == actualException) { \
                 m_ExpectedException.clear(); \
                 return; \
             } \
             if (m_ExpectedException != exception.what()) { \
                 std::string failedTestDescription = davincpp::Console::fmtTxt( \
-                        "\nTest step '", #test, "' failed: \n", \
-                        "Expected exception was not thrown: \n", \
-                        "Actual exception: \n", exception.what(), \
-                        "........................................\n", \
-                        "Expected exception: \n", m_ExpectedException \
-                ); \
+                    "\nTest step '", "testAssignmentNodeFailure()", "' failed: \n", "Expected exception was not thrown: \n", \
+                    "Actual exception: \n", actualException, "........................................\n", \
+                    "Expected exception: \n", m_ExpectedException); \
                 m_ExpectedException.clear(); \
                 DEBUG_BREAK; \
                 throw std::runtime_error(failedTestDescription); \
