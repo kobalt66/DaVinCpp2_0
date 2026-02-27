@@ -1,5 +1,6 @@
 #include "DaVinCppString.h"
 #include <iomanip>
+#include <regex>
 #include <sstream>
 #include <string>
 
@@ -18,39 +19,19 @@ namespace davincpp
 		return tokens;
 	}
 
-	std::string DaVinCppString::findReplace(std::string_view input, std::string_view find, std::string_view replace)
+	std::string DaVinCppString::findReplaceAll(std::string_view input, const std::string& find, const std::string& replace)
 	{
-		std::string str = input.data();
-
-		size_t pos = str.find(find.data());
-		if (pos != std::string::npos) {
-			str.replace(pos, find.length(), replace);
-
-			if (str.at(pos) == '\0') {
-				str.erase(pos);
-			}
-		}
-
-		return str;
-	}
-
-	std::string DaVinCppString::findReplaceAll(std::string_view input, std::string_view find, std::string_view replace)
-	{
-		if (find.empty()) {
-			return std::string(input);
-		}
-
 		std::string str(input);
-		size_t pos = 0;
 
-		while ((pos = str.find(find, pos)) != std::string::npos) {
+		size_t pos = str.find(find, size_t{});
+		while (pos != std::string::npos)
+		{
 			str.replace(pos, find.length(), replace);
-			pos += replace.length();
+			pos = str.find(find, pos + replace.length());
 		}
 
 		return str;
 	}
-
 
 	std::string DaVinCppString::fmtTime(msc duration)
 	{

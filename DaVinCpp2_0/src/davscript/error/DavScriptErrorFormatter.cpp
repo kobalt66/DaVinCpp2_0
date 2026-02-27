@@ -145,7 +145,7 @@ namespace davincpp::davscript
             return "";
         }
 
-        line = DaVinCppString::findReplace(line, "\n", "");
+        line = DaVinCppString::findReplaceAll(line, "\n", "");
 
         std::string lineNumber = std::to_string(token.getTokenPosition().Line + 1);
 

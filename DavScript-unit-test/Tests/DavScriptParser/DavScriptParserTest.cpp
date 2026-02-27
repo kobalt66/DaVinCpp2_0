@@ -17,8 +17,8 @@ namespace davincpp::davscript
     void DavScriptParserTest::execute()
     {
         assertTestStep(testAssignmentNodeSuccess());
-        assertTestStep(testFunctionCallNodeSuccess());
         assertTestStep(testAssignmentNodeFailure());
+        assertTestStep(testFunctionCallNodeSuccess());
     }
 
     void DavScriptParserTest::testAssignmentNodeSuccess()
@@ -53,6 +53,7 @@ namespace davincpp::davscript
 
         DavScriptParser parser(lexer.getTokens());
         parser.generateAst();
+        Console::log("asdf");
     }
 
     void DavScriptParserTest::testFunctionCallNodeSuccess()
