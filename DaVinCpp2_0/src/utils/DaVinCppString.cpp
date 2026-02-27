@@ -33,6 +33,24 @@ namespace davincpp
 		return str;
 	}
 
+	std::string DaVinCppString::findReplaceAllByRegex(std::string_view input, const std::regex& regex, const std::string& replace)
+	{
+		std::string str(input);
+
+		std::smatch match;
+
+		while (std::regex_search(str, match, regex)) {
+			size_t matchStartPos = match.position(0);
+			str.replace(matchStartPos, match.length(0), replace);
+
+			if (matchStartPos < str.length() && str.at(matchStartPos) == '\0') {
+				str.erase(matchStartPos, 1);
+			}
+		}
+
+		return str;
+	}
+
 	std::string DaVinCppString::fmtTime(msc duration)
 	{
 		min minutes = std::chrono::duration_cast<min>(duration);

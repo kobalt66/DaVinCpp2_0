@@ -1,8 +1,9 @@
 #pragma once
-#include <string>
-#include <DaVinCppExceptions.h>
 #include <Console.h>
+#include <DaVinCppExceptions.h>
 #include <DaVinCppMacros.h>
+#include <filesystem>
+#include <string>
 
 namespace davincpp::unittest {
     class UnitTest
@@ -17,6 +18,13 @@ namespace davincpp::unittest {
 
         [[nodiscard]] std::string getTestName() const;
 
+    protected:
+        void expectException(std::string_view expectedException);
+        void expectException(const std::filesystem::path& expectedExceptionTranscript);
+
+    protected:
+        std::string m_ExpectedException;
+
     private:
         std::string m_TestName;
     };
@@ -24,6 +32,24 @@ namespace davincpp::unittest {
 #define assertTestStep(test) \
     try { test; } \
     catch (std::exception& exception) { \
+        if (!m_ExpectedException.empty()) { \
+            if (m_ExpectedException == exception.what()) { \
+                m_ExpectedException.clear(); \
+                return; \
+            } \
+            if (m_ExpectedException != exception.what()) { \
+                std::string failedTestDescription = davincpp::Console::fmtTxt( \
+                        "\nTest step '", #test, "' failed: \n", \
+                        "Expected exception was not thrown: \n", \
+                        "Actual exception: \n", exception.what(), \
+                        "........................................\n", \
+                        "Expected exception: \n", m_ExpectedException \
+                ); \
+                m_ExpectedException.clear(); \
+                DEBUG_BREAK; \
+                throw std::runtime_error(failedTestDescription); \
+            } \
+        } \
         DEBUG_BREAK; \
         throw std::runtime_error( \
             davincpp::Console::fmtTxt("\nTest step '", #test, "' failed: \n", exception.what()) \

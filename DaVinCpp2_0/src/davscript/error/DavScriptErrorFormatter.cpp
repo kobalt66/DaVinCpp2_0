@@ -13,7 +13,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Parsing error: Unexpected token: \n",
+            "Parsing error: Unexpected token:\n",
             generateErrorCodeLine(actualToken), '\n',
             "Actual token: ", actualToken.toString(), '\n',
             "Expected token: ", expectedToken.toString()
@@ -26,7 +26,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Parsing error: Invalid : \n",
+            "Parsing error: Invalid value type:\n",
             generateErrorCodeLine(valueToken), '\n',
             "Actual value type: ", TOKEN_TYPE2STRING.at(valueToken.getTokenType()), '\n',
             "Expected value type: ", TOKEN_TYPE2STRING.at(expectedToken)
@@ -39,7 +39,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Parsing error: Inaccessible symbol: \n",
+            "Parsing error: Inaccessible symbol:\n",
             generateErrorCodeLine(symbolToken), '\n',
             "Symbol name: ", symbolToken.getActualValue(), '\n',
             "Symbol type: ", SYMBOL_TYPE2STRING.at(symbolType)
@@ -52,7 +52,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Parsing error: Namespace not found: \n",
+            "Parsing error: Namespace not found:\n",
             generateErrorCodeLine(useToken), '\n',
             "Namespace name: ", namespaceName
         );
@@ -64,7 +64,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Parsing error: Symbol name already exists somewhere else: \n",
+            "Parsing error: Symbol name already exists somewhere else:\n",
             generateErrorCodeLine(symbolToken), '\n',
             "Symbol name: ", symbolToken.getActualValue(), '\n',
             "Symbol type: ", SYMBOL_TYPE2STRING.at(symbolType)
@@ -77,7 +77,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Compiler error: Invalid type: \n",
+            "Compiler error: Invalid type:\n",
             generateErrorCodeLine(typeToken), '\n',
             "Actual type: ", typeToken.getActualValue(), '\n',
             "Expected type: ", STACK_VALUE_TYPE2STRING.at(expectedType)
@@ -131,7 +131,7 @@ namespace davincpp::davscript
 
     std::string DavScriptErrorFormatter::generateErrorLocationInfo(const DavScript& davScript, CharPosition position)
     {
-        return Console::fmtTxt("Script: ", davScript.Location, " (ln: ", position.Line + 1, ", char: ", position.CharIdx + 1, "): \n");
+        return Console::fmtTxt("Script: ", davScript.Location, " (ln: ", position.Line + 1, ", char: ", position.CharIdx + 1, "):\n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorCodeLine(const Token& token)

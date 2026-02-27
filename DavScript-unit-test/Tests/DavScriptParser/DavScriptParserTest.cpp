@@ -1,4 +1,6 @@
 #include "DavScriptParserTest.h"
+
+#include <DaVinCppString.h>
 #include <DavScript.h>
 #include <parser/ast/AssignmentNode.h>
 #include <parser/ast/Ast.h>
@@ -17,7 +19,27 @@ namespace davincpp::davscript
     void DavScriptParserTest::execute()
     {
         assertTestStep(testAssignmentNodeSuccess());
-        assertTestStep(testAssignmentNodeFailure());
+        try { testAssignmentNodeFailure(); } catch (std::exception& exception) {
+            if (!m_ExpectedException.empty()) {
+                std::string actualException = DaVinCppString::findReplaceAllByRegex(exception.what(), std::regex(R"(\x1B\[[0-9;]*m|\033\[[0-9;]*m)"), "");
+                if (m_ExpectedException == actualException) {
+                    m_ExpectedException.clear();
+                    return;
+                }
+                if (m_ExpectedException != exception.what()) {
+                    std::string failedTestDescription = davincpp::Console::fmtTxt(
+                        "\nTest step '", "testAssignmentNodeFailure()", "' failed: \n", "Expected exception was not thrown: \n",
+                        "Actual exception: \n", actualException, "........................................\n",
+                        "Expected exception: \n", m_ExpectedException);
+                    m_ExpectedException.clear();
+                    ((void) 0);
+                    throw std::runtime_error(failedTestDescription);
+                }
+            }
+            ((void) 0);
+            throw std::runtime_error(davincpp::Console::fmtTxt("\nTest step '", "testAssignmentNodeFailure()", "' failed: \n",
+                                                               exception.what()));
+        }
         assertTestStep(testFunctionCallNodeSuccess());
     }
 
@@ -46,6 +68,8 @@ namespace davincpp::davscript
 
     void DavScriptParserTest::testAssignmentNodeFailure()
     {
+        expectException(std::filesystem::path("../Tests/DavScriptParser/TestFiles/AssignmentExpectedException.txt"));
+
         DavScript davScript("../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav");
 
         DavScriptLexer lexer(davScript);

@@ -1,0 +1,21 @@
+[Error]   | DavScript failed to be parsed!
+
+[===================================================================================]
+Script: "../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav" (ln: 1, char: 8):
+Parsing error: Unexpected token:
+1 | @var b = 1
+  |        ^
+
+Actual token: Role: 'operator', Type: '='
+Expected token: Role: 'character', Type: '['
+
+[====================================================================================]
+Script: "../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav" (ln: 2, char: 15):
+Parsing error: Invalid value type:
+2 | @var b [int] =
+  |               ^
+
+Actual value type: newline
+Expected value type: mixed
+
+2 error(s) occurred during the parsing phase.
