@@ -28,9 +28,18 @@ namespace davincpp::unittest
 
         timer.start();
 
-        int unitTestCount = 0;
+        int testVisualCounter = 0;
         int executedUnitTestCount = 0;
         int successfullyExecutedTestCount = 0;
+
+        const auto lineWrapper = [&totalTestStepCount, &executedUnitTestCount, &testVisualCounter]
+        {
+            if (++testVisualCounter == 60) {
+                std::cout << " (" << executedUnitTestCount << " / " << totalTestStepCount << ")";
+                Console::newline();
+                testVisualCounter = 0;
+            }
+        };
 
         std::vector<std::pair<std::string, std::runtime_error>> errors;
 
@@ -45,22 +54,20 @@ namespace davincpp::unittest
 
                     if (testResult.success) {
                         std::cout << ".";
+                        lineWrapper();
                         continue;
                     }
 
                     errors.emplace_back(unitTest->getTestName(), testResult.errorMsg);
                     std::cout << Console::fmtRaw(Console::RED, "E");
+                    lineWrapper();
                 }
             } catch (std::runtime_error& exception) {
                 executedUnitTestCount++;
+
                 errors.emplace_back(unitTest->getTestName(), exception);
                 std::cout << Console::fmtRaw(Console::RED, "F");;
-            }
-
-            if (++unitTestCount == 40) {
-                std::cout << " (" << executedUnitTestCount << " / " << totalTestStepCount << ")";
-                Console::newline();
-                unitTestCount = 0;
+                lineWrapper();
             }
         }
 

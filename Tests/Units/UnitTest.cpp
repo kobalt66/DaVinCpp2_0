@@ -63,6 +63,10 @@ namespace davincpp::unittest
 
     void UnitTest::registerTestStep(const std::string& testStepName, const std::function<void()>& testStep)
     {
+        if (m_TestSteps.contains(testStepName)) {
+            throw std::runtime_error(Console::fmtErr("Test step '", testStepName, "' already exists!"));
+        }
+
         m_TestSteps.emplace(testStepName, testStep);
     }
 
