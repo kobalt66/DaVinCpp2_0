@@ -1,7 +1,6 @@
 #include "DavScriptErrorFormatter.h"
 #include <Console.h>
 #include <DaVinCppString.h>
-#include <execution/DavScriptCodeExecution.h>
 #include <sstream>
 #include <iomanip>
 
@@ -84,6 +83,18 @@ namespace davincpp::davscript
         );
     }
 
+    std::string DavScriptErrorFormatter::generateCompilerErrorFoundAmbiguousFunction(const Token& functionName)
+    {
+        std::string info = generateErrorLocationInfo(functionName.getDavScript(), functionName.getTokenPosition());
+        return Console::fmtTxt(
+            generateErrorSeparator(info.size()),
+            info,
+            "Compiler error: Found ambiguous function:\n",
+            generateErrorCodeLine(functionName), '\n',
+            "Function name: ", functionName.getActualValue()
+        );
+    }
+
     std::string DavScriptErrorFormatter::generateRuntimeExitCode(uint8_t exitCode)
     {
         return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode), "\n");
@@ -122,6 +133,26 @@ namespace davincpp::davscript
             << std::hex << ptr;
 
         return Console::fmtTxt("\nRuntime error: Invalid memory write access (at ", ss.str(), ")\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidPointerAccess(uint32_t ptr, std::string_view context)
+    {
+        std::stringstream ss;
+        ss  << "0x"
+            << std::setfill('0') << std::setw(8)
+            << std::hex << ptr;
+
+        return Console::fmtTxt("\nRuntime error: Invalid ", context, " pointer access (at ", ss.str(), ")\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidStackAccessEmptyStack()
+    {
+        return Console::fmtTxt("\nRuntime error: Failed to access stack value: Stack is empty\n");
+    }
+
+    std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidParameterValue(std::string_view functionName, int parameterIndex, ValueType actualType, std::string_view expectedType)
+    {
+        return Console::fmtTxt("\nRuntime error: Invalid parameter value for '", functionName, "' at the ", parameterIndex,". parameter: Expected ", expectedType, ", got ", STACK_VALUE_TYPE2STRING.at(actualType), "\n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorSeparator(size_t length)

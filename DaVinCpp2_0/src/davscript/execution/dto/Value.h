@@ -42,10 +42,10 @@ namespace davincpp::davscript
     };
 
     static const std::unordered_map<ValueType, std::string> STACK_VALUE_TYPE2STRING = {
-        { ValueType::INT, T_INT },
-        { ValueType::BOOL, T_BOOL },
-        { ValueType::DOUBLE, T_FLOAT },
-        { ValueType::STRING, T_STRING },
-        { ValueType::OBJECT, T_MIXED },
+        { ValueType::INT,       T_INT       },
+        { ValueType::BOOL,      T_BOOL      },
+        { ValueType::DOUBLE,    T_FLOAT     },
+        { ValueType::STRING,    T_STRING    },
+        { ValueType::OBJECT,    T_MIXED     },
     };
 }

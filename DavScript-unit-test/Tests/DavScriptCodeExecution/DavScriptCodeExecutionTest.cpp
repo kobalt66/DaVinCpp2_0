@@ -1,19 +1,20 @@
 #include "DavScriptCodeExecutionTest.h"
-
 #include <DavScript.h>
+#include <execution/DavScriptCompiler.h>
+#include <execution/DavScriptVirtualMachine.h>
 #include <lexer/DavScriptLexer.h>
 #include <parser/DavScriptParser.h>
-#include <execution/DavScriptCodeExecution.h>
 
 namespace davincpp::davscript
 {
     DavScriptCodeExecutionTest::DavScriptCodeExecutionTest()
-        : UnitTest("Testing the functionality of the DavScript compilation and code execution")
+        : UnitTest("Testing the functionality of the DavScript compiler and vm")
     { }
 
     void DavScriptCodeExecutionTest::onSetup() noexcept
     {
-        registerTestStep("vm: variable assignments", [] { testVariableAssignment(); });
+        registerTestStep("compiler & vm: variable assignments", [] { testVariableAssignment(); });
+        registerTestStep("compiler & vm: simple print function call", [] { testSimplePrintFunctionCall(); });
     }
 
     void DavScriptCodeExecutionTest::testVariableAssignment()
@@ -30,17 +31,38 @@ namespace davincpp::davscript
         DavScriptParser parser(lexer.getTokens());
         parser.generateAst();
 
-        DavScriptCodeExecution codeExecution(parser.getAst());
-        codeExecution.run();
+        DavScriptCompiler compiler(parser.getAst());
+        compiler.compile();
 
-        Value actualIntStackValue = codeExecution.getVM().readMemory(0);
-        Value actualBoolStackValue = codeExecution.getVM().readMemory(1);
-        Value actualFloatStackValue = codeExecution.getVM().readMemory(2);
-        Value actualStringStackValue = codeExecution.getVM().readMemory(3);
+        DavScriptVirtualMachine vm;
+        compiler.prepareVM(vm);
+        vm.execute();
+
+        Value actualIntStackValue = vm.readMemory(0);
+        Value actualBoolStackValue = vm.readMemory(1);
+        Value actualFloatStackValue = vm.readMemory(2);
+        Value actualStringStackValue = vm.readMemory(3);
 
         assertTrue(expectedIntValue == actualIntStackValue);
         assertTrue(expectedBoolValue == actualBoolStackValue);
         assertTrue(expectedFloatValue == actualFloatStackValue);
         assertTrue(expectedStringValue == actualStringStackValue);
+    }
+
+    void DavScriptCodeExecutionTest::testSimplePrintFunctionCall()
+    {
+        DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/SimplePrintFunctionCall.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        DavScriptParser parser(lexer.getTokens());
+        parser.generateAst();
+
+        DavScriptCompiler compiler(parser.getAst());
+        compiler.compile();
+
+        DavScriptVirtualMachine vm;
+        compiler.prepareVM(vm);
+        vm.execute();
     }
 }

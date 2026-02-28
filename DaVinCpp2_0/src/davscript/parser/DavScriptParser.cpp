@@ -136,7 +136,7 @@ namespace davincpp::davscript
         m_CurrentScopeDepth--;
 
         for (auto it = m_DefinedSymbols.begin(); it != m_DefinedSymbols.end();) {
-            if (it->second.first > m_CurrentScopeDepth) {
+            if (it->second.scopeDepth > m_CurrentScopeDepth) {
                 it = m_DefinedSymbols.erase(it);
             } else {
                 ++it;
@@ -157,8 +157,8 @@ namespace davincpp::davscript
     bool DavScriptParser::validateSymbol(std::string_view symbolName, SymbolType symbolType) const
     {
         return  m_DefinedSymbols.contains(symbolName.data())                        &&
-                m_DefinedSymbols.at(symbolName.data()).first <= m_CurrentScopeDepth &&
-                m_DefinedSymbols.at(symbolName.data()).second == symbolType;
+                m_DefinedSymbols.at(symbolName.data()).scopeDepth <= m_CurrentScopeDepth &&
+                m_DefinedSymbols.at(symbolName.data()).symbolType == symbolType;
     }
 
     bool DavScriptParser::doesVariableAlreadyExist(const Token& variableName) const

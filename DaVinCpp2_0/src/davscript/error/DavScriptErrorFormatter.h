@@ -14,12 +14,16 @@ namespace davincpp::davscript
         static std::string generateDuplicateSymbolName(const Token& symbolToken, SymbolType symbolType);
 
         static std::string generateCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType);
+        static std::string generateCompilerErrorFoundAmbiguousFunction(const Token& functionName);
 
         static std::string generateRuntimeExitCode(uint8_t exitCode);
         static std::string generateRuntimeUnexpectedError(std::string_view errorMessage);
         static std::string generateRuntimeErrorInvalidOperation(uint8_t operation);
         static std::string generateRuntimeErrorInvalidMemoryReadAccess(uint32_t ptr);
         static std::string generateRuntimeErrorInvalidMemoryWriteAccess(uint32_t ptr);
+        static std::string generateRuntimeErrorInvalidPointerAccess(uint32_t ptr, std::string_view context);
+        static std::string generateRuntimeErrorInvalidStackAccessEmptyStack();
+        static std::string generateRuntimeErrorInvalidParameterValue(std::string_view functionName, int parameterIndex, ValueType actualType, std::string_view expectedType);
 
     private:
         static std::string generateErrorSeparator(size_t length);

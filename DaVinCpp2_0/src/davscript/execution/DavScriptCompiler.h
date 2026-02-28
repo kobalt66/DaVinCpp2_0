@@ -1,10 +1,10 @@
 #pragma once
 #include <functional>
 #include <memory>
-#include <execution/DavScriptVirtualMachine.h>
 #include <parser/ast/Ast.h>
 #include <execution/dto/Value.h>
 #include <execution/dto/VariableScope.h>
+#include <libraries/DavScriptLibraries.h>
 #include <tokens/Token.h>
 
 namespace davincpp::davscript
@@ -15,15 +15,18 @@ namespace davincpp::davscript
         explicit DavScriptCompiler(std::shared_ptr<Ast> ast);
 
         void reset();
-        void loadStdLibraries();
-        std::vector<uint8_t> compile();
+        void loadStdLibraries(const std::vector<std::string>& usedNamespaces);
+        void compile();
+
+        void prepareVM(DavScriptVirtualMachine& vm) const;
 
         uint32_t registerVariableScope(std::string_view variableName);
         [[nodiscard]] bool canAccessVariable(std::string_view variableName) const;
 
-        [[nodiscard]] const std::vector<std::function<void(DavScriptVirtualMachine*)>>& getRegisteredCppFunctions() const;
+        [[nodiscard]] std::vector<uint8_t> determineFunctionPtr(const Token& functionName);
 
-        void logCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType);
+        void logInvalidValueTypeError(const Token& typeToken, ValueType expectedType);
+        void logFoundAmbiguousFunctionError(const Token& functionName);
 
     private:
         void enterScope();
@@ -37,7 +40,8 @@ namespace davincpp::davscript
         std::vector<VariableScope> m_VariableScopes;
         int m_CurrentScopeDepth = 0;
 
-        std::vector<std::function<void(DavScriptVirtualMachine*)>> m_RegisteredCppFunctions;
+        std::vector<uint8_t> m_ByteCode;
+        std::unordered_map<uint32_t, std::pair<std::string, std::function<void(DavScriptVirtualMachine*)>>> m_RegisteredLibraryFunctions;
 
         std::vector<std::string> m_CompilerErrorMessages;
     };

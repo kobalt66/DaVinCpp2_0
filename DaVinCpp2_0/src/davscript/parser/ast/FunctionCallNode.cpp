@@ -3,6 +3,7 @@
 #include <execution/ByteOperations.h>
 
 #include <utility>
+#include <parser/ast/ValueNode.h>
 
 namespace davincpp::davscript
 {
@@ -27,7 +28,29 @@ namespace davincpp::davscript
     {
         std::vector<uint8_t> byteCode;
 
+        std::vector<uint8_t> functionPtr = compiler->determineFunctionPtr(m_FunctionName);
+        std::vector<uint8_t> parametersByteCode;
+
+        for (const auto& parameter: m_Parameters) {
+            if (auto valueNode = std::dynamic_pointer_cast<ValueNode>(parameter)) {
+                Token valueType = valueNode->getValueType();
+                std::vector<uint8_t> valueBytes = valueNode->generateByteCode(compiler, valueType);
+
+                switch (valueType.getTokenType()) {
+                    case INTTYPE: parametersByteCode.push_back(MOV_INT); break;
+                    case BOOLTYPE: parametersByteCode.push_back(MOV_BOOL); break;
+                    case FLOATTYPE: parametersByteCode.push_back(MOV_FLOAT); break;
+                    case STRINGTYPE: parametersByteCode.push_back(MOV_STRING); break;
+                    default: continue;
+                }
+
+                parametersByteCode.insert(parametersByteCode.end(), valueBytes.begin(), valueBytes.end());
+            }
+        }
+
+        byteCode.insert(byteCode.begin(), parametersByteCode.begin(), parametersByteCode.end());
         byteCode.push_back(CALL);
+        byteCode.insert(byteCode.end(), functionPtr.begin(), functionPtr.end());
 
         return byteCode;
     }

@@ -64,39 +64,34 @@ namespace davincpp::davscript
         std::vector<uint8_t> valueBytes{};
 
         if (const auto valueNode = std::dynamic_pointer_cast<ValueNode>(m_Value)) {
-            std::string actualValue = valueNode->getValue().getActualValue();
+            valueBytes = valueNode->generateByteCode(compiler, m_Type->getType());
 
             switch (m_Type->getType().getTokenType()) {
                 case INTTYPE:
                 {
                     storeByteOperation = ST_INT;
-                    valueBytes = ByteCastHelper::nativeToBytes(std::stol(actualValue));
                     break;
                 }
                 case BOOLTYPE:
                 {
                     storeByteOperation = ST_BOOL;
-                    valueBytes = ByteCastHelper::nativeToBytes(actualValue == T_TRUE);
                     break;
                 }
                 case FLOATTYPE:
                 {
                     storeByteOperation = ST_FLOAT;
-                    valueBytes = ByteCastHelper::nativeToBytes(std::stol(actualValue));
                     break;
                 }
                 case STRINGTYPE:
                 {
                     storeByteOperation = ST_STRING;
-                    valueBytes = ByteCastHelper::stringToBytes(actualValue);
-                    valueBytes.push_back(NUL);
                     break;
                 }
                 case MIXEDTYPE:
                     storeByteOperation = NUL;
                     break;
                 default:
-                    compiler->logCompilerErrorInvalidValueType(m_Type->getType(), ValueType::OBJECT);
+                    compiler->logInvalidValueTypeError(m_Type->getType(), ValueType::OBJECT);
                     return { };
             }
         }

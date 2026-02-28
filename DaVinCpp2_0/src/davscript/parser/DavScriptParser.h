@@ -56,7 +56,7 @@ namespace davincpp::davscript
         std::vector<std::string> m_ErrorMessages;
 
         int m_CurrentScopeDepth = 0;
-        std::unordered_map<std::string, std::pair<int, SymbolType>> m_DefinedSymbols;
+        std::unordered_map<std::string, DavScriptSymbol> m_DefinedSymbols;
 
         std::unordered_map<std::string, DavScriptNamespace> m_RegisteredCustomNamespaces;
         std::vector<std::string> m_UsedNamespaces;

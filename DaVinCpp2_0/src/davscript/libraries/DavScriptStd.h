@@ -1,9 +1,10 @@
 #pragma once
-#include <execution/DavScriptVirtualMachine.h>
 
-namespace davincpp::davscript::stdlib
+namespace davincpp::davscript
 {
-    namespace io
+    class DavScriptVirtualMachine;
+
+    namespace stdlib::io
     {
         void print(DavScriptVirtualMachine* vm);
     }

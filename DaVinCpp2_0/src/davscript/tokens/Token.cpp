@@ -39,6 +39,16 @@ namespace davincpp::davscript
         return m_Role == other.m_Role && m_Type == other.m_Type && m_ActualValue == other.m_ActualValue;
     }
 
+    void Token::setTokenType(TokenType type)
+    {
+        m_Type = type;
+    }
+
+    void Token::setTokenRole(TokenRole role)
+    {
+        m_Role = role;
+    }
+
     DavScript Token::getDavScript() const
     {
         return m_DavScript;

@@ -1,7 +1,9 @@
 #include "DavScriptCompiler.h"
 #include <Console.h>
+#include <ranges>
 #include <error/DavScriptErrorFormatter.h>
-#include <libraries/DavScriptStd.h>
+#include <execution/ByteCastHelper.h>
+#include <execution/DavScriptVirtualMachine.h>
 
 namespace davincpp::davscript
 {
@@ -15,17 +17,37 @@ namespace davincpp::davscript
         m_CurrentScopeDepth = 0;
     }
 
-    void DavScriptCompiler::loadStdLibraries()
+    void DavScriptCompiler::loadStdLibraries(const std::vector<std::string>& usedNamespaces)
     {
-        m_RegisteredCppFunctions.emplace_back(stdlib::io::print);
+        for (std::string_view namespaceName : usedNamespaces) {
+            if (DAVSCRIPT_LIBRARIES.contains(namespaceName.data())) {
+                const auto& registeredSymbols = DAVSCRIPT_LIBRARIES.at(namespaceName.data()).registeredSymbols;
+
+                for (const auto& [symbolName, symbol] : registeredSymbols) {
+                    if (symbol.symbolType == SymbolType::FUNCTION) {
+                        m_RegisteredLibraryFunctions.emplace(
+                            static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
+                            std::pair{Console::fmtTxt(namespaceName, symbolName), symbol.symbolFunction}
+                        );
+                    }
+                }
+            }
+        }
     }
 
-    std::vector<uint8_t> DavScriptCompiler::compile()
+    void DavScriptCompiler::compile()
     {
-        loadStdLibraries();
-        std::vector<uint8_t> callStack = m_Ast->generateByteCode(this);
+        m_ByteCode = m_Ast->generateByteCode(this);
         checkForCompilationErrors();
-        return callStack;
+    }
+
+    void DavScriptCompiler::prepareVM(DavScriptVirtualMachine& vm) const
+    {
+        vm.loadByteCode(m_ByteCode);
+
+        for (const auto& registeredLibraryFunction : m_RegisteredLibraryFunctions) {
+            vm.registerLibraryFunction(registeredLibraryFunction.first, registeredLibraryFunction.second.second);
+        }
     }
 
     uint32_t DavScriptCompiler::registerVariableScope(std::string_view variableName)
@@ -45,14 +67,33 @@ namespace davincpp::davscript
         return false;
     }
 
-    const std::vector<std::function<void(DavScriptVirtualMachine*)>>& DavScriptCompiler::getRegisteredCppFunctions() const
+    std::vector<uint8_t> DavScriptCompiler::determineFunctionPtr(const Token& functionName)
     {
-        return m_RegisteredCppFunctions;
+        int functionPtr = -1;
+        for (const auto& registeredLibraryFunction : m_RegisteredLibraryFunctions) {
+            if (registeredLibraryFunction.second.first == functionName.getActualValue()) {
+                if (functionPtr != -1) {
+                    logFoundAmbiguousFunctionError(functionName);
+                    return {};
+                }
+
+                functionPtr = static_cast<int>(registeredLibraryFunction.first);
+            }
+        }
+
+        // todo: determine custom function ptr
+
+        return ByteCastHelper::nativeToBytes(static_cast<uint32_t>(functionPtr));
     }
 
-    void DavScriptCompiler::logCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType)
+    void DavScriptCompiler::logInvalidValueTypeError(const Token& typeToken, ValueType expectedType)
     {
         m_CompilerErrorMessages.push_back(DavScriptErrorFormatter::generateCompilerErrorInvalidValueType(typeToken, expectedType));
+    }
+
+    void DavScriptCompiler::logFoundAmbiguousFunctionError(const Token& functionName)
+    {
+        m_CompilerErrorMessages.push_back(DavScriptErrorFormatter::generateCompilerErrorFoundAmbiguousFunction(functionName));
     }
 
     void DavScriptCompiler::enterScope()

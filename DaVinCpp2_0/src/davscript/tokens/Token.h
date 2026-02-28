@@ -33,6 +33,8 @@ namespace davincpp::davscript
 
         bool operator ==(const Token& other) const;
 
+        void setTokenType(TokenType type);
+        void setTokenRole(TokenRole role);
         [[nodiscard]] DavScript getDavScript() const;
         [[nodiscard]] std::string getActualValue() const;
         [[nodiscard]] TokenType getTokenType() const;

@@ -5,6 +5,8 @@
 #include <error/DavScriptException.h>
 #include <execution/ByteCastHelper.h>
 
+#include <utility>
+
 namespace davincpp::davscript
 {
     void DavScriptVirtualMachine::reset()
@@ -34,6 +36,10 @@ namespace davincpp::davscript
 
     Value DavScriptVirtualMachine::popStackValue()
     {
+        if (m_Stack.empty()) {
+            throw DavScriptException(DavScriptErrorFormatter::generateRuntimeErrorInvalidStackAccessEmptyStack());
+        }
+
         const Value value = m_Stack.top();
         m_Stack.pop();
         return value;
@@ -48,7 +54,7 @@ namespace davincpp::davscript
         return m_Memory.at(ptr);
     }
 
-    void DavScriptVirtualMachine::writeMemory(uint32_t ptr, Value value)
+    void DavScriptVirtualMachine::writeMemory(uint32_t ptr, const Value& value)
     {
         if (ptr >= m_Memory.size()) {
             throw DavScriptException(DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryWriteAccess(ptr));
@@ -57,9 +63,23 @@ namespace davincpp::davscript
         m_Memory.at(ptr) = value;
     }
 
+    void DavScriptVirtualMachine::allocateMemory(uint8_t variablePtr)
+    {
+        if (variablePtr < m_Memory.size()) {
+            return;
+        }
+
+        m_Memory.resize(variablePtr + 1);
+    }
+
     void DavScriptVirtualMachine::loadByteCode(const std::vector<uint8_t>& byteCode)
     {
         m_CallStack = byteCode;
+    }
+
+    void DavScriptVirtualMachine::registerLibraryFunction(uint32_t functionPtr, std::function<void(DavScriptVirtualMachine*)> function)
+    {
+        m_RegisteredLibraryFunctions.emplace(functionPtr, function);
     }
 
     bool DavScriptVirtualMachine::interpretOperation()
@@ -76,6 +96,21 @@ namespace davincpp::davscript
                 break;
             case ST_STRING:
                 processStoreStringValueOperation();
+                break;
+            case MOV_INT:
+                processMovIntValueOperation();
+                break;
+            case MOV_BOOL:
+                processMovBoolValueOperation();
+                break;
+            case MOV_FLOAT:
+                processMovFloatValueOperation();
+                break;
+            case MOV_STRING:
+                processMovStringValueOperation();
+                break;
+            case CALL:
+                processFunctionCallOperation();
                 break;
             case END:
                 m_ExitCode = advanceOperationPtr();
@@ -94,13 +129,21 @@ namespace davincpp::davscript
         return true;
     }
 
+    void DavScriptVirtualMachine::processFunctionCallOperation()
+    {
+        uint32_t functionPtr = getPtrFromCallStack();
+
+        if (!m_RegisteredLibraryFunctions.contains(functionPtr)) {
+            throw DavScriptException(DavScriptErrorFormatter::generateRuntimeErrorInvalidPointerAccess(functionPtr, PTR_CONTEXT_FUNCTION));
+        }
+
+        m_RegisteredLibraryFunctions.at(functionPtr)(this);
+    }
+
     void DavScriptVirtualMachine::processStoreIntValueOperation()
     {
-        uint8_t variablePtr = getVariablePtrFromCallStack();
-        advanceOperationPtr();
-
-        int64_t value = ByteCastHelper::bytesToInt(m_OperationPtr);
-        advanceOperationPtrByN(sizeof(int64_t));
+        uint8_t variablePtr = getPtrFromCallStack();
+        int64_t value = getIntValueFromCallStack();
 
         allocateMemory(variablePtr);
         writeMemory(variablePtr, {ValueType::INT, value});
@@ -108,11 +151,8 @@ namespace davincpp::davscript
 
     void DavScriptVirtualMachine::processStoreBoolValueOperation()
     {
-        uint8_t variablePtr = getVariablePtrFromCallStack();
-        advanceOperationPtr();
-
-        bool value = ByteCastHelper::bytesToBool(m_OperationPtr);
-        advanceOperationPtrByN(sizeof(bool));
+        uint8_t variablePtr = getPtrFromCallStack();
+        bool value = getBoolValueFromCallStack();
 
         allocateMemory(variablePtr);
         writeMemory(variablePtr, {ValueType::BOOL, value});
@@ -120,11 +160,8 @@ namespace davincpp::davscript
 
     void DavScriptVirtualMachine::processStoreFloatValueOperation()
     {
-        uint8_t variablePtr = getVariablePtrFromCallStack();
-        advanceOperationPtr();
-
-        double value = ByteCastHelper::bytesToFloat(m_OperationPtr);
-        advanceOperationPtrByN(sizeof(double));
+        uint8_t variablePtr = getPtrFromCallStack();
+        double value = getFloatValueFromCallStack();
 
         allocateMemory(variablePtr);
         writeMemory(variablePtr, {ValueType::DOUBLE, value});
@@ -132,14 +169,35 @@ namespace davincpp::davscript
 
     void DavScriptVirtualMachine::processStoreStringValueOperation()
     {
-        uint8_t variablePtr = getVariablePtrFromCallStack();
-        advanceOperationPtr();
-
-        std::string value = ByteCastHelper::bytesToString(m_OperationPtr);
-        advanceOperationPtrByN(value.size() + 1);
+        uint8_t variablePtr = getPtrFromCallStack();
+        std::string value = getStringValueFromCallStack();
 
         allocateMemory(variablePtr);
         writeMemory(variablePtr, {ValueType::STRING, value});
+    }
+
+    void DavScriptVirtualMachine::processMovIntValueOperation()
+    {
+        int64_t value = getIntValueFromCallStack();
+        m_Stack.emplace(ValueType::INT, value);
+    }
+
+    void DavScriptVirtualMachine::processMovBoolValueOperation()
+    {
+        bool value = getBoolValueFromCallStack();
+        m_Stack.emplace(ValueType::BOOL, value);
+    }
+
+    void DavScriptVirtualMachine::processMovFloatValueOperation()
+    {
+        double value = getFloatValueFromCallStack();
+        m_Stack.emplace(ValueType::DOUBLE, value);
+    }
+
+    void DavScriptVirtualMachine::processMovStringValueOperation()
+    {
+        std::string value = getStringValueFromCallStack();
+        m_Stack.emplace(ValueType::STRING, value);
     }
 
     uint8_t DavScriptVirtualMachine::advanceOperationPtr()
@@ -162,16 +220,7 @@ namespace davincpp::davscript
         m_OperationPtr += n - 1;
     }
 
-    void DavScriptVirtualMachine::allocateMemory(uint8_t variablePtr)
-    {
-        if (variablePtr < m_Memory.size()) {
-            return;
-        }
-
-        m_Memory.resize(variablePtr + 1);
-    }
-
-    uint32_t DavScriptVirtualMachine::getVariablePtrFromCallStack()
+    uint32_t DavScriptVirtualMachine::getPtrFromCallStack()
     {
         advanceOperationPtr();
         uint32_t variablePtr = ByteCastHelper::bytesToInt(m_OperationPtr);
@@ -179,9 +228,41 @@ namespace davincpp::davscript
         return variablePtr;
     }
 
+    int64_t DavScriptVirtualMachine::getIntValueFromCallStack()
+    {
+        advanceOperationPtr();
+        int64_t integer = ByteCastHelper::bytesToInt(m_OperationPtr);
+        advanceOperationPtrByN(sizeof(int64_t));
+        return integer;
+    }
+
+    bool DavScriptVirtualMachine::getBoolValueFromCallStack()
+    {
+        advanceOperationPtr();
+        bool boolean = ByteCastHelper::bytesToBool(m_OperationPtr);
+        advanceOperationPtrByN(sizeof(bool));
+        return boolean;
+    }
+
+    double DavScriptVirtualMachine::getFloatValueFromCallStack()
+    {
+        advanceOperationPtr();
+        double floatValue = ByteCastHelper::bytesToFloat(m_OperationPtr);
+        advanceOperationPtrByN(sizeof(double));
+        return floatValue;
+    }
+
+    std::string DavScriptVirtualMachine::getStringValueFromCallStack()
+    {
+        advanceOperationPtr();
+        std::string stringValue = ByteCastHelper::bytesToString(m_OperationPtr);
+        advanceOperationPtrByN(stringValue.size() + 1);
+        return stringValue;
+    }
+
     void DavScriptVirtualMachine::logRuntimeErrorInvalidOperation(uint8_t operation)
     {
-        m_RuntimeErrorMessages.emplace_back(DavScriptErrorFormatter::generateRuntimeErrorInvalidOperation(operation));
+        m_RuntimeErrorMessages.push_back(DavScriptErrorFormatter::generateRuntimeErrorInvalidOperation(operation));
     }
 
     void DavScriptVirtualMachine::checkForCompilationErrors() const
