@@ -14,7 +14,7 @@ namespace davincpp::davscript
     void DavScriptCodeExecutionTest::onSetup() noexcept
     {
         registerTestStep("compiler & vm: variable assignments", [] { testVariableAssignment(); });
-        registerTestStep("compiler & vm: simple print function call", [] { testSimplePrintFunctionCall(); });
+        registerTestStep("compiler & vm: simple print function call", [this] { testSimplePrintFunctionCall(); });
     }
 
     void DavScriptCodeExecutionTest::testVariableAssignment()
@@ -51,6 +51,8 @@ namespace davincpp::davscript
 
     void DavScriptCodeExecutionTest::testSimplePrintFunctionCall()
     {
+        std::string expectedOutput = Console::cleanseText(Console::fmtLog("Hello World!"));
+
         DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/SimplePrintFunctionCall.dav");
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
@@ -64,6 +66,13 @@ namespace davincpp::davscript
 
         DavScriptVirtualMachine vm;
         compiler.prepareVM(vm);
+
+        suppressConsoleOutput();
         vm.execute();
+        restoreConsoleOutput();
+
+        std::string output = readSuppressedConsoleOutput();
+
+        assertEquals(expectedOutput, output);
     }
 }

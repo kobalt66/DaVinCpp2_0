@@ -1,4 +1,6 @@
 #include "Console.h"
+
+#include <DaVinCppString.h>
 #ifdef _WIN32
 #include <windows.h>
 #include <conio.h>
@@ -94,6 +96,10 @@ namespace davincpp
 		m_ResizeFlag = 0;
 	}
 
+	std::string Console::cleanseText(std::string_view text)
+	{
+		return DaVinCppString::findReplaceAllByRegex(text, std::regex(R"(\x1B\[[0-9;]*m|033\[[0-9;]*m)"), "");
+	}
 
 #ifdef _WIN32
 	void Console::printNChar(char c, int length, const char* color)

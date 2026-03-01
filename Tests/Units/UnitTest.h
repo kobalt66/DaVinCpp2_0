@@ -34,6 +34,10 @@ namespace davincpp::unittest {
         void expectException(std::string_view expectedException);
         void expectException(const std::filesystem::path& expectedExceptionTranscript);
 
+        void suppressConsoleOutput();
+        std::string readSuppressedConsoleOutput() const;
+        void restoreConsoleOutput() const;
+
     protected:
         std::string m_ExpectedException;
 
@@ -41,6 +45,9 @@ namespace davincpp::unittest {
         std::unordered_map<std::string, std::function<void()>> m_TestSteps;
         std::vector<TestResult> m_TestResults;
         std::string m_TestName;
+
+        std::stringstream m_SuppressedOutputBuffer;
+        std::streambuf* m_OriginalOutputBuffer = nullptr;
     };
 
 #define assertTrue(expression) \

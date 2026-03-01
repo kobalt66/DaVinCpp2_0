@@ -138,6 +138,11 @@ namespace davincpp
 			return output.str().c_str();
 		}
 
+		/**
+		 * Gets rid of any text styling, hence, returning the raw text.
+		 */
+		static std::string cleanseText(std::string_view text);
+
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
 		static void printNChar(char c, int count, const char* color);
 		static void printCenteredText(std::string_view text, const char* color, char firstChar = ' ', char lastChar = ' ');

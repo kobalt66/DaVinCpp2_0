@@ -6,7 +6,7 @@ namespace davincpp::unittest
 {
     UnitTest::UnitTest(std::string_view testName)
         : m_TestName(testName)
-    { }
+    {}
 
     UnitTest::~UnitTest() = default;
 
@@ -18,7 +18,7 @@ namespace davincpp::unittest
             }
             catch (std::exception& exception) {
                 if (!m_ExpectedException.empty()) {
-                    std::string actualException = DaVinCppString::findReplaceAllByRegex(exception.what(), std::regex(R"(\x1B\[[0-9;]*m|033\[[0-9;]*m)"), "");
+                    std::string actualException = Console::cleanseText(exception.what());
 
                     if (m_ExpectedException == actualException) {
                         m_TestResults.emplace_back(true, "");
@@ -78,5 +78,20 @@ namespace davincpp::unittest
     void UnitTest::expectException(const std::filesystem::path& expectedExceptionTranscript)
     {
         m_ExpectedException = DaVinCppFileSystem::readFile(expectedExceptionTranscript);
+    }
+
+    void UnitTest::suppressConsoleOutput()
+    {
+        m_OriginalOutputBuffer = std::cout.rdbuf(m_SuppressedOutputBuffer.rdbuf());
+    }
+
+    std::string UnitTest::readSuppressedConsoleOutput() const
+    {
+        return Console::cleanseText(m_SuppressedOutputBuffer.str());
+    }
+
+    void UnitTest::restoreConsoleOutput() const
+    {
+        std::cout.rdbuf(m_OriginalOutputBuffer);
     }
 }
