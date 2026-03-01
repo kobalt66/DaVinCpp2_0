@@ -63,7 +63,7 @@ namespace davincpp::davscript
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
-            "Parsing error: Symbol name already exists somewhere else:\n",
+            "Parsing error: Symbol name already defined:\n",
             generateErrorCodeLine(symbolToken), '\n',
             "Symbol name: ", symbolToken.getActualValue(), '\n',
             "Symbol type: ", SYMBOL_TYPE2STRING.at(symbolType)
@@ -97,12 +97,12 @@ namespace davincpp::davscript
 
     std::string DavScriptErrorFormatter::generateRuntimeExitCode(uint8_t exitCode)
     {
-        return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode), "\n");
+        return Console::fmtTxt("\nProgram exiting with code: ", static_cast<int>(exitCode));
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeUnexpectedError(std::string_view errorMessage)
     {
-        return Console::fmtTxt("\nRuntime error: Unexpected error: ", errorMessage, "\n");
+        return Console::fmtTxt("Runtime error: Unexpected error: ", errorMessage);
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidOperation(uint8_t operation)
@@ -112,7 +112,7 @@ namespace davincpp::davscript
             << std::setfill('0') << std::setw(4)
             << std::hex << static_cast<uint32_t>(operation);
 
-        return Console::fmtTxt("\nRuntime error: Invalid operation: ", ss.str(), "\n");
+        return Console::fmtTxt("Runtime error: Invalid operation: ", ss.str());
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryReadAccess(uint32_t ptr)
@@ -122,7 +122,7 @@ namespace davincpp::davscript
             << std::setfill('0') << std::setw(8)
             << std::hex << ptr;
 
-        return Console::fmtTxt("\nRuntime error: Invalid memory read access (at ", ss.str(), ")\n");
+        return Console::fmtTxt("Runtime error: Invalid memory read access (at ", ss.str(), ")");
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidMemoryWriteAccess(uint32_t ptr)
@@ -132,7 +132,7 @@ namespace davincpp::davscript
             << std::setfill('0') << std::setw(8)
             << std::hex << ptr;
 
-        return Console::fmtTxt("\nRuntime error: Invalid memory write access (at ", ss.str(), ")\n");
+        return Console::fmtTxt("Runtime error: Invalid memory write access (at ", ss.str(), ")");
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidPointerAccess(uint32_t ptr, std::string_view context)
@@ -142,17 +142,17 @@ namespace davincpp::davscript
             << std::setfill('0') << std::setw(8)
             << std::hex << ptr;
 
-        return Console::fmtTxt("\nRuntime error: Invalid ", context, " pointer access (at ", ss.str(), ")\n");
+        return Console::fmtTxt("Runtime error: Invalid ", context, " pointer access (at ", ss.str(), ")");
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidStackAccessEmptyStack()
     {
-        return Console::fmtTxt("\nRuntime error: Failed to access stack value: Stack is empty\n");
+        return Console::fmtTxt("Runtime error: Failed to access stack value: Stack is empty");
     }
 
     std::string DavScriptErrorFormatter::generateRuntimeErrorInvalidParameterValue(std::string_view functionName, int parameterIndex, ValueType actualType, std::string_view expectedType)
     {
-        return Console::fmtTxt("\nRuntime error: Invalid parameter value for '", functionName, "' at the ", parameterIndex,". parameter: Expected ", expectedType, ", got ", STACK_VALUE_TYPE2STRING.at(actualType), "\n");
+        return Console::fmtTxt("Runtime error: Invalid parameter value for '", functionName, "' at the ", parameterIndex,". parameter: Expected ", expectedType, ", got ", STACK_VALUE_TYPE2STRING.at(actualType), "");
     }
 
     std::string DavScriptErrorFormatter::generateErrorSeparator(size_t length)

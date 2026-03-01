@@ -16,6 +16,7 @@ namespace davincpp::davscript
         explicit DavScript(std::filesystem::path scriptPath);
 
         void loadFile();
+        void unloadFile();
 
         [[nodiscard]] char getCharByPosition(CharPosition position) const;
         [[nodiscard]] bool atEndOfLine(CharPosition position) const;

@@ -1,15 +1,20 @@
 #include "FunctionCallParser.h"
 #include <parser/DavScriptParser.h>
 #include <parser/ast/FunctionCallNode.h>
+#include <parser/ast/IdentifierNode.h>
 #include <parser/ast/ValueNode.h>
 #include <parser/ast/VariableAccessNode.h>
+#include <parser/nodeParser/IdentifierParser.h>
 
 namespace davincpp::davscript
 {
     std::shared_ptr<AstNode> FunctionCallParser::parseNode(DavScriptParser* scriptParser)
     {
-        assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
-        Token functionName = scriptParser->advanceToken();
+        auto functionName = std::dynamic_pointer_cast<IdentifierNode>(m_IdentifierParser.parseNode(scriptParser));
+
+        if (!scriptParser->validateSymbol(functionName, SymbolType::FUNCTION)) {
+            return std::make_shared<InvalidNode>();
+        }
 
         assert(assertSymbolAccess(scriptParser, functionName, SymbolType::FUNCTION));
 
@@ -52,6 +57,6 @@ namespace davincpp::davscript
 
         assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token(RPARAN)));
 
-        return std::make_shared<FunctionCallNode>(functionName, parameters);
+        return std::make_shared<FunctionCallNode>(functionName->getName(), parameters);
     }
 }

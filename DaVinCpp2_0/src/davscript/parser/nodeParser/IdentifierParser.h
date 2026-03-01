@@ -1,15 +1,11 @@
 #pragma once
 #include <parser/nodeParser/BaseNodeParser.h>
-#include <parser/nodeParser/IdentifierParser.h>
 
 namespace davincpp::davscript
 {
-    class FunctionCallParser final : public BaseNodeParser
+    class IdentifierParser final : public BaseNodeParser
     {
     public:
         [[nodiscard]] std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) override;
-
-    private:
-        IdentifierParser m_IdentifierParser;
     };
 }

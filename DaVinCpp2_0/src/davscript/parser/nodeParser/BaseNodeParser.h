@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <parser/ast/AstNode.h>
+#include <parser/ast/IdentifierNode.h>
 #include <tokens/Token.h>
 
 #include <parser/ast/InvalidNode.h>
@@ -30,10 +31,10 @@ namespace davincpp::davscript
         static bool assertNotTokenRole(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
         static bool assertTokenType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
         static bool assertNotTokenType(DavScriptParser* scriptParser, const Token& actualToken, const Token& expectedToken);
-        static bool assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType);
-        static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType);
-        static bool assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes);
-        static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes);
-        static bool assertSymbolDoesntExist(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType);
+        static bool assertSymbolAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType);
+        static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType);
+        static bool assertSymbolAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, std::vector<SymbolType> symbolTypes);
+        static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, std::vector<SymbolType> symbolTypes);
+        static bool assertSymbolDoesntExist(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType);
     };
 }

@@ -12,7 +12,6 @@ namespace davincpp::davscript
         Name = Location.filename();
     }
 
-
     void DavScript::loadFile()
     {
         RawContent = DaVinCppFileSystem::readFile(Location);
@@ -29,6 +28,11 @@ namespace davincpp::davscript
         }
     }
 
+    void DavScript::unloadFile()
+    {
+        RawContent.clear();
+        RefinedContent.clear();
+    }
 
     char DavScript::getCharByPosition(CharPosition position) const
     {

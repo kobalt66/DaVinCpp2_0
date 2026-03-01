@@ -4,11 +4,11 @@
 
 namespace davincpp::davscript
 {
-    UseNode::UseNode(std::string namespacedName)
+    UseNode::UseNode(Token namespacedName)
         : m_NamespacedName(std::move(namespacedName))
     { }
 
-    std::string UseNode::getNamespaceName() const
+    Token UseNode::getNamespaceName() const
     {
         return m_NamespacedName;
     }

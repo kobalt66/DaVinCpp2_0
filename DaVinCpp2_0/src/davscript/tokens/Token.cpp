@@ -23,7 +23,9 @@ namespace davincpp::davscript
             m_ActualValue(std::move(value)),
             m_Type(type),
             m_Role(role)
-    { }
+    {
+        m_DavScript.unloadFile();
+    }
 
     Token::Token(
         TokenType type,
@@ -37,6 +39,16 @@ namespace davincpp::davscript
     bool Token::operator==(const Token& other) const
     {
         return m_Role == other.m_Role && m_Type == other.m_Type && m_ActualValue == other.m_ActualValue;
+    }
+
+    void Token::setTokenPosition(CharPosition position)
+    {
+        m_Position = position;
+    }
+
+    void Token::setActualValue(std::string_view value)
+    {
+        m_ActualValue = value;
     }
 
     void Token::setTokenType(TokenType type)

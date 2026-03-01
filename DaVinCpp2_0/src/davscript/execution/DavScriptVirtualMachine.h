@@ -61,6 +61,7 @@ namespace davincpp::davscript
         std::vector<uint8_t> m_CallStack;
 
         std::unordered_map<uint32_t, std::function<void(DavScriptVirtualMachine*)>> m_RegisteredLibraryFunctions;
+        std::vector<std::string> m_UsedNamespaces;
 
         std::stack<Value> m_Stack;
         std::vector<Value> m_Memory;

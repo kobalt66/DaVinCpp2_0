@@ -15,10 +15,11 @@ namespace davincpp::davscript
         explicit DavScriptCompiler(std::shared_ptr<Ast> ast);
 
         void reset();
-        void loadStdLibraries(const std::vector<std::string>& usedNamespaces);
         void compile();
 
         void prepareVM(DavScriptVirtualMachine& vm) const;
+
+        void loadStdLibrary(std::string_view usedNamespace);
 
         uint32_t registerVariableScope(std::string_view variableName);
         [[nodiscard]] bool canAccessVariable(std::string_view variableName) const;

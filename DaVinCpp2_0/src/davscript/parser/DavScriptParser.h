@@ -3,6 +3,7 @@
 #include <vector>
 #include <libraries/DavScriptLibraries.h>
 #include <parser/ast/Ast.h>
+#include <parser/ast/IdentifierNode.h>
 #include <parser/nodeParser/AssignmentParser.h>
 #include <parser/nodeParser/FunctionCallParser.h>
 #include <parser/nodeParser/UseNodeParser.h>
@@ -13,9 +14,11 @@ namespace davincpp::davscript
     class DavScriptParser final
     {
     public:
-        explicit DavScriptParser(const std::vector<Token>& tokens);
+        explicit DavScriptParser(DavScript scriptFile, const std::vector<Token>& tokens);
 
         void generateAst();
+
+        void prepareCompiler(DavScriptCompiler& compiler) const;
 
         void skipNewLines();
         void skipUntilNextLine();
@@ -24,13 +27,16 @@ namespace davincpp::davscript
 
         void enterScriptFile();
 
-        [[nodiscard]] bool useNamespace(std::string_view namespaceName);
+        [[nodiscard]] bool useNamespace(const Token& namespaceName);
+        [[nodiscard]] bool isUsingNamespace(std::string_view namespaceName) const;
+        [[nodiscard]] Token getCurrentNamespaceName() const;
 
         void enterScope();
         void exitScope();
 
         [[nodiscard]] bool registerSymbol(std::string_view symbolName, SymbolType symbolType);
-        [[nodiscard]] bool validateSymbol(std::string_view symbolName, SymbolType symbolType) const;
+        [[nodiscard]] bool validateSymbol(const std::shared_ptr<IdentifierNode>& symbolName, SymbolType symbolType) const;
+        [[nodiscard]] bool isValidDefinedSymbol(std::string_view symbolName, SymbolType symbolType) const;
 
         [[nodiscard]] bool doesVariableAlreadyExist(const Token& variableName) const;
 
@@ -43,15 +49,24 @@ namespace davincpp::davscript
         [[nodiscard]] std::shared_ptr<Ast> getAst() const;
 
     private:
+        void startParsingAttempt();
+        void commitParsingAttempt();
+        void rollbackParsingAttempt();
+
         [[nodiscard]] std::shared_ptr<AstNode> parseIdentifier(const Token& nextToken);
         [[nodiscard]] std::shared_ptr<AstNode> parseKeywords(const Token& nextToken);
 
         void checkForErrors() const;
 
     private:
+        std::shared_ptr<DavScriptParser> m_ParsingAttempt = nullptr;
+
         AssignmentParser m_AssignmentParser;
         FunctionCallParser m_FunctionCallParser;
         UseNodeParser m_UseNodeParser;
+        IdentifierParser m_IdentifierParser;
+
+        DavScript m_CurrentScriptFile;
 
         std::vector<std::string> m_ErrorMessages;
 
@@ -59,7 +74,7 @@ namespace davincpp::davscript
         std::unordered_map<std::string, DavScriptSymbol> m_DefinedSymbols;
 
         std::unordered_map<std::string, DavScriptNamespace> m_RegisteredCustomNamespaces;
-        std::vector<std::string> m_UsedNamespaces;
+        std::vector<Token> m_UsedNamespaces;
         DavScriptNamespace m_CurrentNamespace;
         std::string m_CurrentNamespaceName;
 
@@ -67,6 +82,7 @@ namespace davincpp::davscript
         std::vector<Token> m_Tokens;
 
         int m_CurrentTokenIdx = -1;
+
         Token m_CurrentToken;
     };
 }

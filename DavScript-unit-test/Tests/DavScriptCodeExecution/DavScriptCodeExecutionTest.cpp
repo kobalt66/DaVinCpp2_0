@@ -28,7 +28,7 @@ namespace davincpp::davscript
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
-        DavScriptParser parser(lexer.getTokens());
+        DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
 
         DavScriptCompiler compiler(parser.getAst());
@@ -55,10 +55,11 @@ namespace davincpp::davscript
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
-        DavScriptParser parser(lexer.getTokens());
+        DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
 
         DavScriptCompiler compiler(parser.getAst());
+        parser.prepareCompiler(compiler);
         compiler.compile();
 
         DavScriptVirtualMachine vm;

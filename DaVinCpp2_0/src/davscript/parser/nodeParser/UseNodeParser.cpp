@@ -8,6 +8,8 @@ namespace davincpp::davscript
     {
         assert(assertTokenType(scriptParser, scriptParser->advanceToken(), Token(USE, KEYWORD)));
 
+        Token namespaceNameToken = scriptParser->peakNextToken();
+
         std::string namespaceName;
         while (true) {
             assert(assertTokenType(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
@@ -21,6 +23,7 @@ namespace davincpp::davscript
             namespaceName += ".";
         }
 
-        return std::make_shared<UseNode>(namespaceName);
+        namespaceNameToken.setActualValue(namespaceName);
+        return std::make_shared<UseNode>(namespaceNameToken);
     }
 }

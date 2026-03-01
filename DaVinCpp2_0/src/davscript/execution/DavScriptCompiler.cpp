@@ -17,24 +17,6 @@ namespace davincpp::davscript
         m_CurrentScopeDepth = 0;
     }
 
-    void DavScriptCompiler::loadStdLibraries(const std::vector<std::string>& usedNamespaces)
-    {
-        for (std::string_view namespaceName : usedNamespaces) {
-            if (DAVSCRIPT_LIBRARIES.contains(namespaceName.data())) {
-                const auto& registeredSymbols = DAVSCRIPT_LIBRARIES.at(namespaceName.data()).registeredSymbols;
-
-                for (const auto& [symbolName, symbol] : registeredSymbols) {
-                    if (symbol.symbolType == SymbolType::FUNCTION) {
-                        m_RegisteredLibraryFunctions.emplace(
-                            static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
-                            std::pair{Console::fmtTxt(namespaceName, symbolName), symbol.symbolFunction}
-                        );
-                    }
-                }
-            }
-        }
-    }
-
     void DavScriptCompiler::compile()
     {
         m_ByteCode = m_Ast->generateByteCode(this);
@@ -47,6 +29,22 @@ namespace davincpp::davscript
 
         for (const auto& registeredLibraryFunction : m_RegisteredLibraryFunctions) {
             vm.registerLibraryFunction(registeredLibraryFunction.first, registeredLibraryFunction.second.second);
+        }
+    }
+
+    void DavScriptCompiler::loadStdLibrary(std::string_view usedNamespace)
+    {
+        if (DAVSCRIPT_LIBRARIES.contains(usedNamespace.data())) {
+            const auto& registeredSymbols = DAVSCRIPT_LIBRARIES.at(usedNamespace.data()).registeredSymbols;
+
+            for (const auto& [symbolName, symbol] : registeredSymbols) {
+                if (symbol.symbolType == SymbolType::FUNCTION) {
+                    m_RegisteredLibraryFunctions.emplace(
+                        static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
+                        std::pair{Console::fmtTxt(usedNamespace, ".", symbolName), symbol.symbolFunction}
+                    );
+                }
+            }
         }
     }
 

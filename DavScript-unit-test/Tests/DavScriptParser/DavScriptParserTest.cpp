@@ -36,7 +36,7 @@ namespace davincpp::davscript
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
-        DavScriptParser parser(lexer.getTokens());
+        DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
 
         auto ast = parser.getAst();
@@ -53,7 +53,7 @@ namespace davincpp::davscript
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
-        DavScriptParser parser(lexer.getTokens());
+        DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
         Console::log("asdf");
     }
@@ -63,9 +63,9 @@ namespace davincpp::davscript
         DavScript davScript("../Tests/DavScriptParser/TestFiles/FunctionCallSuccess.dav");
 
         auto expectedAst = std::make_shared<Ast>();
-        expectedAst->addNode(std::make_shared<UseNode>("std.io"));
+        expectedAst->addNode(std::make_shared<UseNode>(Token(davScript, CharPosition(0, 4), "std.io", NONE, IDENTIFIER)));
         expectedAst->addNode(std::make_shared<FunctionCallNode>(
-            Token(davScript, CharPosition(2, 0), "print", NONE, IDENTIFIER),
+            Token(davScript, CharPosition(2, 0), "std.io.print", NONE, IDENTIFIER),
             std::vector<std::shared_ptr<AstNode>>
             {
                 std::make_shared<ValueNode>(Token(davScript, CharPosition(2, 6), "1", NUMBERINT, DATAVALUE))
@@ -75,7 +75,7 @@ namespace davincpp::davscript
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
-        DavScriptParser parser(lexer.getTokens());
+        DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
 
         auto ast = parser.getAst();

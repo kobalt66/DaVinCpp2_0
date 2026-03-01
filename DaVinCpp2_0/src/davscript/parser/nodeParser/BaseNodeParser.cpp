@@ -1,5 +1,4 @@
 #include "BaseNodeParser.h"
-
 #include <algorithm>
 #include <parser/DavScriptParser.h>
 
@@ -113,47 +112,47 @@ namespace davincpp::davscript
         return false;
     }
 
-    bool BaseNodeParser::assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType)
+    bool BaseNodeParser::assertSymbolAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType)
     {
-        if (scriptParser->validateSymbol(symbolToken.getActualValue(), symbolType)) {
+        if (scriptParser->validateSymbol(identifierNode, symbolType)) {
             return true;
         }
 
-        scriptParser->logInaccessibleSymbolError(symbolToken, symbolType);
+        scriptParser->logInaccessibleSymbolError(identifierNode->getName(), symbolType);
         return false;
     }
 
-    bool BaseNodeParser::assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType)
+    bool BaseNodeParser::assertSymbolNoAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType)
     {
-        if (!scriptParser->validateSymbol(symbolToken.getActualValue(), symbolType)) {
+        if (!scriptParser->validateSymbol(identifierNode, symbolType)) {
             return true;
         }
 
-        scriptParser->logInaccessibleSymbolError(symbolToken, symbolType);
+        scriptParser->logInaccessibleSymbolError(identifierNode->getName(), symbolType);
         return false;
     }
 
-    bool BaseNodeParser::assertSymbolAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes)
+    bool BaseNodeParser::assertSymbolAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, std::vector<SymbolType> symbolTypes)
     {
-        return std::ranges::any_of(symbolTypes.begin(), symbolTypes.end(), [&scriptParser, &symbolToken](SymbolType type) {
-            return assertSymbolAccess(scriptParser, symbolToken, type);
+        return std::ranges::any_of(symbolTypes.begin(), symbolTypes.end(), [&scriptParser, &identifierNode](SymbolType type) {
+            return assertSymbolAccess(scriptParser, identifierNode, type);
         });
     }
 
-    bool BaseNodeParser::assertSymbolNoAccess(DavScriptParser* scriptParser, const Token& symbolToken, std::vector<SymbolType> symbolTypes)
+    bool BaseNodeParser::assertSymbolNoAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, std::vector<SymbolType> symbolTypes)
     {
-        return std::ranges::any_of(symbolTypes.begin(), symbolTypes.end(), [&scriptParser, &symbolToken](SymbolType type) {
-            return assertSymbolNoAccess(scriptParser, symbolToken, type);
+        return std::ranges::any_of(symbolTypes.begin(), symbolTypes.end(), [&scriptParser, &identifierNode](SymbolType type) {
+            return assertSymbolNoAccess(scriptParser, identifierNode, type);
         });
     }
 
-    bool BaseNodeParser::assertSymbolDoesntExist(DavScriptParser* scriptParser, const Token& symbolToken, SymbolType symbolType)
+    bool BaseNodeParser::assertSymbolDoesntExist(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType)
     {
-        if (!scriptParser->doesVariableAlreadyExist(symbolToken)) {
+        if (!scriptParser->doesVariableAlreadyExist(identifierNode->getName())) {
             return true;
         }
 
-        scriptParser->logDuplicateSymbolName(symbolToken, symbolType);
+        scriptParser->logDuplicateSymbolName(identifierNode->getName(), symbolType);
         return false;
     }
 }

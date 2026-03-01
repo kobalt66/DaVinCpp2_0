@@ -11,7 +11,7 @@ namespace davincpp::davscript
         Token variableType = scriptParser->advanceToken();
 
         assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
-        Token variableName = scriptParser->advanceToken();
+        auto variableName = std::make_shared<IdentifierNode>(scriptParser->advanceToken());
 
         assert(assertSymbolDoesntExist(scriptParser, variableName, SymbolType::VARIABLE));
 
@@ -29,7 +29,7 @@ namespace davincpp::davscript
 
         return std::make_shared<AssignmentNode>(
             variableType,
-            variableName,
+            variableName->getName(),
             valueType,
             std::make_shared<ValueNode>(value)
         );

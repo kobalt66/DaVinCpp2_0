@@ -1,1 +1,3 @@
-print("Hello World!")
+use std.io
+
+std.io.print("Hello World!")
