@@ -47,10 +47,12 @@ namespace davincpp::davscript
         const auto& registeredSymbols = DAVSCRIPT_LIBRARIES.at(namespaceName.getActualValue()).registeredSymbols;
 
         for (const auto& [symbolName, symbol] : registeredSymbols) {
-            if (symbol.symbolType == SymbolType::FUNCTION) {
+            if (symbol->getSymbolType() == SymbolType::FUNCTION) {
+                const auto functionSymbol = symbol->castToSymbolType<DavScriptFunctionSymbol>();
+
                 m_RegisteredLibraryFunctions.emplace(
-                    static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
-                    std::pair{Console::fmtTxt(namespaceName.getActualValue(), ".", symbolName), symbol.symbolFunction}
+                    functionSymbol->getFunctionPtr(),
+                    std::pair{Console::fmtTxt(namespaceName.getActualValue(), ".", symbolName), functionSymbol->getFunction()}
                 );
             }
         }

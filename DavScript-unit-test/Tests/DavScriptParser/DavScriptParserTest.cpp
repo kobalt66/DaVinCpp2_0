@@ -16,9 +16,9 @@ namespace davincpp::davscript
 
     void DavScriptParserTest::onSetup() noexcept
     {
-        registerTestStep("parsing assignments: success", [] { testAssignmentNodeSuccess(); });
-        registerTestStep("parsing assignments: failure", [this] { testAssignmentNodeFailure(); });
-        registerTestStep("parsing function call: success: ", [] { testFunctionCallNodeSuccess(); });
+        registerTestStep({ "parsing assignments: success", [] { testAssignmentNodeSuccess(); }});
+        registerTestStep({ "parsing assignments: failure", [this] { testAssignmentNodeFailure(); }});
+        registerTestStep({ "parsing function call: success: ", [] { testFunctionCallNodeSuccess(); }});
     }
 
     void DavScriptParserTest::testAssignmentNodeSuccess()

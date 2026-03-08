@@ -10,12 +10,12 @@ namespace davincpp::davscript
 
     void DavScriptFileTest::onSetup() noexcept
     {
-        registerTestStep("DavScript: loading script file", []
+        registerTestStep({"DavScript: loading script file", []
         {
             DavScript davScript("../Tests/DavScriptFiles/TestFiles/test.dav");
             davScript.loadFile();
 
             assertEquals(false, davScript.RawContent.empty());
-        });
+        }});
     }
 }

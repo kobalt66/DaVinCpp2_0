@@ -1,29 +1,19 @@
 #pragma once
-#include <functional>
 #include <string>
 #include <unordered_map>
 #include <libraries/DavScriptStd.h>
-#include <tokens/TokenData.h>
+#include <libraries/symbols/DavScriptFunctionSymbol.h>
+#include <libraries/symbols/DavScriptNamespace.h>
 
 namespace davincpp::davscript
 {
-    struct DavScriptSymbol
-    {
-        int scopeDepth;
-        SymbolType symbolType;
-        std::function<void(DavScriptVirtualMachine*)> symbolFunction;
-    };
+    static uint32_t GLOBAL_FUNCTION_PTR = 0;
 
-    struct DavScriptNamespace
-    {
-        std::unordered_map<std::string, DavScriptSymbol> registeredSymbols;
-    };
+    static const DavScriptNamespace STD_IO = DavScriptNamespace({
+        { "print", std::make_shared<DavScriptFunctionSymbol>(0, GLOBAL_FUNCTION_PTR++, stdlib::io::print) }
+    });
 
     static const std::unordered_map<std::string, DavScriptNamespace> DAVSCRIPT_LIBRARIES = {
-        {"std.io", DavScriptNamespace({
-                    { "print", { 0, SymbolType::FUNCTION, stdlib::io::print } }
-                }
-            )
-        }
+        {"std.io", STD_IO }
     };
 }

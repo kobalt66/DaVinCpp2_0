@@ -34,8 +34,8 @@ file(GLOB_RECURSE SOURCES
         "../DaVinCpp2_0/src/utils/DaVinCppString.h"
         "../DaVinCpp2_0/src/utils/DaVinCppMacros.h"
         "../DaVinCpp2_0/src/utils/Console.h"
-        "../Tests/Units/UnitTest.h"
-        "../Tests/Units/UnitTestEnvironment.h"
+        "../Tests/Units/*.h"
+        "../Tests/Units/*.cpp"
         "../DaVinCpp2_0/src/core/time/Timer.h"
         "./Tests/*.h"
 )

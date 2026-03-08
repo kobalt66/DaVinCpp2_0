@@ -7,22 +7,20 @@ namespace davincpp::davscript
         : UnitTest("Testing the functionality of the DavScript lexer")
     { }
 
-
     void DavScriptLexerTest::onSetup() noexcept
     {
-        registerTestStep("lexing: single char tokens", [] { testSingleCharTokens(); });
-        registerTestStep("lexing: comments", [] { testComments(); });
-        registerTestStep("lexing: variable types", [] { testVariableType(); });
-        registerTestStep("lexing: wrong variable types", [] { testWrongVariableType(); });
-        registerTestStep("lexing: words", [] { testWords(); });
-        registerTestStep("lexing: numbers", [] { testNumbers(); });
-        registerTestStep("lexing: strings", [] { testStrings(); });
-        registerTestStep("lexing: wrong strings", [] { testWrongStrings(); });
-        registerTestStep("lexing: function documentation", [] { testFunctionDoc(); });
-        registerTestStep("lexing: wrong function documentation", [] { testWrongFunctionDoc(); });
-        registerTestStep("lexing: bulk test (big script)", [] { testBulk(); });
+        registerTestStep({ "lexing: single char tokens", [] { testSingleCharTokens(); }});
+        registerTestStep({ "lexing: comments", [] { testComments(); }});
+        registerTestStep({ "lexing: variable types", [] { testVariableType(); }});
+        registerTestStep({ "lexing: wrong variable types", [] { testWrongVariableType(); }});
+        registerTestStep({ "lexing: words", [] { testWords(); }});
+        registerTestStep({ "lexing: numbers", [] { testNumbers(); }});
+        registerTestStep({ "lexing: strings", [] { testStrings(); }});
+        registerTestStep({ "lexing: wrong strings", [] { testWrongStrings(); }});
+        registerTestStep({ "lexing: function documentation", [] { testFunctionDoc(); }});
+        registerTestStep({ "lexing: wrong function documentation", [] { testWrongFunctionDoc(); }});
+        registerTestStep({ "lexing: bulk test (big script)", [] { testBulk(); }});
     }
-
 
     void DavScriptLexerTest::testSingleCharTokens()
     {

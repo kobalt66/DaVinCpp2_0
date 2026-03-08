@@ -5,15 +5,10 @@
 #include <filesystem>
 #include <functional>
 #include <string>
-#include <unordered_map>
+#include <TestResult.h>
+#include <TestStep.h>
 
 namespace davincpp::unittest {
-    struct TestResult
-    {
-        bool success;
-        std::string errorMsg;
-    };
-
     class UnitTest
     {
     public:
@@ -29,23 +24,24 @@ namespace davincpp::unittest {
         [[nodiscard]] const std::vector<TestResult>& getTestResult() const;
 
     protected:
-        void registerTestStep(const std::string& testStepName, const std::function<void()>& testStep);
+        void registerTestStep(const TestStep& testStep);
 
         void expectException(std::string_view expectedException);
         void expectException(const std::filesystem::path& expectedExceptionTranscript);
 
         void suppressConsoleOutput();
         std::string readSuppressedConsoleOutput() const;
-        void restoreConsoleOutput() const;
+        void restoreConsoleOutput();
 
     protected:
         std::string m_ExpectedException;
 
     private:
-        std::unordered_map<std::string, std::function<void()>> m_TestSteps;
+        std::vector<TestStep> m_TestSteps;
         std::vector<TestResult> m_TestResults;
         std::string m_TestName;
 
+        bool m_ConsoleOutputSuppressed = false;
         std::stringstream m_SuppressedOutputBuffer;
         std::streambuf* m_OriginalOutputBuffer = nullptr;
     };
@@ -115,3 +111,4 @@ namespace davincpp::unittest {
         } \
     }
 }
+

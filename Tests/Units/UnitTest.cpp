@@ -1,6 +1,7 @@
 #include "UnitTest.h"
 #include <DaVinCppFileSystem.h>
 #include <DaVinCppString.h>
+#include <ranges>
 
 namespace davincpp::unittest
 {
@@ -17,6 +18,7 @@ namespace davincpp::unittest
                 testStep();
             }
             catch (std::exception& exception) {
+                restoreConsoleOutput();
                 if (!m_ExpectedException.empty()) {
                     std::string actualException = Console::cleanseText(exception.what());
 
@@ -61,13 +63,13 @@ namespace davincpp::unittest
         return m_TestResults;
     }
 
-    void UnitTest::registerTestStep(const std::string& testStepName, const std::function<void()>& testStep)
+    void UnitTest::registerTestStep(const TestStep& testStep)
     {
-        if (m_TestSteps.contains(testStepName)) {
-            throw std::runtime_error(Console::fmtErr("Test step '", testStepName, "' already exists!"));
+        if (std::ranges::find(m_TestSteps, testStep) != m_TestSteps.end()) {
+            throw std::runtime_error(Console::fmtErr("Test step '", testStep.name, "' already exists!"));
         }
 
-        m_TestSteps.emplace(testStepName, testStep);
+        m_TestSteps.push_back(testStep);
     }
 
     void UnitTest::expectException(std::string_view expectedException)
@@ -82,6 +84,7 @@ namespace davincpp::unittest
 
     void UnitTest::suppressConsoleOutput()
     {
+        m_ConsoleOutputSuppressed = true;
         m_OriginalOutputBuffer = std::cout.rdbuf(m_SuppressedOutputBuffer.rdbuf());
     }
 
@@ -90,8 +93,13 @@ namespace davincpp::unittest
         return Console::cleanseText(m_SuppressedOutputBuffer.str());
     }
 
-    void UnitTest::restoreConsoleOutput() const
+    void UnitTest::restoreConsoleOutput()
     {
+        if (!m_ConsoleOutputSuppressed) {
+            return;
+        }
+
         std::cout.rdbuf(m_OriginalOutputBuffer);
+        m_ConsoleOutputSuppressed = false;
     }
 }

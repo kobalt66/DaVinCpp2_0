@@ -13,8 +13,8 @@ namespace davincpp::davscript
 
     void DavScriptCodeExecutionTest::onSetup() noexcept
     {
-        registerTestStep("compiler & vm: variable assignments", [] { testVariableAssignment(); });
-        registerTestStep("compiler & vm: simple print function call", [this] { testSimplePrintFunctionCall(); });
+        registerTestStep({ "compiler & vm: variable assignments", [] { testVariableAssignment(); }});
+        registerTestStep({ "compiler & vm: simple print function call", [this] { testSimplePrintFunctionCall(); }});
     }
 
     void DavScriptCodeExecutionTest::testVariableAssignment()

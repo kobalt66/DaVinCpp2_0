@@ -157,7 +157,7 @@ namespace davincpp::davscript
         m_CurrentScopeDepth--;
 
         for (auto it = m_DefinedSymbols.begin(); it != m_DefinedSymbols.end();) {
-            if (it->second.scopeDepth > m_CurrentScopeDepth) {
+            if (it->second->getScopeDepth() > m_CurrentScopeDepth) {
                 it = m_DefinedSymbols.erase(it);
             } else {
                 ++it;
@@ -171,7 +171,8 @@ namespace davincpp::davscript
             return false;
         }
 
-        m_DefinedSymbols[symbolName.data()] = {m_CurrentScopeDepth, symbolType};
+        // todo: maybe adjust?
+        m_DefinedSymbols[symbolName.data()] = std::make_shared<DavScriptSymbol>(m_CurrentScopeDepth, symbolType);
         return true;
     }
 
@@ -202,13 +203,8 @@ namespace davincpp::davscript
             return false;
         }
 
-        DavScriptSymbol symbol = m_DefinedSymbols.at(symbolName.data());
-
-        if (symbol.scopeDepth <= m_CurrentScopeDepth && symbol.symbolType == symbolType) {
-            return true;
-        }
-
-        return false;
+        std::shared_ptr<DavScriptSymbol> symbol = m_DefinedSymbols.at(symbolName.data());
+        return symbol->getScopeDepth() <= m_CurrentScopeDepth && symbol->getSymbolType() == symbolType;
     }
 
     bool DavScriptParser::doesVariableAlreadyExist(const Token& variableName) const
