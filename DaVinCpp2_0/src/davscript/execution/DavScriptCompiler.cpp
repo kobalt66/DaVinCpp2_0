@@ -35,7 +35,7 @@ namespace davincpp::davscript
     void DavScriptCompiler::saveByteCode()
     {
         std::string output(m_ByteCode.begin(), m_ByteCode.end());
-        DaVinCppFileSystem::writeFile(m_ProjectDirectory.append("o"), output);
+        DaVinCppFileSystem::writeFile(m_ProjectDirectory.append("o.bin"), output);
     }
 
     void DavScriptCompiler::useNamespace(const Token& namespaceName)

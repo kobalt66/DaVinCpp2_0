@@ -24,7 +24,7 @@ namespace davincpp::davscript
 
     void DavScriptVirtualMachine::prepareVM()
     {
-        std::string byteCodeBlob = DaVinCppFileSystem::readFile(m_ProjectDirectory.append("o"));
+        std::string byteCodeBlob = DaVinCppFileSystem::readFile(m_ProjectDirectory.append("o.bin"));
         m_CallStack = ByteCastHelper::stringToBytes(byteCodeBlob);
     }
 
