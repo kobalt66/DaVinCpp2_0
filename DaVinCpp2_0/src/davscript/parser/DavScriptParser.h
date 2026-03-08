@@ -18,8 +18,6 @@ namespace davincpp::davscript
 
         void generateAst();
 
-        void prepareCompiler(DavScriptCompiler& compiler) const;
-
         void skipNewLines();
         void skipUntilNextLine();
         Token advanceToken();
@@ -47,6 +45,7 @@ namespace davincpp::davscript
         void logDuplicateSymbolName(const Token& symbolToken, SymbolType symbolType);
 
         [[nodiscard]] std::shared_ptr<Ast> getAst() const;
+        [[nodiscard]] const std::vector<Token>& getUsedNamespaces() const;
 
     private:
         void startParsingAttempt();

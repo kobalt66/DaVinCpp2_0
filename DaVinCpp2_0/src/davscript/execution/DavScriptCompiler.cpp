@@ -1,15 +1,24 @@
 #include "DavScriptCompiler.h"
 #include <Console.h>
 #include <ranges>
+#include <utility>
 #include <error/DavScriptErrorFormatter.h>
 #include <execution/ByteCastHelper.h>
 #include <execution/DavScriptVirtualMachine.h>
 
 namespace davincpp::davscript
 {
-    DavScriptCompiler::DavScriptCompiler(std::shared_ptr<Ast> ast)
-        : m_Ast(std::move(ast))
-    { }
+    DavScriptCompiler::DavScriptCompiler(
+        std::shared_ptr<Ast> ast,
+        const std::vector<Token>& usedNamespaces,
+        std::filesystem::path projectDirectory
+    ) : m_Ast(std::move(ast)),
+        m_ProjectDirectory(std::move(projectDirectory))
+    {
+        for (const auto& usedNamespace : usedNamespaces) {
+            useNamespace(usedNamespace);
+        }
+    }
 
     void DavScriptCompiler::reset()
     {
@@ -23,27 +32,26 @@ namespace davincpp::davscript
         checkForCompilationErrors();
     }
 
-    void DavScriptCompiler::prepareVM(DavScriptVirtualMachine& vm) const
+    void DavScriptCompiler::saveByteCode()
     {
-        vm.loadByteCode(m_ByteCode);
-
-        for (const auto& registeredLibraryFunction : m_RegisteredLibraryFunctions) {
-            vm.registerLibraryFunction(registeredLibraryFunction.first, registeredLibraryFunction.second.second);
-        }
+        std::string output(m_ByteCode.begin(), m_ByteCode.end());
+        DaVinCppFileSystem::writeFile(m_ProjectDirectory.append("o"), output);
     }
 
-    void DavScriptCompiler::loadStdLibrary(std::string_view usedNamespace)
+    void DavScriptCompiler::useNamespace(const Token& namespaceName)
     {
-        if (DAVSCRIPT_LIBRARIES.contains(usedNamespace.data())) {
-            const auto& registeredSymbols = DAVSCRIPT_LIBRARIES.at(usedNamespace.data()).registeredSymbols;
+        if (!DAVSCRIPT_LIBRARIES.contains(namespaceName.getActualValue())) {
+            return;
+        }
 
-            for (const auto& [symbolName, symbol] : registeredSymbols) {
-                if (symbol.symbolType == SymbolType::FUNCTION) {
-                    m_RegisteredLibraryFunctions.emplace(
-                        static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
-                        std::pair{Console::fmtTxt(usedNamespace, ".", symbolName), symbol.symbolFunction}
-                    );
-                }
+        const auto& registeredSymbols = DAVSCRIPT_LIBRARIES.at(namespaceName.getActualValue()).registeredSymbols;
+
+        for (const auto& [symbolName, symbol] : registeredSymbols) {
+            if (symbol.symbolType == SymbolType::FUNCTION) {
+                m_RegisteredLibraryFunctions.emplace(
+                    static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
+                    std::pair{Console::fmtTxt(namespaceName.getActualValue(), ".", symbolName), symbol.symbolFunction}
+                );
             }
         }
     }

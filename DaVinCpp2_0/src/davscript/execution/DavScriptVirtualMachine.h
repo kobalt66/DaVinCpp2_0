@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <functional>
 #include <memory>
 #include <stack>
@@ -17,7 +18,10 @@ namespace davincpp::davscript
     class DavScriptVirtualMachine final
     {
     public:
+        explicit DavScriptVirtualMachine(std::filesystem::path projectDirectory);
+
         void reset();
+        void prepareVM();
         void execute();
 
         [[nodiscard]] Value popStackValue();
@@ -26,11 +30,10 @@ namespace davincpp::davscript
         void writeMemory(uint32_t ptr, const Value& value);
         void allocateMemory(uint8_t variablePtr);
 
-        void loadByteCode(const std::vector<uint8_t>& byteCode);
-        void registerLibraryFunction(uint32_t functionPtr, std::function<void(DavScriptVirtualMachine*)> function);
-
     private:
         bool interpretOperation();
+
+        void processLoadLibraryOperation();
 
         void processFunctionCallOperation();
 
@@ -43,6 +46,8 @@ namespace davincpp::davscript
         void processMovBoolValueOperation();
         void processMovFloatValueOperation();
         void processMovStringValueOperation();
+
+        void useNamespace(std::string_view namespaceName);
 
         uint8_t advanceOperationPtr();
         void advanceOperationPtrByN(size_t n);
@@ -57,6 +62,8 @@ namespace davincpp::davscript
         void checkForCompilationErrors() const;
 
     private:
+        std::filesystem::path m_ProjectDirectory;
+
         uint8_t* m_OperationPtr = nullptr;
         std::vector<uint8_t> m_CallStack;
 

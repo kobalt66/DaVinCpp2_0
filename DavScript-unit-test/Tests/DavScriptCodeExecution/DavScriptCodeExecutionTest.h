@@ -3,6 +3,8 @@
 
 namespace davincpp::davscript
 {
+    static auto PROJECT_DIRECTORY = "../Tests/DavScriptCodeExecution";
+
     class DavScriptCodeExecutionTest final : public unittest::UnitTest
     {
     public:

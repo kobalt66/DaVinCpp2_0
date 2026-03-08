@@ -1,19 +1,31 @@
 #include "DavScriptVirtualMachine.h"
 
 #include <Console.h>
+#include <ranges>
 #include <error/DavScriptErrorFormatter.h>
 #include <error/DavScriptException.h>
 #include <execution/ByteCastHelper.h>
 
 #include <utility>
+#include <libraries/DavScriptLibraries.h>
 
 namespace davincpp::davscript
 {
+    DavScriptVirtualMachine::DavScriptVirtualMachine(std::filesystem::path projectDirectory)
+        : m_ProjectDirectory(std::move(projectDirectory))
+    { }
+
     void DavScriptVirtualMachine::reset()
     {
         m_CallStack.clear();
         while (!m_Stack.empty()) m_Stack.pop();
         m_Memory.clear();
+    }
+
+    void DavScriptVirtualMachine::prepareVM()
+    {
+        std::string byteCodeBlob = DaVinCppFileSystem::readFile(m_ProjectDirectory.append("o"));
+        m_CallStack = ByteCastHelper::stringToBytes(byteCodeBlob);
     }
 
     void DavScriptVirtualMachine::execute()
@@ -72,19 +84,12 @@ namespace davincpp::davscript
         m_Memory.resize(variablePtr + 1);
     }
 
-    void DavScriptVirtualMachine::loadByteCode(const std::vector<uint8_t>& byteCode)
-    {
-        m_CallStack = byteCode;
-    }
-
-    void DavScriptVirtualMachine::registerLibraryFunction(uint32_t functionPtr, std::function<void(DavScriptVirtualMachine*)> function)
-    {
-        m_RegisteredLibraryFunctions.emplace(functionPtr, function);
-    }
-
     bool DavScriptVirtualMachine::interpretOperation()
     {
         switch (const uint8_t operation = advanceOperationPtr()) {
+            case LD_LIB:
+                processLoadLibraryOperation();
+                break;
             case ST_INT:
                 processStoreIntValueOperation();
                 break;
@@ -127,6 +132,12 @@ namespace davincpp::davscript
         }
 
         return true;
+    }
+
+    void DavScriptVirtualMachine::processLoadLibraryOperation()
+    {
+        std::string namespaceName = getStringValueFromCallStack();
+        useNamespace(namespaceName);
     }
 
     void DavScriptVirtualMachine::processFunctionCallOperation()
@@ -198,6 +209,25 @@ namespace davincpp::davscript
     {
         std::string value = getStringValueFromCallStack();
         m_Stack.emplace(ValueType::STRING, value);
+    }
+
+    void DavScriptVirtualMachine::useNamespace(std::string_view namespaceName)
+    {
+        if (
+            !DAVSCRIPT_LIBRARIES.contains(namespaceName.data()) ||
+            std::ranges::find(m_UsedNamespaces, namespaceName.data()) != m_UsedNamespaces.end()
+        ) {
+            return;
+        }
+
+        for (const auto& symbol: DAVSCRIPT_LIBRARIES.at(namespaceName.data()).registeredSymbols | std::views::values) {
+            if (symbol.symbolType == SymbolType::FUNCTION) {
+                m_RegisteredLibraryFunctions.emplace(
+                    static_cast<uint32_t>(m_RegisteredLibraryFunctions.size()),
+                    symbol.symbolFunction
+                );
+            }
+        }
     }
 
     uint8_t DavScriptVirtualMachine::advanceOperationPtr()

@@ -12,14 +12,15 @@ namespace davincpp::davscript
     class DavScriptCompiler final
     {
     public:
-        explicit DavScriptCompiler(std::shared_ptr<Ast> ast);
+        DavScriptCompiler(
+            std::shared_ptr<Ast> ast,
+            const std::vector<Token>& usedNamespaces,
+            std::filesystem::path projectDirectory
+            );
 
         void reset();
         void compile();
-
-        void prepareVM(DavScriptVirtualMachine& vm) const;
-
-        void loadStdLibrary(std::string_view usedNamespace);
+        void saveByteCode();
 
         uint32_t registerVariableScope(std::string_view variableName);
         [[nodiscard]] bool canAccessVariable(std::string_view variableName) const;
@@ -30,12 +31,16 @@ namespace davincpp::davscript
         void logFoundAmbiguousFunctionError(const Token& functionName);
 
     private:
+        void useNamespace(const Token& namespaceName);
+
         void enterScope();
         void exitScope();
 
         void checkForCompilationErrors() const;
 
     private:
+        std::filesystem::path m_ProjectDirectory;
+
         std::shared_ptr<Ast> m_Ast;
 
         std::vector<VariableScope> m_VariableScopes;

@@ -60,13 +60,6 @@ namespace davincpp::davscript
         checkForErrors();
     }
 
-    void DavScriptParser::prepareCompiler(DavScriptCompiler& compiler) const
-    {
-        for (const Token& namespaceName : m_UsedNamespaces) {
-            compiler.loadStdLibrary(namespaceName.getActualValue());
-        }
-    }
-
     void DavScriptParser::skipNewLines()
     {
         while (peakNextToken().getTokenType() == NEWLINE) {
@@ -190,15 +183,17 @@ namespace davincpp::davscript
             return true;
         }
 
-        for (const auto& usedNamespace : m_UsedNamespaces) {
+        return std::ranges::any_of(m_UsedNamespaces, [this, &symbolName, &symbolType, &fullName](const Token& usedNamespace)
+        {
             std::string namespaceSymbolName = Console::fmtTxt(usedNamespace.getActualValue(), ".", fullName);
+
             if (isValidDefinedSymbol(namespaceSymbolName, symbolType)) {
                 symbolName->setName(namespaceSymbolName);
                 return true;
             }
-        }
 
-        return false;
+            return false;
+        });
     }
 
     bool DavScriptParser::isValidDefinedSymbol(std::string_view symbolName, SymbolType symbolType) const
@@ -249,6 +244,11 @@ namespace davincpp::davscript
     std::shared_ptr<Ast> DavScriptParser::getAst() const
     {
         return m_Ast;
+    }
+
+    const std::vector<Token>& DavScriptParser::getUsedNamespaces() const
+    {
+        return m_UsedNamespaces;
     }
 
     void DavScriptParser::startParsingAttempt()

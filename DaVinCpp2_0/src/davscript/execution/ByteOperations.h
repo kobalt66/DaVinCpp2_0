@@ -26,4 +26,6 @@ namespace davincpp::davscript
     constexpr uint8_t END           = 0x14;
     constexpr uint8_t DIE           = 0x15;
     constexpr uint8_t CALL          = 0x16;
+    constexpr uint8_t JMP           = 0x17;
+    constexpr uint8_t LD_LIB        = 0x18;
 }

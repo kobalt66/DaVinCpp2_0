@@ -31,11 +31,12 @@ namespace davincpp::davscript
         DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
 
-        DavScriptCompiler compiler(parser.getAst());
+        DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), PROJECT_DIRECTORY);
         compiler.compile();
+        compiler.saveByteCode();
 
-        DavScriptVirtualMachine vm;
-        compiler.prepareVM(vm);
+        DavScriptVirtualMachine vm(PROJECT_DIRECTORY);
+        vm.prepareVM();
         vm.execute();
 
         Value actualIntStackValue = vm.readMemory(0);
@@ -60,12 +61,12 @@ namespace davincpp::davscript
         DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
 
-        DavScriptCompiler compiler(parser.getAst());
-        parser.prepareCompiler(compiler);
+        DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), PROJECT_DIRECTORY);
         compiler.compile();
+        compiler.saveByteCode();
 
-        DavScriptVirtualMachine vm;
-        compiler.prepareVM(vm);
+        DavScriptVirtualMachine vm(PROJECT_DIRECTORY);
+        vm.prepareVM();
 
         suppressConsoleOutput();
         vm.execute();

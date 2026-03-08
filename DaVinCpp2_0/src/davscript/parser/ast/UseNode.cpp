@@ -1,6 +1,8 @@
 #include "UseNode.h"
 
 #include <utility>
+#include <execution/ByteCastHelper.h>
+#include <execution/ByteOperations.h>
 
 namespace davincpp::davscript
 {
@@ -25,6 +27,13 @@ namespace davincpp::davscript
 
     std::vector<uint8_t> UseNode::generateByteCode(DavScriptCompiler* compiler)
     {
-        return {};
+        std::vector<uint8_t> byteCode;
+        byteCode.push_back(LD_LIB);
+
+        std::vector<uint8_t> namespaceName = ByteCastHelper::stringToBytes(m_NamespacedName.getActualValue());
+        byteCode.insert(byteCode.end(),namespaceName.begin(), namespaceName.end());
+        byteCode.push_back(NUL);
+
+        return byteCode;
     }
 }
