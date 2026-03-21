@@ -1,5 +1,5 @@
 #pragma once
-
+#include <tokens/CharPosition.h>
 #ifndef DAVSCRIPT_UNIT_TEST
 #include <DaVinCppYamlHelper.h>
 #else
@@ -8,27 +8,31 @@
 
 namespace davincpp::davscript
 {
-    class CharPosition;
-
-    // todo: make loading the script files more efficient by avoiding loading all of the file's contents into the RefinedContent vector. Instead try to lazy load each line of code.
-    struct DavScript
+    class DavScript
     {
+    public:
         DavScript() = default;
         explicit DavScript(std::filesystem::path scriptPath);
 
         void loadFile();
         void unloadFile();
 
+        [[nodiscard]] bool isEmpty() const;
         [[nodiscard]] char getCharByPosition(CharPosition position) const;
         [[nodiscard]] bool atEndOfLine(CharPosition position) const;
         [[nodiscard]] bool atEndOfFile(CharPosition position) const;
-        [[nodiscard]] std::string getLineByTokenPosition(CharPosition position) const;
+        [[nodiscard]] size_t getLineLength(CharPosition position) const;
+        [[nodiscard]] std::string_view getCodeLineByPosition(CharPosition position) const;
 
-        std::string RawContent;
-        std::vector<std::string> RefinedContent;
+        [[nodiscard]] std::filesystem::path getLocation() const;
+        [[nodiscard]] std::string getName() const;
 
-        std::filesystem::path Location;
-        std::string Name;
+    private:
+        std::string m_FileContent;
+        std::vector<uint32_t> m_LineCharacterOffsets;
+
+        std::filesystem::path m_Location;
+        std::string m_Name;
     };
 }
 

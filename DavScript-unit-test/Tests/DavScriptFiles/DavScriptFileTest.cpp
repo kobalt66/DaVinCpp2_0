@@ -15,7 +15,7 @@ namespace davincpp::davscript
             DavScript davScript("../Tests/DavScriptFiles/TestFiles/test.dav");
             davScript.loadFile();
 
-            assertEquals(false, davScript.RawContent.empty());
+            assertEquals(false, davScript.isEmpty());
         }});
     }
 }

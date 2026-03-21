@@ -140,7 +140,7 @@ namespace davincpp::davscript
     Token DavScriptParser::getCurrentNamespaceName() const
     {
         // todo: determine the correct namespace name via the "module" keyword. Though, the fallback namespace should still be the script's name.
-        return {m_CurrentScriptFile, CharPosition(0, 0), m_CurrentScriptFile.Name, NONE, IDENTIFIER};
+        return {m_CurrentScriptFile, CharPosition(0, 0), m_CurrentScriptFile.getName(), NONE, IDENTIFIER};
     }
 
     void DavScriptParser::enterScope()

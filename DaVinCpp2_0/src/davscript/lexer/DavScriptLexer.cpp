@@ -174,7 +174,7 @@ namespace davincpp::davscript
 
         std::string wordValue = word.str();
         TokenType type = NONE;
-        TokenRole role = NORMAL;
+        TokenRole role;
 
         if (tokenValueOnWhiteList(wordValue, KEYWORD_TOKENS)) {
             role = KEYWORD;
@@ -286,32 +286,32 @@ namespace davincpp::davscript
 
     char DavScriptLexer::advanceChar(int positionAdvanceStep)
     {
-        m_CurrentCharPosition = getNextcharPosition(positionAdvanceStep);
+        m_CurrentCharPosition = getNextCharPosition(positionAdvanceStep);
 
         m_CurrentChar = m_DavScript.getCharByPosition(m_CurrentCharPosition);
 
         return m_CurrentChar;
     }
 
-    char DavScriptLexer::peakNextChar(int peakAheadStep)
+    char DavScriptLexer::peakNextChar(int peakAheadStep) const
     {
-        return m_DavScript.getCharByPosition(getNextcharPosition(peakAheadStep));
+        return m_DavScript.getCharByPosition(getNextCharPosition(peakAheadStep));
     }
 
-    CharPosition DavScriptLexer::getNextcharPosition(int positionAdvanceStep) const
+    CharPosition DavScriptLexer::getNextCharPosition(int positionAdvanceStep) const
     {
         CharPosition nextCharPosition = m_CurrentCharPosition;
 
         for (int i = 0; i < positionAdvanceStep; i++) {
-            nextCharPosition.CharIdx += 1;
+            nextCharPosition.incrementCharIdx();
 
             if (m_DavScript.atEndOfFile(nextCharPosition)) {
                 return nextCharPosition;
             }
 
             if (m_DavScript.atEndOfLine(nextCharPosition)) {
-                nextCharPosition.CharIdx = 0;
-                nextCharPosition.Line += 1;
+                nextCharPosition.resetCharIdx();
+                nextCharPosition.incrementLine();
             }
         }
 

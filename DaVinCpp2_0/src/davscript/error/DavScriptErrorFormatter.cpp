@@ -162,7 +162,7 @@ namespace davincpp::davscript
 
     std::string DavScriptErrorFormatter::generateErrorLocationInfo(const DavScript& davScript, CharPosition position)
     {
-        return Console::fmtTxt("Script: ", davScript.Location, " (ln: ", position.Line + 1, ", char: ", position.CharIdx + 1, "):\n");
+        return Console::fmtTxt("Script: ", davScript.getLocation(), " (ln: ", position.getLine() + 1, ", char: ", position.getCharIdx() + 1, "):\n");
     }
 
     std::string DavScriptErrorFormatter::generateErrorCodeLine(const Token& token)
@@ -170,19 +170,19 @@ namespace davincpp::davscript
         DavScript targetScript = token.getDavScript();
         targetScript.loadFile();
 
-        std::string line = targetScript.getLineByTokenPosition(token.getTokenPosition());
+        std::string_view line = targetScript.getCodeLineByPosition(token.getTokenPosition());
 
         if (line.empty()) {
             return "";
         }
 
-        line = DaVinCppString::findReplaceAll(line, "\n", "");
+        std::string cleansedLine = DaVinCppString::findReplaceAll(line, "\n", "");
 
-        std::string lineNumber = std::to_string(token.getTokenPosition().Line + 1);
+        std::string lineNumber = std::to_string(token.getTokenPosition().getLine() + 1);
 
         return Console::fmtTxt(
-            lineNumber, " | ", line, '\n',
-            std::string(lineNumber.length(), ' '), " | ", std::string(token.getTokenPosition().CharIdx, ' '), std::string(token.getTokenLength(), '^'), '\n'
+            lineNumber, " | ", cleansedLine, '\n',
+            std::string(lineNumber.length(), ' '), " | ", std::string(token.getTokenPosition().getCharIdx(), ' '), std::string(token.getTokenLength(), '^'), '\n'
         );
     }
 }

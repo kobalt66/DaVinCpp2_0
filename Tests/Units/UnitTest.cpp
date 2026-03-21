@@ -30,7 +30,7 @@ namespace davincpp::unittest
 
                     std::string failedTestDescription = Console::fmtTxt(
                         "\nTest step '", "testAssignmentNodeFailure()", "' failed: \n", "Expected exception was not thrown: \n",
-                        "Actual exception: \n", actualException, "........................................\n",
+                        "Actual exception: \n", actualException, "\n........................................\n",
                         "Expected exception: \n", m_ExpectedException);
 
                     m_ExpectedException.clear();

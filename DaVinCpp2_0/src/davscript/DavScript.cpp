@@ -1,37 +1,42 @@
 #include "DavScript.h"
 #include <DaVinCppFileSystem.h>
 #include <DaVinCppString.h>
-#include <tokens/Token.h>
 #include <utility>
+#include <tokens/TokenData.h>
 
 namespace davincpp::davscript
 {
     DavScript::DavScript(std::filesystem::path scriptPath)
-        : Location(std::move(scriptPath))
+        : m_Location(std::move(scriptPath))
     {
-        Name = Location.filename();
+        m_Name = m_Location.filename();
     }
 
     void DavScript::loadFile()
     {
-        RawContent = DaVinCppFileSystem::readFile(Location);
+        m_FileContent = DaVinCppFileSystem::readFile(m_Location);
+        m_LineCharacterOffsets.clear();
+        m_LineCharacterOffsets.push_back(0);
 
-        RefinedContent = DaVinCppString::split(RawContent, T_NEWLINE);
+        if (m_FileContent.empty()) {
+            return;
+        }
 
-        int lineCount = RawContent.at(RawContent.size() - 1) == T_NEWLINE ?
-            static_cast<int>(RefinedContent.size()) :
-            static_cast<int>(RefinedContent.size() - 1);
-
-        for (int i = 0; i < lineCount; i++) {
-            std::string& line = RefinedContent.at(i);
-            line = line.append(1, T_NEWLINE);
+        for (size_t i = 0; i < m_FileContent.size(); ++i) {
+            if (m_FileContent[i] == T_NEWLINE) {
+                m_LineCharacterOffsets.push_back(i + 1);
+            }
         }
     }
 
     void DavScript::unloadFile()
     {
-        RawContent.clear();
-        RefinedContent.clear();
+        m_FileContent.clear();
+    }
+
+    bool DavScript::isEmpty() const
+    {
+        return m_FileContent.empty() || m_LineCharacterOffsets.empty();
     }
 
     char DavScript::getCharByPosition(CharPosition position) const
@@ -40,32 +45,57 @@ namespace davincpp::davscript
             return T_EOF;
         }
 
-        std::string line = RefinedContent.at(position.Line);
+        std::string_view line = getCodeLineByPosition(position);
 
         if (atEndOfLine(position)) {
             return line.at(line.size() - 1);
         }
 
-        return line.at(position.CharIdx);
+        return line.at(position.getCharIdx());
     }
 
     bool DavScript::atEndOfLine(CharPosition position) const
     {
-        return position.CharIdx >= RefinedContent.at(position.Line).size();
+        return position.getCharIdx() >= getLineLength(position);
     }
 
     bool DavScript::atEndOfFile(CharPosition position) const
     {
-        return position.Line >= RefinedContent.size() || (position.Line == RefinedContent.size() - 1 && atEndOfLine(position));
+        return position.getLine() >= m_LineCharacterOffsets.size() || (position.getLine() == m_LineCharacterOffsets.size() - 1 && atEndOfLine(position));
     }
 
-    std::string DavScript::getLineByTokenPosition(CharPosition position) const
+    size_t DavScript::getLineLength(CharPosition position) const
+    {
+        size_t lineOffset = m_LineCharacterOffsets.at(position.getLine());
+
+        size_t nextLineOffset;
+        if (position.getLine() + 1 < m_LineCharacterOffsets.size()) {
+            nextLineOffset = m_LineCharacterOffsets.at(position.getLine() + 1);
+        } else {
+            nextLineOffset = m_FileContent.size();
+        }
+
+        return nextLineOffset - lineOffset;
+    }
+
+    std::string_view DavScript::getCodeLineByPosition(CharPosition position) const
     {
         if (atEndOfFile(position)) {
             return "";
         }
 
-        return RefinedContent.at(position.Line);
+        size_t startIdx = m_LineCharacterOffsets.at(position.getLine());
+        return {&m_FileContent.at(startIdx), getLineLength(position)};
+    }
+
+    std::filesystem::path DavScript::getLocation() const
+    {
+        return m_Location;
+    }
+
+    std::string DavScript::getName() const
+    {
+        return m_Name;
     }
 }
 

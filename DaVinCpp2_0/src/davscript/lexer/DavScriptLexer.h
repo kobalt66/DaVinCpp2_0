@@ -26,8 +26,8 @@ namespace davincpp::davscript
         void lexOperators();
 
         char advanceChar(int positionAdvanceStep = 1);
-        char peakNextChar(int peakAheadStep = 1);
-        [[nodiscard]] CharPosition getNextcharPosition(int positionAdvanceStep = 1) const;
+        char peakNextChar(int peakAheadStep = 1) const;
+        [[nodiscard]] CharPosition getNextCharPosition(int positionAdvanceStep = 1) const;
 
         [[nodiscard]] bool isSingleCharToken() const;
         [[nodiscard]] bool isMultiCharToken() const;

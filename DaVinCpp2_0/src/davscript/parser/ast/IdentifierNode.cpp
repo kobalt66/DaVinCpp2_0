@@ -62,7 +62,7 @@ namespace davincpp::davscript
 
         CharPosition segPosition = m_Name.getTokenPosition();
         for (size_t i = 0; i < lastSegIndex; i++) {
-            segPosition.CharIdx += static_cast<int>(m_NameSegments.at(i).size() + 1);
+            segPosition.incrementCharIdx(static_cast<int>(m_NameSegments.at(i).size() + 1));
         }
 
         Token segToken = m_Name;

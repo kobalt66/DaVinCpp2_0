@@ -5,13 +5,6 @@
 
 namespace davincpp::davscript
 {
-    void CharPosition::reset()
-    {
-        Line = 0;
-        CharIdx = -1;
-    }
-
-
     Token::Token(
         DavScript davScript,
         CharPosition position,

@@ -5,14 +5,6 @@
 
 namespace davincpp::davscript
 {
-    struct CharPosition
-    {
-        int Line = 0;
-        int CharIdx = 0;
-
-        void reset();
-    };
-
     class Token
     {
     public:
