@@ -61,7 +61,7 @@ namespace davincpp::davscript
             }
             case FLOATTYPE:
             {
-                valueBytes = ByteCastHelper::nativeToBytes(std::stol(actualValue));
+                valueBytes = ByteCastHelper::nativeToBytes(std::stod(actualValue));
                 break;
             }
             case STRINGTYPE:

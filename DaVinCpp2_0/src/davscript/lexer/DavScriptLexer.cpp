@@ -149,7 +149,7 @@ namespace davincpp::davscript
 
         std::string variableTypeValue = variableType.str();
 
-        if (VARIABLE_TYPE_TOKENS.find(variableTypeValue) == VARIABLE_TYPE_TOKENS.end()) {
+        if (!VARIABLE_TYPE_TOKENS.contains(variableTypeValue)) {
             m_Tokens.emplace_back(m_DavScript, startPosition, variableTypeValue, NONE, INVALID);
             return;
         }
@@ -331,7 +331,7 @@ namespace davincpp::davscript
 
     bool DavScriptLexer::isOperatorToken() const
     {
-        return OPERATOR_TOKENS.find(std::string(1, m_CurrentChar)) != OPERATOR_TOKENS.end();
+        return OPERATOR_TOKENS.contains(std::string(1, m_CurrentChar));
     }
 
 

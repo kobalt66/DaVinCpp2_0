@@ -32,7 +32,7 @@ namespace davincpp::davscript
             if (parameters.empty()) {
                 assert(assertNotTokenType(scriptParser, nextToken, Token(COMMA, OPERATOR)));
             } else {
-                assert(assertTokenType(scriptParser, nextToken, Token(COMMA, OPERATOR)));
+                assert(assertTokenType(scriptParser, nextToken, Token(COMMA)));
                 scriptParser->advanceToken();
             }
 
@@ -42,12 +42,12 @@ namespace davincpp::davscript
 
             if (checkTokenRole(parameterValue, Token(NONE, IDENTIFIER))) {
                 assert(assertSymbolAccess(scriptParser, functionName, {SymbolType::VARIABLE, SymbolType::CONSTANT}));
-                parameters.push_back(std::make_shared<VariableAccessNode>(parameterValue));
+                parameters.emplace(parameters.begin(), std::make_shared<VariableAccessNode>(parameterValue));
                 continue;
             }
 
             if (checkTokenRole(parameterValue, Token(NONE, DATAVALUE))) {
-                parameters.push_back(std::make_shared<ValueNode>(parameterValue));
+                parameters.emplace(parameters.begin(), std::make_shared<ValueNode>(parameterValue));
                 continue;
             }
 

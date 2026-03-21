@@ -17,11 +17,11 @@ namespace davincpp::davscript
     struct Value
     {
         explicit Value();
-        Value(ValueType type, int64_t value);
-        Value(ValueType type, bool value);
-        Value(ValueType type, double value);
-        Value(ValueType type, const std::string& value);
-        Value(ValueType type, void* value);
+        Value(int64_t value);
+        Value(bool value);
+        Value(double value);
+        Value(const std::string& value);
+        Value(void* value);
         ~Value();
 
         Value(const Value& other);

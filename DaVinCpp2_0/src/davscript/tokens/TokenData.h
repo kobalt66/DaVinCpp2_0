@@ -33,6 +33,7 @@ namespace davincpp::davscript
         USE,
         MODULE,
         INTERNAL,
+        EXTERN,
         PRIVATE,
         PUBLIC,
         FUNCTION,
@@ -52,6 +53,7 @@ namespace davincpp::davscript
         // Variable types
         REF,
         VAR,
+        PARAM,
         CONST,
         REFCOMP,
         ARRAY,
@@ -109,6 +111,7 @@ namespace davincpp::davscript
     enum class SymbolType
     {
         VARIABLE,
+        PARAMETER,
         CONSTANT,
         FUNCTION,
         STRUCT
@@ -135,6 +138,7 @@ namespace davincpp::davscript
     static const std::string T_USE              = "use";
     static const std::string T_MODULE           = "module";
     static const std::string T_INTERNAL         = "internal";
+    static const std::string T_EXTERN           = "extern";
     static const std::string T_PRIVATE          = "private";
     static const std::string T_PUBLIC           = "public";
     static const std::string T_FUNCTION         = "function";
@@ -153,6 +157,7 @@ namespace davincpp::davscript
 
     static const std::string T_REF              = "@ref";
     static const std::string T_VAR              = "@var";
+    static const std::string T_PARAM            = "@param";
     static const std::string T_CONST            = "@const";
     static const std::string T_REFCOMP          = "@refcomp";
     static const std::string T_ARRAY            = "@array";
@@ -214,10 +219,11 @@ namespace davincpp::davscript
         { T_USE,        USE      },
         { T_MODULE,     MODULE   },
         { T_INTERNAL,   INTERNAL },
+        { T_EXTERN,     EXTERN   },
         { T_PRIVATE,    PRIVATE  },
         { T_PUBLIC,     PUBLIC   },
         { T_FUNCTION,   FUNCTION },
-        { T_END,        END_STMT      },
+        { T_END,        END_STMT },
         { T_IF,         IF       },
         { T_ELIF,       ELIF     },
         { T_ELSE,       ELSE     },
@@ -234,6 +240,7 @@ namespace davincpp::davscript
     static const std::unordered_map<std::string, TokenType> VARIABLE_TYPE_TOKENS = {
         { T_REF,        REF     },
         { T_VAR,        VAR     },
+        { T_PARAM,      PARAM   },
         { T_CONST,      CONST   },
         { T_REFCOMP,    REFCOMP },
         { T_ARRAY,      ARRAY   },
@@ -289,6 +296,7 @@ namespace davincpp::davscript
         { USE,         T_USE                           },
         { MODULE,      T_MODULE                        },
         { INTERNAL,    T_INTERNAL                      },
+        { EXTERN,      T_EXTERN                        },
         { PRIVATE,     T_PRIVATE                       },
         { PUBLIC,      T_PUBLIC                        },
         { FUNCTION,    T_FUNCTION                      },
@@ -306,6 +314,7 @@ namespace davincpp::davscript
         { OR,          T_OR                            },
         { REF,         T_REF                           },
         { VAR,         T_VAR                           },
+        { PARAM,       T_PARAM                         },
         { CONST,       T_CONST                         },
         { REFCOMP,     T_REFCOMP                       },
         { ARRAY,       T_ARRAY                         },
@@ -349,9 +358,10 @@ namespace davincpp::davscript
     };
 
     static const std::unordered_map<SymbolType, std::string> SYMBOL_TYPE2STRING = {
-        { SymbolType::VARIABLE, "variable" },
-        { SymbolType::CONSTANT, "constant" },
-        { SymbolType::FUNCTION, "function" },
-        { SymbolType::STRUCT,   "struct"   },
+        { SymbolType::VARIABLE,  "variable"  },
+        { SymbolType::PARAMETER, "parameter" },
+        { SymbolType::CONSTANT,  "constant"  },
+        { SymbolType::FUNCTION,  "function"  },
+        { SymbolType::STRUCT,    "struct"    },
     };
 }

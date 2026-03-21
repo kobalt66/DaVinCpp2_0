@@ -57,6 +57,17 @@ namespace davincpp::davscript
         return value;
     }
 
+    Value DavScriptVirtualMachine::tryPopStackValue()
+    {
+        if (m_Stack.empty()) {
+            return Value();
+        }
+
+        const Value value = m_Stack.top();
+        m_Stack.pop();
+        return value;
+    }
+
     Value DavScriptVirtualMachine::readMemory(uint32_t ptr) const
     {
         if (ptr >= m_Memory.size()) {
@@ -157,7 +168,7 @@ namespace davincpp::davscript
         int64_t value = getIntValueFromCallStack();
 
         allocateMemory(variablePtr);
-        writeMemory(variablePtr, {ValueType::INT, value});
+        writeMemory(variablePtr, value);
     }
 
     void DavScriptVirtualMachine::processStoreBoolValueOperation()
@@ -166,7 +177,7 @@ namespace davincpp::davscript
         bool value = getBoolValueFromCallStack();
 
         allocateMemory(variablePtr);
-        writeMemory(variablePtr, {ValueType::BOOL, value});
+        writeMemory(variablePtr, value);
     }
 
     void DavScriptVirtualMachine::processStoreFloatValueOperation()
@@ -175,7 +186,7 @@ namespace davincpp::davscript
         double value = getFloatValueFromCallStack();
 
         allocateMemory(variablePtr);
-        writeMemory(variablePtr, {ValueType::DOUBLE, value});
+        writeMemory(variablePtr, value);
     }
 
     void DavScriptVirtualMachine::processStoreStringValueOperation()
@@ -184,31 +195,31 @@ namespace davincpp::davscript
         std::string value = getStringValueFromCallStack();
 
         allocateMemory(variablePtr);
-        writeMemory(variablePtr, {ValueType::STRING, value});
+        writeMemory(variablePtr, {value});
     }
 
     void DavScriptVirtualMachine::processMovIntValueOperation()
     {
         int64_t value = getIntValueFromCallStack();
-        m_Stack.emplace(ValueType::INT, value);
+        m_Stack.emplace(value);
     }
 
     void DavScriptVirtualMachine::processMovBoolValueOperation()
     {
         bool value = getBoolValueFromCallStack();
-        m_Stack.emplace(ValueType::BOOL, value);
+        m_Stack.emplace(value);
     }
 
     void DavScriptVirtualMachine::processMovFloatValueOperation()
     {
         double value = getFloatValueFromCallStack();
-        m_Stack.emplace(ValueType::DOUBLE, value);
+        m_Stack.emplace(value);
     }
 
     void DavScriptVirtualMachine::processMovStringValueOperation()
     {
         std::string value = getStringValueFromCallStack();
-        m_Stack.emplace(ValueType::STRING, value);
+        m_Stack.emplace(value);
     }
 
     void DavScriptVirtualMachine::useNamespace(std::string_view namespaceName)

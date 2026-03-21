@@ -6,45 +6,37 @@ namespace davincpp::davscript
     Value::Value()
         : type(ValueType::NONE), data({})
     {
-        data.int_t = 0;
-        data.bool_t = false;
-        data.double_t = 0.0;
-        data.string_t = nullptr;
         data.object_t = nullptr;
     }
 
-    Value::Value(ValueType type, int64_t value)
-        : type(type), data({})
+    Value::Value(int64_t value)
+        : type(ValueType::INT), data({})
     {
         data.int_t = value;
-        data.string_t = nullptr;
     }
 
-    Value::Value(ValueType type, bool value)
-        : type(type), data({})
+    Value::Value(bool value)
+        : type(ValueType::BOOL), data({})
     {
         data.bool_t = value;
-        data.string_t = nullptr;
     }
 
-    Value::Value(ValueType type, double value)
-        : type(type), data({})
+    Value::Value(double value)
+        : type(ValueType::DOUBLE), data({})
     {
         data.double_t = value;
-        data.string_t = nullptr;
     }
 
-    Value::Value(ValueType type, const std::string& value)
-        : type(type), data({})
+    Value::Value(const std::string& value)
+        : type(ValueType::STRING), data({})
     {
         data.string_t = strdup(value.c_str());
     }
 
-    Value::Value(ValueType type, void* value)
-        : type(type), data({})
+    Value::Value(void* value)
+        : type(ValueType::OBJECT), data({})
     {
         data.object_t = value;
-        data.string_t = nullptr;
     }
 
     Value::~Value()

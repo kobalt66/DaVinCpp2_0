@@ -19,10 +19,10 @@ namespace davincpp::davscript
 
     void DavScriptCodeExecutionTest::testVariableAssignment()
     {
-        Value expectedIntValue(ValueType::INT, 1L);
-        Value expectedBoolValue(ValueType::BOOL, false);
-        Value expectedFloatValue(ValueType::DOUBLE, 0.123);
-        Value expectedStringValue(ValueType::STRING, std::string("Hello World!"));
+        Value expectedIntValue(1L);
+        Value expectedBoolValue(false);
+        Value expectedFloatValue(0.123);
+        Value expectedStringValue(std::string("Hello World!"));
 
         DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/Assignment.dav");
         DavScriptLexer lexer(davScript);
@@ -52,7 +52,7 @@ namespace davincpp::davscript
 
     void DavScriptCodeExecutionTest::testSimplePrintFunctionCall()
     {
-        std::string expectedOutput = Console::cleanseText(Console::fmtLog("Hello World!"));
+        std::string expectedOutput = Console::cleanseText(Console::fmtTxt(Console::fmtLog("Hello World!"), Console::fmtLog("<int> 1")));
 
         DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/SimplePrintFunctionCall.dav");
         DavScriptLexer lexer(davScript);
@@ -74,6 +74,37 @@ namespace davincpp::davscript
 
         std::string output = readSuppressedConsoleOutput();
 
+        assertEquals(expectedOutput, output);
+    }
+
+    void DavScriptCodeExecutionTest::testUsingVariable()
+    {
+        Value expectedIntValue(1L);
+
+        DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/UsingVariable.dav");
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        DavScriptParser parser(davScript, lexer.getTokens());
+        parser.generateAst();
+
+        DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), PROJECT_DIRECTORY);
+        compiler.compile();
+        compiler.saveByteCode();
+
+        DavScriptVirtualMachine vm(PROJECT_DIRECTORY);
+        vm.prepareVM();
+
+        suppressConsoleOutput();
+        vm.execute();
+        restoreConsoleOutput();
+
+        std::string output = readSuppressedConsoleOutput();
+
+        Value actualIntStackValue = vm.readMemory(0);
+        assertTrue(expectedIntValue == actualIntStackValue);
+
+        std::string expectedOutput = Console::cleanseText(Console::fmtLog("<int> 1"));
         assertEquals(expectedOutput, output);
     }
 }

@@ -1,3 +1,4 @@
 use std.io
 
 std.io.print("Hello World!")
+print(1, true)

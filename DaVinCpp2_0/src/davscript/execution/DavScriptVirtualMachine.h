@@ -25,6 +25,7 @@ namespace davincpp::davscript
         void execute();
 
         [[nodiscard]] Value popStackValue();
+        [[nodiscard]] Value tryPopStackValue();
 
         [[nodiscard]] Value readMemory(uint32_t ptr) const;
         void writeMemory(uint32_t ptr, const Value& value);

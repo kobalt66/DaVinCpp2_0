@@ -115,7 +115,7 @@ public function closeGame(): void
     list1.empty()           # Will return 'true' if the array is empty
     list1.add_range([1, 2, list1, list2, false]) # This will basically try to merge the two arrays
     list3.sort(
-        function (@var a [int], @var b [int]): bool
+        function (@param a [int], @param b [int]): bool
             return a < b    # Will throw an exception if one of the values is not compareable or if the comparision doesn't work on the two values
         end
     )
@@ -129,12 +129,12 @@ public function closeGame(): void
     list2.size()            # Returns the size of the dictionary
     list2.empty()           # Will return 'true' if the dictionary is empty
     list2.sort_by_key(
-        function (@var a [string], @var b [string]): bool
+        function (@param a [string], @param b [string]): bool
             a.after(b) # The 'after' function only works for strings and will return true if the target string value would alphabetically be sorted after the specified value. (a="b", b="a" => a.after(b) > true)
         end
     )
     list2.sort_by_value(
-        function (@var a [mixed], @var b [mixed]): bool
+        function (@param a [mixed], @param b [mixed]): bool
             a != b
         end
     )

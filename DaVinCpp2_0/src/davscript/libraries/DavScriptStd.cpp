@@ -11,24 +11,42 @@ namespace davincpp::davscript
     {
         void print(DavScriptVirtualMachine* vm)
         {
-            Value value = vm->popStackValue();
+            Value input = vm->popStackValue();
 
-            if (value.type == ValueType::OBJECT) {
-                throw DavScriptException(DavScriptErrorFormatter::generateRuntimeErrorInvalidParameterValue("std.io.print", 0, value.type, "int, bool, float or string"));
+            if (input.type == ValueType::OBJECT) {
+                throw DavScriptException(DavScriptErrorFormatter::generateRuntimeErrorInvalidParameterValue("std.io.print", 0, input.type, "int, bool, float or string"));
             }
 
-            switch (value.type) {
+            Value typeInfo = vm->tryPopStackValue();
+
+            if (typeInfo.type != ValueType::BOOL && typeInfo.type != ValueType::NONE) {
+                throw DavScriptException(DavScriptErrorFormatter::generateRuntimeErrorInvalidParameterValue("std.io.print", 1, input.type, "bool"));
+            }
+
+            switch (input.type) {
                 case ValueType::INT:
-                    Console::log("<int> ", value.data.int_t);
+                    Console::log(
+                        typeInfo.data.bool_t ? "<int> " : "",
+                        input.data.int_t
+                    );
                     break;
                 case ValueType::BOOL:
-                    Console::log(value.data.bool_t ? "true" : "false");
+                    Console::log(
+                        typeInfo.data.bool_t ? "<bool> " : "",
+                        input.data.bool_t ? "true" : "false"
+                    );
                     break;
                 case ValueType::DOUBLE:
-                    Console::log("<float> ", value.data.double_t);
+                    Console::log(
+                        typeInfo.data.bool_t ? "<float> " : "",
+                        input.data.double_t
+                    );
                     break;
                 case ValueType::STRING:
-                    Console::log(static_cast<const char*>(value.data.string_t));
+                    Console::log(
+                        typeInfo.data.bool_t ? "<string> " : "",
+                        static_cast<const char*>(input.data.string_t)
+                    );
                     break;
                 default: break;
             }

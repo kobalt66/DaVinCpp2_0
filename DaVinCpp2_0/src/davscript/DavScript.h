@@ -10,6 +10,7 @@ namespace davincpp::davscript
 {
     class CharPosition;
 
+    // todo: make loading the script files more efficient by avoiding loading all of the file's contents into the RefinedContent vector. Instead try to lazy load each line of code.
     struct DavScript
     {
         DavScript() = default;

@@ -15,5 +15,6 @@ namespace davincpp::davscript
     private:
         static void testVariableAssignment();
         void testSimplePrintFunctionCall();
+        void testUsingVariable();
     };
 }

@@ -1,0 +1,7 @@
+module std.io
+
+**
+    @param input - Input value which gets printed to the console.
+    @param type_info - If true, will print additional type information, such as: "<int> 123" or "<bool> true".
+**
+extern function print(@param input [mixed, !object], @param type_info [bool] = false)
