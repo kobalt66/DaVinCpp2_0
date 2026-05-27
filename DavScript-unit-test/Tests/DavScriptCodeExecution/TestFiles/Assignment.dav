@@ -1,4 +1,0 @@
-@var a [int] = 1
-@var b [bool] = false
-@var c [float] = 0.123
-@var d [string] = "Hello World!"

@@ -12,26 +12,31 @@ namespace davincpp::davscript
         m_Name = m_Location.filename();
     }
 
+    bool DavScript::operator==(const DavScript& other) const
+    {
+        return m_Location == other.m_Location;
+    }
+
     void DavScript::loadFile()
     {
-        m_FileContent = DaVinCppFileSystem::readFile(m_Location);
-        m_LineCharacterOffsets.clear();
-        m_LineCharacterOffsets.push_back(0);
-
-        if (m_FileContent.empty()) {
+        if (!m_FileContent.empty()) {
             return;
         }
 
-        for (size_t i = 0; i < m_FileContent.size(); ++i) {
-            if (m_FileContent[i] == T_NEWLINE) {
-                m_LineCharacterOffsets.push_back(i + 1);
-            }
-        }
+        m_FileContent = DaVinCppFileSystem::readFile(m_Location);
+        computeLineOffsets();
     }
 
     void DavScript::unloadFile()
     {
         m_FileContent.clear();
+        m_LineCharacterOffsets.clear();
+    }
+
+    void DavScript::setFileContent(std::string_view fileContent)
+    {
+        m_FileContent = fileContent;
+        computeLineOffsets();
     }
 
     bool DavScript::isEmpty() const
@@ -88,6 +93,19 @@ namespace davincpp::davscript
         return {&m_FileContent.at(startIdx), getLineLength(position)};
     }
 
+    std::string DavScript::getCodeLineByWord(std::string_view word) const
+    {
+        for (size_t i = 0; i < m_LineCharacterOffsets.size(); i++) {
+            std::string_view line = getCodeLineByPosition(CharPosition(0, static_cast<int>(i)));
+
+            if (line.find(word) != std::string_view::npos) {
+                return std::string(line);
+            }
+        }
+
+        return "";
+    }
+
     std::filesystem::path DavScript::getLocation() const
     {
         return m_Location;
@@ -96,6 +114,22 @@ namespace davincpp::davscript
     std::string DavScript::getName() const
     {
         return m_Name;
+    }
+
+    void DavScript::computeLineOffsets()
+    {
+        m_LineCharacterOffsets.clear();
+        m_LineCharacterOffsets.push_back(0);
+
+        if (m_FileContent.empty()) {
+            return;
+        }
+
+        for (size_t i = 0; i < m_FileContent.size(); ++i) {
+            if (m_FileContent[i] == T_NEWLINE) {
+                m_LineCharacterOffsets.push_back(i + 1);
+            }
+        }
     }
 }
 

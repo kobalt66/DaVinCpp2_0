@@ -1,11 +1,12 @@
 #include "DavScriptParser.h"
 #include <algorithm>
 #include <Console.h>
-#include <iostream>
+#include <DaVinCppString.h>
 #include <ranges>
 #include <utility>
 #include <error/DavScriptErrorFormatter.h>
 #include <execution/DavScriptCompiler.h>
+#include <lexer/DavScriptLexer.h>
 #include <libraries/DavScriptLibraries.h>
 #include <parser/ast/FunctionCallNode.h>
 #include <parser/ast/IdentifierNode.h>
@@ -13,13 +14,30 @@
 
 namespace davincpp::davscript
 {
-    DavScriptParser::DavScriptParser(DavScript scriptFile, const std::vector<Token>& tokens)
-        : m_CurrentScriptFile(std::move(scriptFile)), m_Tokens(tokens)
-    { }
+    std::unordered_map<IdentifierNode, DavScript> DavScriptParser::ModuleScriptMap;
+    std::unordered_map<IdentifierNode, std::shared_ptr<Ast>> DavScriptParser::ParsedScriptFilesMap;
+    std::unordered_map<IdentifierNode, DavScriptNamespace> DavScriptParser::RegisteredCustomNamespaces;
+
+    DavScriptParser::DavScriptParser(
+        DavScript scriptFile,
+        const std::vector<Token>& tokens,
+        bool root
+    ) : m_CurrentScript(std::move(scriptFile)),
+        m_Tokens(tokens),
+        m_IsRoot(root)
+    {
+        if (m_IsRoot) {
+            ModuleScriptMap.clear();
+            ParsedScriptFilesMap.clear();
+            RegisteredCustomNamespaces.clear();
+        }
+    }
 
     void DavScriptParser::generateAst()
     {
-        m_Ast = std::make_shared<Ast>();
+        if (m_CurrentAst == nullptr) {
+            m_CurrentAst = std::make_shared<Ast>();
+        }
 
         try {
             do {
@@ -51,10 +69,70 @@ namespace davincpp::davscript
                     skipUntilNextLine();
                 }
 
-                m_Ast->addNode(node);
+                m_CurrentAst->addNode(node);
             } while(true);
         } catch (const std::exception& e) {
             m_ErrorMessages.emplace_back(e.what());
+        }
+
+        checkForErrors();
+    }
+
+    void DavScriptParser::mapScriptsToModules(const std::filesystem::path& projectDirectory)
+    {
+        ModuleScriptMap.clear();
+        RegisteredCustomNamespaces.clear();
+
+        std::vector<std::filesystem::directory_entry> davLibsDirectoryContents = DaVinCppFileSystem::getFilesInDirectoryRecursive(DaVinCppFileSystem::prepareFilePath("[DAV_LIBS]"));
+        std::vector<std::filesystem::directory_entry> combinedDirectoryContents = DaVinCppFileSystem::getFilesInDirectoryRecursive(projectDirectory);
+        combinedDirectoryContents.insert(combinedDirectoryContents.end(), davLibsDirectoryContents.begin(), davLibsDirectoryContents.end());
+
+        for (const auto& directoryEntry : combinedDirectoryContents) {
+            if (directoryEntry.is_directory()) {
+                continue;
+            }
+
+            DavScript script(directoryEntry.path());
+            script.loadFile();
+
+            std::string codeLine = script.getCodeLineByWord(T_MODULE);
+
+            IdentifierNode moduleIdentifier;
+            if (codeLine.empty()) {
+                std::string generatedModuleName = script.getLocation();
+                generatedModuleName = DaVinCppString::findReplaceAll(generatedModuleName, Console::fmtTxt(projectDirectory.string(), "/"), "");
+                generatedModuleName = DaVinCppString::findReplaceAll(generatedModuleName, " ", "_");
+                generatedModuleName = DaVinCppString::findReplaceAll(generatedModuleName, "/", ".");
+                generatedModuleName = DaVinCppString::findReplaceAll(generatedModuleName, ".dav", "");
+                moduleIdentifier = IdentifierNode(Token(script, CharPosition(0, 0), generatedModuleName, NONE, IDENTIFIER));
+            } else {
+                script.setFileContent(codeLine);
+
+                DavScriptLexer lexer(script);
+                lexer.generateTokens();
+
+                DavScriptParser parser(script, lexer.getTokens(), false);
+                parser.generateAst();
+
+                std::vector<std::shared_ptr<IdentifierNode>> moduleNodes = parser.m_CurrentAst->getNodesByT<IdentifierNode>();
+
+                if (moduleNodes.size() > 1) {
+                    throw DavScriptException(Console::fmtTxt("Multiple module nodes found in script file: ", script.getName()));
+                }
+
+                moduleIdentifier = *moduleNodes.at(0);
+            }
+
+            if (ModuleScriptMap.contains(moduleIdentifier)) {
+                logInvalidModuleNamespaceError(moduleIdentifier.getName());
+                continue;
+            }
+
+            if (script == m_CurrentScript) {
+                m_CurrentAst = std::make_shared<Ast>(moduleIdentifier);
+            }
+
+            ModuleScriptMap.emplace(moduleIdentifier, script);
         }
 
         checkForErrors();
@@ -92,36 +170,31 @@ namespace davincpp::davscript
         return m_Tokens.at(m_CurrentTokenIdx + static_cast<int>(m_CurrentTokenIdx + n < m_Tokens.size()));
     }
 
-    void DavScriptParser::enterScriptFile()
+    bool DavScriptParser::useNamespace(const IdentifierNode& namespaceName)
     {
-        if (!m_CurrentNamespace.registeredSymbols.empty()) {
-            m_RegisteredCustomNamespaces.emplace(m_CurrentNamespaceName, m_CurrentNamespace);
-            m_CurrentNamespace.registeredSymbols.clear();
-            m_CurrentNamespaceName.clear();
-        }
-
-        m_UsedNamespaces.clear();
-    }
-
-    bool DavScriptParser::useNamespace(const Token& namespaceName)
-    {
-        if (DAVSCRIPT_LIBRARIES.contains(namespaceName.getActualValue())) {
-            DavScriptNamespace libraryNamespace = DAVSCRIPT_LIBRARIES.at(namespaceName.getActualValue());
+        if (DAVSCRIPT_LIBRARIES.contains(namespaceName.getName().getActualValue())) {
+            DavScriptNamespace libraryNamespace = DAVSCRIPT_LIBRARIES.at(namespaceName.getName().getActualValue());
 
             for (const auto& symbol : libraryNamespace.registeredSymbols) {
-                m_DefinedSymbols.emplace(Console::fmtTxt(namespaceName.getActualValue(), ".", symbol.first), symbol.second);
+                m_DefinedSymbols.emplace(Console::fmtTxt(namespaceName.getName().getActualValue(), ".", symbol.first), symbol.second);
             }
 
-            m_UsedNamespaces.emplace_back(namespaceName);
+            m_UsedNamespaces.emplace_back(namespaceName.getName());
             return true;
         }
 
         // todo: Determine the script file of the custom namespace and parse it. After that, generate a namespace from the script and push it to the m_RegisteredCustomNamespaces map.
 
-        if (m_RegisteredCustomNamespaces.contains(namespaceName.getActualValue())) {
-            DavScriptNamespace customNamespace = m_RegisteredCustomNamespaces.at(namespaceName.getActualValue());
+        if (RegisteredCustomNamespaces.contains(namespaceName)) {
+            DavScriptNamespace customNamespace = RegisteredCustomNamespaces.at(namespaceName);
             m_DefinedSymbols.insert(customNamespace.registeredSymbols.begin(), customNamespace.registeredSymbols.end());
+            m_UsedNamespaces.emplace_back(namespaceName);
+            return true;
+        }
 
+        if (ModuleScriptMap.contains(namespaceName)) {
+            DavScriptNamespace customNamespace = parseUsedScriptFile(namespaceName);
+            m_DefinedSymbols.insert(customNamespace.registeredSymbols.begin(), customNamespace.registeredSymbols.end());
             m_UsedNamespaces.emplace_back(namespaceName);
             return true;
         }
@@ -131,16 +204,20 @@ namespace davincpp::davscript
 
     bool DavScriptParser::isUsingNamespace(std::string_view namespaceName) const
     {
-        return std::ranges::any_of(m_UsedNamespaces, [&namespaceName](const Token& namespaceNameToken)
+        return std::ranges::any_of(m_UsedNamespaces, [&namespaceName](const IdentifierNode& namespaceNameToken)
         {
-            return namespaceNameToken.getActualValue() == namespaceName;
+            return namespaceNameToken.getName().getActualValue() == namespaceName;
         });
     }
 
-    Token DavScriptParser::getCurrentNamespaceName() const
+    IdentifierNode DavScriptParser::getCurrentNamespaceName() const
     {
-        // todo: determine the correct namespace name via the "module" keyword. Though, the fallback namespace should still be the script's name.
-        return {m_CurrentScriptFile, CharPosition(0, 0), m_CurrentScriptFile.getName(), NONE, IDENTIFIER};
+        return m_CurrentAst->getModuleNamespace();
+    }
+
+    DavScriptNamespace DavScriptParser::getCurrentNamespace() const
+    {
+        return m_CurrentNamespace;
     }
 
     void DavScriptParser::enterScope()
@@ -173,6 +250,7 @@ namespace davincpp::davscript
 
         // todo: maybe adjust?
         m_DefinedSymbols[symbolName.data()] = std::make_shared<DavScriptSymbol>(m_CurrentScopeDepth, symbolType);
+        m_CurrentNamespace.registeredSymbols.emplace(symbolName.data(), m_DefinedSymbols.at(symbolName.data()));
         return true;
     }
 
@@ -184,9 +262,9 @@ namespace davincpp::davscript
             return true;
         }
 
-        return std::ranges::any_of(m_UsedNamespaces, [this, &symbolName, &symbolType, &fullName](const Token& usedNamespace)
+        return std::ranges::any_of(m_UsedNamespaces, [this, &symbolName, &symbolType, &fullName](const IdentifierNode& usedNamespace)
         {
-            std::string namespaceSymbolName = Console::fmtTxt(usedNamespace.getActualValue(), ".", fullName);
+            std::string namespaceSymbolName = Console::fmtTxt(usedNamespace.getName().getActualValue(), ".", fullName);
 
             if (isValidDefinedSymbol(namespaceSymbolName, symbolType)) {
                 symbolName->setName(namespaceSymbolName);
@@ -227,22 +305,27 @@ namespace davincpp::davscript
         m_ErrorMessages.push_back(DavScriptErrorFormatter::generateInaccessibleSymbolError(symbolToken, symbolType));
     }
 
-    void DavScriptParser::logNamespaceNotFoundError(const Token& useToken, std::string_view namespaceName)
+    void DavScriptParser::logNamespaceNotFoundError(const Token& namespaceToken)
     {
-        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateNamespaceNotFoundError(useToken, namespaceName));
+        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateNamespaceNotFoundError(namespaceToken));
     }
 
-    void DavScriptParser::logDuplicateSymbolName(const Token& symbolToken, SymbolType symbolType)
+    void DavScriptParser::logDuplicateSymbolNameError(const Token& symbolToken, SymbolType symbolType)
     {
-        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateDuplicateSymbolName(symbolToken, symbolType));
+        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateDuplicateSymbolNameError(symbolToken, symbolType));
+    }
+
+    void DavScriptParser::logInvalidModuleNamespaceError(const Token& moduleNameToken)
+    {
+        m_ErrorMessages.push_back(DavScriptErrorFormatter::generateInvalidModuleNamespaceError(moduleNameToken));
     }
 
     std::shared_ptr<Ast> DavScriptParser::getAst() const
     {
-        return m_Ast;
+        return m_CurrentAst;
     }
 
-    const std::vector<Token>& DavScriptParser::getUsedNamespaces() const
+    const std::vector<IdentifierNode>& DavScriptParser::getUsedNamespaces() const
     {
         return m_UsedNamespaces;
     }
@@ -257,11 +340,9 @@ namespace davincpp::davscript
         m_ErrorMessages = m_ParsingAttempt->m_ErrorMessages;
         m_CurrentScopeDepth = m_ParsingAttempt->m_CurrentScopeDepth;
         m_DefinedSymbols = m_ParsingAttempt->m_DefinedSymbols;
-        m_RegisteredCustomNamespaces = m_ParsingAttempt->m_RegisteredCustomNamespaces;
         m_UsedNamespaces = m_ParsingAttempt->m_UsedNamespaces;
         m_CurrentNamespace = m_ParsingAttempt->m_CurrentNamespace;
-        m_CurrentNamespaceName = m_ParsingAttempt->m_CurrentNamespaceName;
-        m_Ast = m_ParsingAttempt->m_Ast;
+        m_CurrentAst = m_ParsingAttempt->m_CurrentAst;
         m_Tokens = m_ParsingAttempt->m_Tokens;
         m_CurrentTokenIdx = m_ParsingAttempt->m_CurrentTokenIdx;
         m_CurrentToken = m_ParsingAttempt->m_CurrentToken;
@@ -311,17 +392,38 @@ namespace davincpp::davscript
                 auto node = m_UseNodeParser.parseNode(this);
 
                 if (auto useNode = std::dynamic_pointer_cast<UseNode>(node)) {
-                    if (!useNamespace(useNode->getNamespaceName())) {
-                        logNamespaceNotFoundError(nextToken, useNode->getNamespaceName().getActualValue());
+                    if (!useNamespace(*useNode->getNamespaceName())) {
+                        logNamespaceNotFoundError(useNode->getNamespaceName()->getName());
                         return std::make_shared<InvalidNode>();
                     }
                 }
 
                 return node;
             }
+            case MODULE:
+                return m_ModuleNodeParser.parseNode(this);
             default:
                 return std::make_shared<InvalidNode>();
         }
+    }
+
+    DavScriptNamespace DavScriptParser::parseUsedScriptFile(const IdentifierNode& namespaceName)
+    {
+        if (RegisteredCustomNamespaces.contains(namespaceName)) {
+            return RegisteredCustomNamespaces.at(namespaceName);
+        }
+
+        const DavScript& script = ModuleScriptMap.at(namespaceName);
+
+        DavScriptLexer lexer(script);
+        lexer.generateTokens();
+
+        DavScriptParser parser(script, lexer.getTokens(), false);
+        parser.generateAst();
+
+        RegisteredCustomNamespaces[parser.getCurrentNamespaceName()] = parser.getCurrentNamespace();
+        ParsedScriptFilesMap[parser.getCurrentNamespaceName()] = parser.getAst();
+        return parser.getCurrentNamespace();
     }
 
     void DavScriptParser::checkForErrors() const
@@ -331,7 +433,10 @@ namespace davincpp::davscript
         }
 
         std::stringstream errorOutput;
-        errorOutput << std::endl;
+
+        if (m_IsRoot) {
+            errorOutput << std::endl;
+        }
 
         for (std::string_view errorMessage : m_ErrorMessages) {
             errorOutput << errorMessage.data() << std::endl;
@@ -339,10 +444,25 @@ namespace davincpp::davscript
 
         errorOutput << std::endl;
 
-        throw std::runtime_error(Console::fmtErr(
-            "DavScript failed to be parsed!",
+        std::string errorCountStr;
+
+        if (m_ErrorMessages.size() > 1) {
+            errorCountStr = Console::fmtTxt(m_ErrorMessages.size(), " errors");
+        } else if (m_ErrorMessages.size() == 1) {
+            errorCountStr = "1 error";
+        }
+
+        if (m_IsRoot) {
+            throw std::runtime_error(Console::fmtErr(
+                "DavScript failed to be parsed!",
+                errorOutput.str(),
+                m_CurrentScript.getName(), ": ", errorCountStr, " occurred during the parsing phase.")
+            );
+        }
+
+        throw std::runtime_error(Console::fmtTxt(
             errorOutput.str(),
-            m_ErrorMessages.size(), " error(s) occurred during the parsing phase.")
+            m_CurrentScript.getName(), ": ", errorCountStr, " occurred during the parsing phase.")
         );
     }
 }

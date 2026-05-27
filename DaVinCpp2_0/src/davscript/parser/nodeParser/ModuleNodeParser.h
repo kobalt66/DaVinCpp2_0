@@ -4,7 +4,7 @@
 
 namespace davincpp::davscript
 {
-    class UseNodeParser final : public BaseNodeParser
+    class ModuleNodeParser final : public BaseNodeParser
     {
     public:
         [[nodiscard]] std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) override;

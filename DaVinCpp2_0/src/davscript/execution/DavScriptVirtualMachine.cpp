@@ -24,7 +24,12 @@ namespace davincpp::davscript
 
     void DavScriptVirtualMachine::prepareVM()
     {
-        std::string byteCodeBlob = DaVinCppFileSystem::readFile(m_ProjectDirectory.append("o.bin"));
+        std::filesystem::path binDirectory = m_ProjectDirectory.append("bin");
+
+        std::vector<std::filesystem::directory_entry> binaryFiles = DaVinCppFileSystem::getFilesInDirectoryRecursive(binDirectory);
+
+        // todo: save all of the binary file entries. Get the "main" file and start executing code from there. If the code encounters a symbol that is defined in a different file, access it's binary file and execute it.
+        std::string byteCodeBlob = DaVinCppFileSystem::readFile();
         m_CallStack = ByteCastHelper::stringToBytes(byteCodeBlob);
     }
 
@@ -234,7 +239,7 @@ namespace davincpp::davscript
         for (const auto& symbol: DAVSCRIPT_LIBRARIES.at(namespaceName.data()).registeredSymbols | std::views::values) {
             if (symbol->getSymbolType() == SymbolType::FUNCTION) {
                 const auto functionSymbol = symbol->castToSymbolType<DavScriptFunctionSymbol>();
-                m_RegisteredLibraryFunctions.emplace(functionSymbol->getFunctionPtr(),functionSymbol->getFunction());
+                m_RegisteredLibraryFunctions.emplace(functionSymbol->getFunctionPtr(), functionSymbol->getFunction());
             }
         }
     }

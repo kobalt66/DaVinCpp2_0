@@ -10,8 +10,9 @@ namespace davincpp::davscript
         static std::string generateUnexpectedTokenError(const Token& actualToken, const Token& expectedToken);
         static std::string generateInvalidValueTypeError(const Token& valueToken, TokenType expectedToken);
         static std::string generateInaccessibleSymbolError(const Token& symbolToken, SymbolType symbolType);
-        static std::string generateNamespaceNotFoundError(const Token& useToken, std::string_view namespaceName);
-        static std::string generateDuplicateSymbolName(const Token& symbolToken, SymbolType symbolType);
+        static std::string generateNamespaceNotFoundError(const Token& useToken);
+        static std::string generateDuplicateSymbolNameError(const Token& symbolToken, SymbolType symbolType);
+        static std::string generateInvalidModuleNamespaceError(const Token& moduleNameToken);
 
         static std::string generateCompilerErrorInvalidValueType(const Token& typeToken, ValueType expectedType);
         static std::string generateCompilerErrorFoundAmbiguousFunction(const Token& functionName);

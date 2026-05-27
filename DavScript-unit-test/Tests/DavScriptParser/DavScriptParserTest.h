@@ -15,5 +15,6 @@ namespace davincpp::davscript
         static void testAssignmentNodeSuccess();
         void testAssignmentNodeFailure();
         static void testFunctionCallNodeSuccess();
+        static void testProjectParsing();
     };
 }

@@ -8,6 +8,7 @@ namespace davincpp::davscript
     class IdentifierNode final : public AstNode
     {
     public:
+        IdentifierNode() = default;
         explicit IdentifierNode(Token name);
 
         void setName(std::string_view name);
@@ -24,5 +25,16 @@ namespace davincpp::davscript
     private:
         std::vector<std::string> m_NameSegments;
         Token m_Name;
+    };
+}
+
+namespace std
+{
+    template<> struct hash<davincpp::davscript::IdentifierNode>
+    {
+        size_t operator()(const davincpp::davscript::IdentifierNode& node) const noexcept
+        {
+            return std::hash<std::string>()(node.getName().getActualValue());
+        }
     };
 }

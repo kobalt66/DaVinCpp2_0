@@ -24,5 +24,6 @@ namespace davincpp
 		/// 1. All sub directories inside the target directory
 		/// 2. All files inside the target directory
 		static std::pair<std::vector<std::filesystem::directory_entry>, std::vector<std::filesystem::directory_entry>> getContentsOfDirectory(const std::filesystem::path& directoryPath);
+		static std::vector<std::filesystem::directory_entry> getFilesInDirectoryRecursive(const std::filesystem::path& directoryPath);
 	};
 }

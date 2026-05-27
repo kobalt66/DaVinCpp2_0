@@ -1,16 +1,15 @@
 #include "UseNode.h"
-
 #include <utility>
 #include <execution/ByteCastHelper.h>
 #include <execution/ByteOperations.h>
 
 namespace davincpp::davscript
 {
-    UseNode::UseNode(Token namespacedName)
+    UseNode::UseNode(std::shared_ptr<IdentifierNode> namespacedName)
         : m_NamespacedName(std::move(namespacedName))
     { }
 
-    Token UseNode::getNamespaceName() const
+    std::shared_ptr<IdentifierNode> UseNode::getNamespaceName() const
     {
         return m_NamespacedName;
     }
@@ -22,7 +21,7 @@ namespace davincpp::davscript
             return false;
         }
 
-        return m_NamespacedName == otherNode->m_NamespacedName;
+        return *m_NamespacedName == *otherNode->m_NamespacedName;
     }
 
     std::vector<uint8_t> UseNode::generateByteCode(DavScriptCompiler* compiler)
@@ -30,7 +29,7 @@ namespace davincpp::davscript
         std::vector<uint8_t> byteCode;
         byteCode.push_back(LD_LIB);
 
-        std::vector<uint8_t> namespaceName = ByteCastHelper::stringToBytes(m_NamespacedName.getActualValue());
+        std::vector<uint8_t> namespaceName = ByteCastHelper::stringToBytes(m_NamespacedName->getName().getActualValue());
         byteCode.insert(byteCode.end(),namespaceName.begin(), namespaceName.end());
         byteCode.push_back(NUL);
 

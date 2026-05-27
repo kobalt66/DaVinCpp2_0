@@ -45,19 +45,19 @@ namespace davincpp::davscript
         );
     }
 
-    std::string DavScriptErrorFormatter::generateNamespaceNotFoundError(const Token& useToken, std::string_view namespaceName)
+    std::string DavScriptErrorFormatter::generateNamespaceNotFoundError(const Token& namespaceToken)
     {
-        std::string info = generateErrorLocationInfo(useToken.getDavScript(), useToken.getTokenPosition());
+        std::string info = generateErrorLocationInfo(namespaceToken.getDavScript(), namespaceToken.getTokenPosition());
         return Console::fmtTxt(
             generateErrorSeparator(info.size()),
             info,
             "Parsing error: Namespace not found:\n",
-            generateErrorCodeLine(useToken), '\n',
-            "Namespace name: ", namespaceName
+            generateErrorCodeLine(namespaceToken), '\n',
+            "Namespace name: ", namespaceToken.getActualValue()
         );
     }
 
-    std::string DavScriptErrorFormatter::generateDuplicateSymbolName(const Token& symbolToken, SymbolType symbolType)
+    std::string DavScriptErrorFormatter::generateDuplicateSymbolNameError(const Token& symbolToken, SymbolType symbolType)
     {
         std::string info = generateErrorLocationInfo(symbolToken.getDavScript(), symbolToken.getTokenPosition());
         return Console::fmtTxt(
@@ -67,6 +67,17 @@ namespace davincpp::davscript
             generateErrorCodeLine(symbolToken), '\n',
             "Symbol name: ", symbolToken.getActualValue(), '\n',
             "Symbol type: ", SYMBOL_TYPE2STRING.at(symbolType)
+        );
+    }
+
+    std::string DavScriptErrorFormatter::generateInvalidModuleNamespaceError(const Token& moduleNameToken)
+    {
+        std::string info = generateErrorLocationInfo(moduleNameToken.getDavScript(), moduleNameToken.getTokenPosition());
+        return Console::fmtTxt(
+            generateErrorSeparator(info.size()),
+            info,
+            "Parsing error: Invalid module namespace: Using a namespace that is already used by a script or library:\n",
+            "Module namespace: ", moduleNameToken.getActualValue()
         );
     }
 

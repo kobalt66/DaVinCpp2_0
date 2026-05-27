@@ -36,5 +36,6 @@ namespace davincpp::davscript
         static bool assertSymbolAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, std::vector<SymbolType> symbolTypes);
         static bool assertSymbolNoAccess(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, std::vector<SymbolType> symbolTypes);
         static bool assertSymbolDoesntExist(DavScriptParser* scriptParser, const std::shared_ptr<IdentifierNode>& identifierNode, SymbolType symbolType);
+        static bool assertValidNode(const std::shared_ptr<AstNode>& node);
     };
 }

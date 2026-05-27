@@ -24,18 +24,21 @@ namespace davincpp::davscript
         Value expectedFloatValue(0.123);
         Value expectedStringValue(std::string("Hello World!"));
 
-        DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/Assignment.dav");
+        std::filesystem::path projectPath = "../Tests/DavScriptCodeExecution/TestFiles/VariableAssignment";
+        DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/VariableAssignment/Assignment.dav");
+
         DavScriptLexer lexer(davScript);
         lexer.generateTokens();
 
         DavScriptParser parser(davScript, lexer.getTokens());
+        parser.mapScriptsToModules(projectPath);
         parser.generateAst();
 
-        DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), PROJECT_DIRECTORY);
+        DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), projectPath);
         compiler.compile();
         compiler.saveByteCode();
 
-        DavScriptVirtualMachine vm(PROJECT_DIRECTORY);
+        DavScriptVirtualMachine vm(projectPath);
         vm.prepareVM();
         vm.execute();
 

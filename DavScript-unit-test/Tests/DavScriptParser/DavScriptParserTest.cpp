@@ -18,7 +18,8 @@ namespace davincpp::davscript
     {
         registerTestStep({ "parsing assignments: success", [] { testAssignmentNodeSuccess(); }});
         registerTestStep({ "parsing assignments: failure", [this] { testAssignmentNodeFailure(); }});
-        registerTestStep({ "parsing function call: success: ", [] { testFunctionCallNodeSuccess(); }});
+        registerTestStep({ "parsing function call: success", [] { testFunctionCallNodeSuccess(); }});
+        registerTestStep({ "parsing project: success", [] { testProjectParsing(); }});
     }
 
     void DavScriptParserTest::testAssignmentNodeSuccess()
@@ -55,7 +56,6 @@ namespace davincpp::davscript
 
         DavScriptParser parser(davScript, lexer.getTokens());
         parser.generateAst();
-        Console::log("asdf");
     }
 
     void DavScriptParserTest::testFunctionCallNodeSuccess()
@@ -63,7 +63,7 @@ namespace davincpp::davscript
         DavScript davScript("../Tests/DavScriptParser/TestFiles/FunctionCallSuccess.dav");
 
         auto expectedAst = std::make_shared<Ast>();
-        expectedAst->addNode(std::make_shared<UseNode>(Token(davScript, CharPosition(0, 4), "std.io", NONE, IDENTIFIER)));
+        expectedAst->addNode(std::make_shared<UseNode>(std::make_shared<IdentifierNode>(Token(davScript, CharPosition(0, 4), "std.io", NONE, IDENTIFIER))));
         expectedAst->addNode(std::make_shared<FunctionCallNode>(
             Token(davScript, CharPosition(2, 0), "std.io.print", NONE, IDENTIFIER),
             std::vector<std::shared_ptr<AstNode>>
@@ -82,4 +82,17 @@ namespace davincpp::davscript
 
         assertTrue(*expectedAst == *ast);
     }
+
+    void DavScriptParserTest::testProjectParsing()
+    {
+        std::filesystem::path projectPath = "../Tests/DavScriptParser/TestFiles/ProjectParsing";
+        DavScript davScript("../Tests/DavScriptParser/TestFiles/ProjectParsing/main.dav");
+
+        DavScriptLexer lexer(davScript);
+        lexer.generateTokens();
+
+        DavScriptParser parser(davScript, lexer.getTokens());
+        parser.mapScriptsToModules(projectPath);
+        parser.generateAst();
+    };
 }

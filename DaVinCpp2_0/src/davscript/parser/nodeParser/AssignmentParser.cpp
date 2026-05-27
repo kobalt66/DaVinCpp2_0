@@ -15,10 +15,8 @@ namespace davincpp::davscript
 
         assert(assertSymbolDoesntExist(scriptParser, variableName, SymbolType::VARIABLE));
 
-        assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token(LBRAKET)));
         assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, VALUETYPE)));
         std::shared_ptr<ValueTypeNode> valueType = std::make_shared<ValueTypeNode>(scriptParser->advanceToken());
-        assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token(RBRAKET)));
 
         assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token( EQUALS, OPERATOR)));
 

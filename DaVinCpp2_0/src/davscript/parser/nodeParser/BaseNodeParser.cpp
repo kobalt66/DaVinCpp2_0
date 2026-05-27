@@ -152,7 +152,12 @@ namespace davincpp::davscript
             return true;
         }
 
-        scriptParser->logDuplicateSymbolName(identifierNode->getName(), symbolType);
+        scriptParser->logDuplicateSymbolNameError(identifierNode->getName(), symbolType);
         return false;
+    }
+
+    bool BaseNodeParser::assertValidNode(const std::shared_ptr<AstNode>& node)
+    {
+        return node != nullptr;
     }
 }

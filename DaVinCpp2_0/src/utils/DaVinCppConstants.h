@@ -15,6 +15,7 @@ namespace davincpp
 	constexpr const char* TEST_ENV = "D:\\C++\\DaVinCpp 2_0\\DaVinCpp2_0\\TestEnv\\";
 #else
 	constexpr const char* BASE_DIR = "/home/lephobix/CLionProjects/DaVinCpp2_0/DaVinCpp2_0/";
+	constexpr const char* DAV_LIBS = "/home/lephobix/CLionProjects/DaVinCpp2_0/DaVinCpp2_0/davlibs";
 	constexpr const char* TEST_ENV = "/home/lephobix/CLionProjects/DaVinCpp2_0/TestEnv";
 #endif
 

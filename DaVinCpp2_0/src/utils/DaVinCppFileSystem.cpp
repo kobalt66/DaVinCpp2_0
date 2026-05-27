@@ -87,6 +87,7 @@ namespace davincpp
 	{
 		std::string output = path;
 		output = DaVinCppString::findReplaceAll(output, "[BASE_DIR]", BASE_DIR);
+		output = DaVinCppString::findReplaceAll(output, "[DAV_LIBS]", DAV_LIBS);
 		output = DaVinCppString::findReplaceAll(output, "[TEST_ENV]", TEST_ENV);
 #ifdef _WIN32
 		output = DaVinCppString::findReplaceAll(output, "/", "\\");
@@ -123,4 +124,20 @@ namespace davincpp
 		return { directories, files };
 	}
 
+	std::vector<std::filesystem::directory_entry> DaVinCppFileSystem::getFilesInDirectoryRecursive(const std::filesystem::path& directoryPath)
+	{
+		std::filesystem::path finalPath = prepareFilePath(directoryPath);
+
+		if (!exists(finalPath)) {
+			throw system_error(Console::fmtTxt("Failed to read data to directory at ", finalPath, ": The directory path is invalid!"));
+		}
+
+		std::vector<std::filesystem::directory_entry> files;
+
+		for (const auto& item : std::filesystem::recursive_directory_iterator(directoryPath)) {
+			files.emplace_back(item);
+		}
+
+		return files;
+	}
 }

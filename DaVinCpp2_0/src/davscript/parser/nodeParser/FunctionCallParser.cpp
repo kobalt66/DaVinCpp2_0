@@ -11,6 +11,7 @@ namespace davincpp::davscript
     std::shared_ptr<AstNode> FunctionCallParser::parseNode(DavScriptParser* scriptParser)
     {
         auto functionName = std::dynamic_pointer_cast<IdentifierNode>(m_IdentifierParser.parseNode(scriptParser));
+        assert(assertValidNode(functionName));
 
         if (!scriptParser->validateSymbol(functionName, SymbolType::FUNCTION)) {
             return std::make_shared<InvalidNode>();

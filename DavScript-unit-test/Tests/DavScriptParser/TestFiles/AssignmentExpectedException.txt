@@ -7,15 +7,15 @@ Parsing error: Unexpected token:
   |        ^
 
 Actual token: Role: 'operator', Type: '='
-Expected token: Role: 'character', Type: '['
+Expected token: Role: 'type', Type: '[non-specific]'
 
 [====================================================================================]
-Script: "../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav" (ln: 2, char: 15):
+Script: "../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav" (ln: 2, char: 13):
 Parsing error: Invalid value type:
-2 | @var b [int] =
-  |               ^
+2 | @var b int =
+  |             ^
 
 Actual value type: newline
 Expected value type: int
 
-2 error(s) occurred during the parsing phase.
+AssignmentFailure.dav: 2 errors occurred during the parsing phase.

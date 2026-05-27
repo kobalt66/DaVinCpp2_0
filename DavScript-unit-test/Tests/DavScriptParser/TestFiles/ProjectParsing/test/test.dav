@@ -1,0 +1,3 @@
+module dav.test
+
+@var a int = 0

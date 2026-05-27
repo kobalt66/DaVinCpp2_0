@@ -14,8 +14,12 @@ namespace davincpp::davscript
         DavScript() = default;
         explicit DavScript(std::filesystem::path scriptPath);
 
+        bool operator==(const DavScript& other) const;
+
         void loadFile();
         void unloadFile();
+
+        void setFileContent(std::string_view fileContent);
 
         [[nodiscard]] bool isEmpty() const;
         [[nodiscard]] char getCharByPosition(CharPosition position) const;
@@ -23,9 +27,13 @@ namespace davincpp::davscript
         [[nodiscard]] bool atEndOfFile(CharPosition position) const;
         [[nodiscard]] size_t getLineLength(CharPosition position) const;
         [[nodiscard]] std::string_view getCodeLineByPosition(CharPosition position) const;
+        [[nodiscard]] std::string getCodeLineByWord(std::string_view word) const;
 
         [[nodiscard]] std::filesystem::path getLocation() const;
         [[nodiscard]] std::string getName() const;
+
+    private:
+        void computeLineOffsets();
 
     private:
         std::string m_FileContent;
