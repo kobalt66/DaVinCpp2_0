@@ -3,9 +3,9 @@
 
 namespace davincpp
 {
-    class DaVinCppNumeric
-    {
-    public:
-        static int convertStringToInteger(std::string_view input, int _default);
-    };
-}
+class DaVinCppNumeric
+{
+  public:
+	static int convertStringToInteger(std::string_view input, int _default);
+};
+} // namespace davincpp

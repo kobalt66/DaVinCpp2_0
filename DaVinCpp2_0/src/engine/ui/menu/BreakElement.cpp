@@ -2,7 +2,8 @@
 
 namespace davincpp
 {
-    BreakElement::BreakElement()
-        : MenuElement("")
-    { }
+BreakElement::BreakElement()
+    : MenuElement("")
+{
 }
+} // namespace davincpp

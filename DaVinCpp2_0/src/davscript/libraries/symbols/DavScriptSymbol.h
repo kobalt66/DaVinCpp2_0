@@ -4,19 +4,20 @@
 
 namespace davincpp::davscript
 {
-    class DavScriptSymbol : public std::enable_shared_from_this<DavScriptSymbol>
-    {
-    public:
-        DavScriptSymbol(int scopeDepth, SymbolType symbolType);
-        virtual ~DavScriptSymbol() = default;
+class DavScriptSymbol : public std::enable_shared_from_this<DavScriptSymbol>
+{
+  public:
+	DavScriptSymbol(int scopeDepth, SymbolType symbolType);
+	virtual ~DavScriptSymbol() = default;
 
-        template<class T> [[nodiscard]] std::shared_ptr<T> castToSymbolType();
+	template <class T>
+	[[nodiscard]] std::shared_ptr<T> castToSymbolType();
 
-        [[nodiscard]] int getScopeDepth() const;
-        [[nodiscard]] SymbolType getSymbolType() const;
+	[[nodiscard]] int getScopeDepth() const;
+	[[nodiscard]] SymbolType getSymbolType() const;
 
-    protected:
-        int m_ScopeDepth;
-        SymbolType m_SymbolType;
-    };
-}
+  protected:
+	int m_ScopeDepth;
+	SymbolType m_SymbolType;
+};
+} // namespace davincpp::davscript

@@ -3,7 +3,9 @@
 
 namespace davincpp
 {
-	GameObjectStats::GameObjectStats(GameObject* objectPtr, std::string objectName)
-		: m_ObjectPtr(objectPtr), m_ObjectName(objectName)
-	{ }
+GameObjectStats::GameObjectStats(GameObject* objectPtr, std::string objectName)
+    : m_ObjectPtr(objectPtr)
+    , m_ObjectName(objectName)
+{
 }
+} // namespace davincpp

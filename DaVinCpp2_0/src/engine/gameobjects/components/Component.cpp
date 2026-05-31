@@ -2,13 +2,13 @@
 
 namespace davincpp
 {
-	Component::Component(ComponentType uniqueType)
-		: m_UniqueType(uniqueType)
-	{ }
-
-
-	ComponentType Component::getUniqueType() const
-	{
-		return m_UniqueType;
-	}
+Component::Component(ComponentType uniqueType)
+    : m_UniqueType(uniqueType)
+{
 }
+
+ComponentType Component::getUniqueType() const
+{
+	return m_UniqueType;
+}
+} // namespace davincpp

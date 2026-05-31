@@ -4,12 +4,12 @@
 
 namespace davincpp::davscript
 {
-    class FunctionCallParser final : public BaseNodeParser
-    {
-    public:
-        [[nodiscard]] std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) override;
+class FunctionCallParser final : public BaseNodeParser
+{
+  public:
+	[[nodiscard]] std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) override;
 
-    private:
-        IdentifierParser m_IdentifierParser;
-    };
-}
+  private:
+	IdentifierParser m_IdentifierParser;
+};
+} // namespace davincpp::davscript

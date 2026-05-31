@@ -5,19 +5,19 @@
 
 namespace davincpp::davscript
 {
-    class Ast final : public CallStackNode
-    {
-    public:
-        Ast() = default;
-        explicit Ast(IdentifierNode script);
+class Ast final : public CallStackNode
+{
+  public:
+	Ast() = default;
+	explicit Ast(IdentifierNode script);
 
-        [[nodiscard]] bool operator==(const AstNode& other) const override;
+	[[nodiscard]] bool operator==(const AstNode& other) const override;
 
-        std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override;
+	std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override;
 
-        [[nodiscard]] IdentifierNode getModuleNamespace() const;
+	[[nodiscard]] IdentifierNode getModuleNamespace() const;
 
-    private:
-        IdentifierNode m_ModuleNamespace;
-    };
-}
+  private:
+	IdentifierNode m_ModuleNamespace;
+};
+} // namespace davincpp::davscript

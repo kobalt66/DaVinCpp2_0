@@ -5,28 +5,30 @@
 
 namespace davincpp
 {
-	class ShaderProfile
+class ShaderProfile
+{
+  public:
+	ShaderProfile() = default;
+	template <class... Args>
+	ShaderProfile(Args... args)
 	{
-	public:
-		ShaderProfile() = default;
-		template<class... Args> ShaderProfile(Args... args)
-		{
-			if (!(std::is_same_v<Args, VertexAttribute> && ...)) {
-				Console::err("A shader profile only accepts vertex attributes!");
-				throw core_error();
-			}
-
-			m_Attributes.insert(m_Attributes.begin(), { args... });
-
-			for (const VertexAttribute& vertexAttrib : m_Attributes) {
-				m_TotalSize += vertexAttrib.getUnitCount();
-			}
+		if (!(std::is_same_v<Args, VertexAttribute> && ...)) {
+			Console::err("A shader profile only accepts vertex attributes!");
+			throw core_error();
 		}
 
-		template<class T> void setAttributes() const;
+		m_Attributes.insert(m_Attributes.begin(), {args...});
 
-	private:
-		std::vector<VertexAttribute> m_Attributes;
-		int m_TotalSize	= 0;
-	};
-}
+		for (const VertexAttribute& vertexAttrib : m_Attributes) {
+			m_TotalSize += vertexAttrib.getUnitCount();
+		}
+	}
+
+	template <class T>
+	void setAttributes() const;
+
+  private:
+	std::vector<VertexAttribute> m_Attributes;
+	int m_TotalSize = 0;
+};
+} // namespace davincpp

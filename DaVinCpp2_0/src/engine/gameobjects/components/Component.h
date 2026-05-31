@@ -4,30 +4,38 @@
 
 namespace davincpp
 {
-	enum class ComponentType : int
+enum class ComponentType : int
+{
+	NONE = -1,
+	SURFACE = 0,
+	TEXTURE = 1,
+};
+
+class Component
+{
+  public:
+	explicit Component(ComponentType uniqueType);
+	virtual ~Component() = default;
+
+	virtual void onLoad(GameObjectStats& gameObjectStats)
 	{
-		NONE	= -1,
-		SURFACE = 0,
-		TEXTURE = 1,
-	};
-
-	class Component
+	}
+	virtual void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
 	{
-	public:
-		explicit Component(ComponentType uniqueType);
-		virtual ~Component() = default;
+	}
+	virtual void onUpdate(GameObjectStats& gameObjectStats)
+	{
+	}
+	virtual void onShutdown(GameObjectStats& gameObjectStats)
+	{
+	}
 
-		virtual void onLoad(GameObjectStats& gameObjectStats) { }
-		virtual void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const { }
-		virtual void onUpdate(GameObjectStats& gameObjectStats) { }
-		virtual void onShutdown(GameObjectStats& gameObjectStats) { }
+	/// TODO:	Add virtual functions that allow the components to get properly rendered on the game engine's UI.
+	///			Every component has to be able to get rendered differently inside the engine's UI.
 
-		/// TODO:	Add virtual functions that allow the components to get properly rendered on the game engine's UI.
-		///			Every component has to be able to get rendered differently inside the engine's UI.
+	[[nodiscard]] ComponentType getUniqueType() const;
 
-		[[nodiscard]] ComponentType getUniqueType() const;
-
-	private:
-		ComponentType m_UniqueType = ComponentType::NONE;
-	};
-}
+  private:
+	ComponentType m_UniqueType = ComponentType::NONE;
+};
+} // namespace davincpp

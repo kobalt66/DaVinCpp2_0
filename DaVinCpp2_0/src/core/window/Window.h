@@ -5,43 +5,43 @@
 
 namespace davincpp
 {
-	class Window
-	{
-	public:
-		Window() = default;
-		explicit Window(const ProjectConfig& projectConfig);
+class Window
+{
+  public:
+	Window() = default;
+	explicit Window(const ProjectConfig& projectConfig);
 
-		static void onResize(GLFWwindow* windowID, int width, int height);
-		static void onMousePosition(GLFWwindow* windowID, double xpos, double ypos);
-		
-		void onSetup();
-		void onUpdate();
-		void onNewFrame();
-		void onRender();
-		void onShutdown();
+	static void onResize(GLFWwindow* windowID, int width, int height);
+	static void onMousePosition(GLFWwindow* windowID, double xpos, double ypos);
 
-		static void setVsync(bool vsync);
-		void showCursor(bool showCursor);
-		void showFps(bool showFps);
-		bool shouldClose() const;
+	void onSetup();
+	void onUpdate();
+	void onNewFrame();
+	void onRender();
+	void onShutdown();
 
-		void updateViewport() const;
-		static void setOpenGLSettings();
-		void setOpenGLCallbacks();
-		static void flipTexturesH(bool flip);
-		void defineEvents();
+	static void setVsync(bool vsync);
+	void showCursor(bool showCursor);
+	void showFps(bool showFps);
+	bool shouldClose() const;
 
-		glm::ivec2 getFrameSize() const;
-		FrameBuffer& getFrameBuffer();
+	void updateViewport() const;
+	static void setOpenGLSettings();
+	void setOpenGLCallbacks();
+	static void flipTexturesH(bool flip);
+	void defineEvents();
 
-	private:
-		uint32_t m_Width = 0, m_Height = 0;
-		std::string m_Title;
+	glm::ivec2 getFrameSize() const;
+	FrameBuffer& getFrameBuffer();
 
-		GLFWwindow* m_WindowPtr = nullptr;
-		GameWindow m_GameWindow;
-		
-		bool m_ShowFps = false;
-		int m_FpsCount = 0;
-	};
-}
+  private:
+	uint32_t m_Width = 0, m_Height = 0;
+	std::string m_Title;
+
+	GLFWwindow* m_WindowPtr = nullptr;
+	GameWindow m_GameWindow;
+
+	bool m_ShowFps = false;
+	int m_FpsCount = 0;
+};
+} // namespace davincpp

@@ -3,13 +3,13 @@
 
 namespace davincpp
 {
-	class EventHandler
-	{
-	public:
-		static void addEvent(Event&& event);
-		static void onUpdate();
+class EventHandler
+{
+  public:
+	static void addEvent(Event&& event);
+	static void onUpdate();
 
-	private:
-		static std::vector<Event> m_Events;
-	};
-}
+  private:
+	static std::vector<Event> m_Events;
+};
+} // namespace davincpp

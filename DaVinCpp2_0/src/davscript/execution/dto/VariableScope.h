@@ -3,9 +3,9 @@
 
 namespace davincpp::davscript
 {
-    struct VariableScope
-    {
-        std::string variableName;
-        int scopeDepth;
-    };
-}
+struct VariableScope
+{
+	std::string variableName;
+	int scopeDepth;
+};
+} // namespace davincpp::davscript

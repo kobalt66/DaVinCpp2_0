@@ -2,10 +2,10 @@
 
 namespace davincpp::davscript
 {
-    class DavScriptVirtualMachine;
+class DavScriptVirtualMachine;
 
-    namespace stdlib::io
-    {
-        void print(DavScriptVirtualMachine* vm);
-    }
+namespace stdlib::io
+{
+void print(DavScriptVirtualMachine* vm);
 }
+} // namespace davincpp::davscript
