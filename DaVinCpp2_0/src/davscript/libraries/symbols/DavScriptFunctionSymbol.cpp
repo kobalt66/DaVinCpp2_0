@@ -3,21 +3,18 @@
 
 namespace davincpp::davscript
 {
-DavScriptFunctionSymbol::DavScriptFunctionSymbol(int scopeDepth, uint32_t functionPtr,
-                                                 std::function<void(DavScriptVirtualMachine*)> function)
-    : DavScriptSymbol(scopeDepth, SymbolType::FUNCTION)
-    , m_FunctionPtr(functionPtr)
-    , m_Function(std::move(function))
+DavScriptFunctionSymbol::DavScriptFunctionSymbol(
+    int scopeDepth, uint32_t functionPtr, std::function<void(DavScriptVirtualMachine*)> function)
+: DavScriptSymbol(scopeDepth, SymbolType::FUNCTION)
+, m_FunctionPtr(functionPtr)
+, m_Function(std::move(function))
 {
 }
 
-uint32_t DavScriptFunctionSymbol::getFunctionPtr() const
-{
-	return m_FunctionPtr;
-}
+uint32_t DavScriptFunctionSymbol::getFunctionPtr() const { return m_FunctionPtr; }
 
 std::function<void(DavScriptVirtualMachine*)> DavScriptFunctionSymbol::getFunction() const
 {
-	return m_Function;
+    return m_Function;
 }
-} // namespace davincpp::davscript
+}  // namespace davincpp::davscript

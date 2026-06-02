@@ -8,6 +8,6 @@ namespace davincpp::davscript
 {
 struct DavScriptNamespace
 {
-	std::unordered_map<std::string, std::shared_ptr<DavScriptSymbol>> registeredSymbols;
+    std::unordered_map<std::string, std::shared_ptr<DavScriptSymbol>> registeredSymbols;
 };
-} // namespace davincpp::davscript
+}  // namespace davincpp::davscript

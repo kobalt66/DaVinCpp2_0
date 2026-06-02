@@ -6,17 +6,17 @@ namespace davincpp
 {
 class InputManager
 {
-  public:
-	static bool isKeyPressed(std::string_view key);
-	static bool isKeyReleased(std::string_view key);
+public:
+    static bool isKeyPressed(std::string_view key);
+    static bool isKeyReleased(std::string_view key);
 
-	static void setWindowPtr(GLFWwindow* windowPtr);
+    static void setWindowPtr(GLFWwindow* windowPtr);
 
-  private:
-	static int translateKey(std::string_view key);
+private:
+    static int translateKey(std::string_view key);
 
-  private:
-	static std::unordered_map<std::string, int> m_InputMap;
-	static GLFWwindow* m_WindowPtr;
+private:
+    static std::unordered_map<std::string, int> m_InputMap;
+    static GLFWwindow*                          m_WindowPtr;
 };
-} // namespace davincpp
+}  // namespace davincpp

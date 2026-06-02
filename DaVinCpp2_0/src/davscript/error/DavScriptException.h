@@ -6,7 +6,7 @@ namespace davincpp::davscript
 {
 class DavScriptException final : public std::runtime_error
 {
-  public:
-	explicit DavScriptException(const std::string& message);
+public:
+    explicit DavScriptException(const std::string& message);
 };
-} // namespace davincpp::davscript
+}  // namespace davincpp::davscript

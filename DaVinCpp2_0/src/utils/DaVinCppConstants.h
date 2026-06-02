@@ -19,10 +19,10 @@ constexpr const char* DAV_LIBS = "/home/lephobix/CLionProjects/DaVinCpp2_0/DaVin
 constexpr const char* TEST_ENV = "/home/lephobix/CLionProjects/DaVinCpp2_0/TestEnv";
 #endif
 
-constexpr uint32_t DEFAULT_RESOLUTION_WIDTH = 1200;
+constexpr uint32_t DEFAULT_RESOLUTION_WIDTH  = 1200;
 constexpr uint32_t DEFAULT_RESOLUTION_HEIGHT = 720;
-constexpr uint32_t DEFAULT_PIXEL_SIZEX = 4;
-constexpr uint32_t DEFAULT_PIXEL_SIZEY = 4;
-constexpr uint32_t MIN_FRAMEBUFFER_SIZEX = 1;
-constexpr uint32_t MIN_FRAMEBUFFER_SIZEY = 1;
-} // namespace davincpp
+constexpr uint32_t DEFAULT_PIXEL_SIZEX       = 4;
+constexpr uint32_t DEFAULT_PIXEL_SIZEY       = 4;
+constexpr uint32_t MIN_FRAMEBUFFER_SIZEX     = 1;
+constexpr uint32_t MIN_FRAMEBUFFER_SIZEY     = 1;
+}  // namespace davincpp

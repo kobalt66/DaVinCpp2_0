@@ -8,58 +8,58 @@ namespace davincpp
 {
 class SelectionMenu
 {
-  public:
-	SelectionMenu() = default;
-	explicit SelectionMenu(const std::shared_ptr<ProjectManager>& projectManager);
+public:
+    SelectionMenu() = default;
+    explicit SelectionMenu(const std::shared_ptr<ProjectManager>& projectManager);
 
-	void onLoad();
-	void onExecute();
+    void onLoad();
+    void onExecute();
 
-	void switchPage(std::string_view pageTag);
-	void gotoPreviousPage();
-	void shouldShutDown(bool shutDown);
+    void switchPage(std::string_view pageTag);
+    void gotoPreviousPage();
+    void shouldShutDown(bool shutDown);
 
-	void setInputControl(bool enableInput);
-	void setSelectedProjectIdx(int projectIdx);
-	int getSelectedProjectIdx() const;
-	template <class T = MenuPage>
-	std::shared_ptr<T> getMenuPage(std::string_view pageTag) const;
+    void setInputControl(bool enableInput);
+    void setSelectedProjectIdx(int projectIdx);
+    int  getSelectedProjectIdx() const;
+    template<class T = MenuPage>
+    std::shared_ptr<T> getMenuPage(std::string_view pageTag) const;
 
 #ifndef _WIN32
-	static void displayDescription(std::string_view text, int colorPair);
-	static void resetDescription();
+    static void displayDescription(std::string_view text, int colorPair);
+    static void resetDescription();
 
-	void clearCurrentMenuPage() const;
+    void clearCurrentMenuPage() const;
 #endif
 
-  private:
-	void onRender() const;
-	void onUpdate(int input);
+private:
+    void onRender() const;
+    void onUpdate(int input);
 
-	static void actionCreateProject(SelectionMenu* selectionMenu, ActionButton* buttonRef);
+    static void actionCreateProject(SelectionMenu* selectionMenu, ActionButton* buttonRef);
 
-  public:
-	static const char* PAGE_UNDEFINED;
-	static const char* PAGE_MAIN;
-	static const char* PAGE_SELECT_PROJECT;
-	static const char* PAGE_CREATE_PROJECT;
-	static const char* PAGE_DELETE_PROJECT;
-	static const char* PAGE_RENAME_PROJECT;
-	static const char* PAGE_EDIT_PROJECT_CONFIGS;
-	static const char* PAGE_SELECT_FILE_PATH;
+public:
+    static const char* PAGE_UNDEFINED;
+    static const char* PAGE_MAIN;
+    static const char* PAGE_SELECT_PROJECT;
+    static const char* PAGE_CREATE_PROJECT;
+    static const char* PAGE_DELETE_PROJECT;
+    static const char* PAGE_RENAME_PROJECT;
+    static const char* PAGE_EDIT_PROJECT_CONFIGS;
+    static const char* PAGE_SELECT_FILE_PATH;
 
-	static const char* WRN_INVALID_INPUT;
+    static const char* WRN_INVALID_INPUT;
 
-  private:
-	std::shared_ptr<ProjectManager> m_ProjectManager;
+private:
+    std::shared_ptr<ProjectManager> m_ProjectManager;
 
-	std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
-	std::vector<std::shared_ptr<MenuPage>> m_PageInvocationHistory;
-	std::shared_ptr<MenuPage> m_CurrentPage = nullptr;
+    std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
+    std::vector<std::shared_ptr<MenuPage>>                     m_PageInvocationHistory;
+    std::shared_ptr<MenuPage>                                  m_CurrentPage = nullptr;
 
-	bool m_ShouldShutdown = false;
-	bool m_InputEnabled = true;
+    bool m_ShouldShutdown = false;
+    bool m_InputEnabled   = true;
 
-	int m_SelectedProjectIdx = 0;
+    int m_SelectedProjectIdx = 0;
 };
-} // namespace davincpp
+}  // namespace davincpp

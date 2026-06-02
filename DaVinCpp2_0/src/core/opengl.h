@@ -15,12 +15,13 @@
 #define DEBUG_BREAK() /* empty */
 #endif
 
-#define GLCall(x)                                                                                                      \
-	{                                                                                                                  \
-		x;                                                                                                             \
-		while (GLenum error = glGetError()) {                                                                          \
-			Console::openglErr("(", error, "): ", #x, " ", __FILE__, " : ", __LINE__, ")");                            \
-			DEBUG_BREAK();                                                                                             \
-			exit(1);                                                                                                   \
-		}                                                                                                              \
-	}
+#define GLCall(x)                                                                                  \
+    {                                                                                              \
+        x;                                                                                         \
+        while (GLenum error = glGetError())                                                        \
+        {                                                                                          \
+            Console::openglErr("(", error, "): ", #x, " ", __FILE__, " : ", __LINE__, ")");        \
+            DEBUG_BREAK();                                                                         \
+            exit(1);                                                                               \
+        }                                                                                          \
+    }

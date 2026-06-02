@@ -3,11 +3,11 @@
 
 namespace davincpp::davscript
 {
-    class DavScriptFileTest : public unittest::UnitTest
-    {
-    public:
-        explicit DavScriptFileTest();
+class DavScriptFileTest : public unittest::UnitTest
+{
+public:
+    explicit DavScriptFileTest();
 
-        void onSetup() noexcept override;
-    };
+    void onSetup() noexcept override;
+};
 }

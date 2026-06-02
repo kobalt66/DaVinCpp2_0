@@ -9,37 +9,37 @@ namespace davincpp
 {
 class GameWindow
 {
-  public:
-	explicit GameWindow(const ProjectConfig& projectConfig);
+public:
+    explicit GameWindow(const ProjectConfig& projectConfig);
 
-	void onSetup();
-	void onClear();
-	void onRender();
-	void onUpdate();
-	void onResize(uint32_t windowSizeX, uint32_t windowSizeY);
-	void onMousePosition(double xpos, double ypos);
+    void onSetup();
+    void onClear();
+    void onRender();
+    void onUpdate();
+    void onResize(uint32_t windowSizeX, uint32_t windowSizeY);
+    void onMousePosition(double xpos, double ypos);
 
-	glm::ivec2 getFrameSize() const;
-	glm::ivec2 getMousePosition() const;
-	FrameBuffer& getFrameBuffer();
-	std::shared_ptr<GameObject> getCursor();
+    glm::ivec2                  getFrameSize() const;
+    glm::ivec2                  getMousePosition() const;
+    FrameBuffer&                getFrameBuffer();
+    std::shared_ptr<GameObject> getCursor();
 
-  private:
-	void updateCursorPosition();
+private:
+    void updateCursorPosition();
 
-  private:
-	uint32_t m_Width = 0, m_Height = 0;
+private:
+    uint32_t m_Width = 0, m_Height = 0;
 
-	std::vector<float> m_Vertices;
-	std::vector<uint32_t> m_Indices;
+    std::vector<float>    m_Vertices;
+    std::vector<uint32_t> m_Indices;
 
-	FrameBuffer m_FrameBuffer;
-	Texture m_FrameTexture;
-	Mesh<float> m_Mesh;
-	Shader m_WindowShader;
+    FrameBuffer m_FrameBuffer;
+    Texture     m_FrameTexture;
+    Mesh<float> m_Mesh;
+    Shader      m_WindowShader;
 
-	std::shared_ptr<GameObject> m_Cursor;
-	glm::ivec2 m_MousePosition = glm::ivec2(0);
-	glm::vec4 m_CursorColor;
+    std::shared_ptr<GameObject> m_Cursor;
+    glm::ivec2                  m_MousePosition = glm::ivec2(0);
+    glm::vec4                   m_CursorColor;
 };
-} // namespace davincpp
+}  // namespace davincpp

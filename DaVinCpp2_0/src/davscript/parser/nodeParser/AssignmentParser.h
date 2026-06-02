@@ -5,7 +5,7 @@ namespace davincpp::davscript
 {
 class AssignmentParser final : public BaseNodeParser
 {
-  public:
-	[[nodiscard]] std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) override;
+public:
+    [[nodiscard]] std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) override;
 };
-} // namespace davincpp::davscript
+}  // namespace davincpp::davscript

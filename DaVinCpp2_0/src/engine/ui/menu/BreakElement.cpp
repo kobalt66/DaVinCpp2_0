@@ -3,7 +3,7 @@
 namespace davincpp
 {
 BreakElement::BreakElement()
-    : MenuElement("")
+: MenuElement("")
 {
 }
-} // namespace davincpp
+}  // namespace davincpp

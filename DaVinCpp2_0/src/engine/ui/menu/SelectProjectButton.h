@@ -6,14 +6,16 @@ namespace davincpp
 {
 class SelectProjectButton : public MenuElement
 {
-  public:
-	explicit SelectProjectButton(const std::string& displayText, ProjectConfig& projectConfig, int projectIdx,
-	                             const std::string& uniqueTag = "");
+public:
+    explicit SelectProjectButton(const std::string& displayText,
+                                 ProjectConfig&     projectConfig,
+                                 int                projectIdx,
+                                 const std::string& uniqueTag = "");
 
-	void onInteraction(SelectionMenu* selectionMenu) override;
+    void onInteraction(SelectionMenu* selectionMenu) override;
 
-  private:
-	int m_ProjectIdx;
-	ProjectConfig m_TargetProjectConfig;
+private:
+    int           m_ProjectIdx;
+    ProjectConfig m_TargetProjectConfig;
 };
-} // namespace davincpp
+}  // namespace davincpp

@@ -8,4 +8,4 @@ namespace stdlib::io
 {
 void print(DavScriptVirtualMachine* vm);
 }
-} // namespace davincpp::davscript
+}  // namespace davincpp::davscript

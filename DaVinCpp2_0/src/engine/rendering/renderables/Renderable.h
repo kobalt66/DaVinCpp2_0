@@ -6,22 +6,25 @@ namespace davincpp
 {
 class Renderable : public Component
 {
-  public:
-	Renderable(glm::vec2 position, glm::vec4 color);
-	virtual ~Renderable() = default;
+public:
+    Renderable(glm::vec2 position, glm::vec4 color);
+    virtual ~Renderable() = default;
 
-	void onLoad(GameObjectStats& gameObjectStats) override;
-	void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
+    void onLoad(GameObjectStats& gameObjectStats) override;
+    void onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const override;
 
-	virtual glm::vec2 getPosition();
-	virtual void setPosition(glm::vec2 position);
+    virtual glm::vec2 getPosition();
+    virtual void      setPosition(glm::vec2 position);
 
-  protected:
-	[[nodiscard]] glm::vec4 mapTextureByUVCoords(std::shared_ptr<Texture2D> texture, int pixelX, int pixelY,
-	                                             float width, float height) const;
+protected:
+    [[nodiscard]] glm::vec4 mapTextureByUVCoords(std::shared_ptr<Texture2D> texture,
+                                                 int                        pixelX,
+                                                 int                        pixelY,
+                                                 float                      width,
+                                                 float                      height) const;
 
-  protected:
-	glm::vec2 m_Position;
-	glm::vec4 m_Color;
+protected:
+    glm::vec2 m_Position;
+    glm::vec4 m_Color;
 };
-} // namespace davincpp
+}  // namespace davincpp

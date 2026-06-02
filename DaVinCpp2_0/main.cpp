@@ -5,28 +5,32 @@
 
 int main()
 {
-	try {
-		davincpp::DaVinCppFileSystem::canWrite("/root");
+    try
+    {
+        davincpp::DaVinCppFileSystem::canWrite("/root");
 
-		davincpp::Application app;
-		app.onStartEngine();
-		app.onLoad();
+        davincpp::Application app;
+        app.onStartEngine();
+        app.onLoad();
 
-		while (!app.shouldShutdown()) {
-			app.onClear();
-			app.onRender();
-			app.onUpdate();
-		}
+        while (!app.shouldShutdown())
+        {
+            app.onClear();
+            app.onRender();
+            app.onUpdate();
+        }
 
-		app.onShutdown();
-	} catch (std::exception& exception) {
+        app.onShutdown();
+    }
+    catch (std::exception& exception)
+    {
 #ifdef __linux__
-		davincpp::Console::shutDownNcurses();
+        davincpp::Console::shutDownNcurses();
 #endif
-		davincpp::Console::raw(davincpp::Console::RED, exception.what());
-		davincpp::Console::raw(davincpp::Console::GRAY, "Unhandled error...");
-		return 1;
-	}
+        davincpp::Console::raw(davincpp::Console::RED, exception.what());
+        davincpp::Console::raw(davincpp::Console::GRAY, "Unhandled error...");
+        return 1;
+    }
 
-	return 0;
+    return 0;
 }

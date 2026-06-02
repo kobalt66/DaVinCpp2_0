@@ -4,13 +4,13 @@
 namespace davincpp
 {
 ExitButton::ExitButton(const std::string& displayText)
-    : MenuElement(displayText)
+: MenuElement(displayText)
 {
 }
 
 void ExitButton::onInteraction(SelectionMenu* selectionMenu)
 {
-	Console::shutDownNcurses();
-	exit(0);
+    Console::shutDownNcurses();
+    exit(0);
 }
-} // namespace davincpp
+}  // namespace davincpp

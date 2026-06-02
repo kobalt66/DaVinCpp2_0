@@ -6,25 +6,25 @@ namespace davincpp
 {
 class Project
 {
-  public:
-	Project() = default;
-	explicit Project(std::string_view projectPath);
+public:
+    Project() = default;
+    explicit Project(std::string_view projectPath);
 
-	void loadProjectConfig(std::string_view davincppVersion);
+    void loadProjectConfig(std::string_view davincppVersion);
 
-	[[nodiscard]] const ProjectConfig& getProjectConfig() const;
+    [[nodiscard]] const ProjectConfig& getProjectConfig() const;
 
-  private:
-	ProjectConfig m_Config;
-	std::string m_ProjectPath;
+private:
+    ProjectConfig m_Config;
+    std::string   m_ProjectPath;
 };
-} // namespace davincpp
+}  // namespace davincpp
 
 namespace YAML
 {
-template <>
+template<>
 struct convert<davincpp::Project>
 {
-	static bool decode(const Node& node, davincpp::Project& rhs);
+    static bool decode(const Node& node, davincpp::Project& rhs);
 };
-} // namespace YAML
+}  // namespace YAML

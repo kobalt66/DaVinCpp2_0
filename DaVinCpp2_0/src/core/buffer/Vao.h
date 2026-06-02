@@ -6,17 +6,17 @@ namespace davincpp
 {
 class Vao
 {
-  public:
-	Vao() = default;
-	~Vao();
+public:
+    Vao() = default;
+    ~Vao();
 
-	void generate();
-	void bind();
-	void unbind();
-	bool bound() const;
+    void generate();
+    void bind();
+    void unbind();
+    bool bound() const;
 
-  private:
-	uint32_t m_ID = 0;
-	bool m_Bound = false;
+private:
+    uint32_t m_ID    = 0;
+    bool     m_Bound = false;
 };
-} // namespace davincpp
+}  // namespace davincpp

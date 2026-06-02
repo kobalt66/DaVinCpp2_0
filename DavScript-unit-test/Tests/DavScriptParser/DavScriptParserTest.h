@@ -4,17 +4,17 @@
 
 namespace davincpp::davscript
 {
-    class DavScriptParserTest : public unittest::UnitTest
-    {
-    public:
-        explicit DavScriptParserTest();
+class DavScriptParserTest : public unittest::UnitTest
+{
+public:
+    explicit DavScriptParserTest();
 
-        void onSetup() noexcept override;
+    void onSetup() noexcept override;
 
-    private:
-        static void testAssignmentNodeSuccess();
-        void testAssignmentNodeFailure();
-        static void testFunctionCallNodeSuccess();
-        static void testProjectParsing();
-    };
+private:
+    static void testAssignmentNodeSuccess();
+    void        testAssignmentNodeFailure();
+    static void testFunctionCallNodeSuccess();
+    static void testProjectParsing();
+};
 }

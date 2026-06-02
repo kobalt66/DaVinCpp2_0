@@ -7,21 +7,21 @@ namespace davincpp
 {
 class Vbo
 {
-  public:
-	Vbo() = default;
-	~Vbo();
+public:
+    Vbo() = default;
+    ~Vbo();
 
-	void generate();
-	void bind();
-	void unbind();
-	bool bound() const;
+    void generate();
+    void bind();
+    void unbind();
+    bool bound() const;
 
-	template <class T>
-	void bindData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW);
+    template<class T>
+    void bindData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW);
 
-  private:
-	uint32_t m_ID = 0;
-	bool m_Bound = false;
-	GLenum m_Usage = GL_STATIC_DRAW;
+private:
+    uint32_t m_ID    = 0;
+    bool     m_Bound = false;
+    GLenum   m_Usage = GL_STATIC_DRAW;
 };
-} // namespace davincpp
+}  // namespace davincpp

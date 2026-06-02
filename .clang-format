@@ -1,63 +1,59 @@
-# .clang-format — matches DaVinCpp2_0 coding style
-# Based on: tabs for indentation, Allman-style braces, member prefix m_
-
-BasedOnStyle: Microsoft
-
-# --- Indentation ---
-UseTab: ForIndentation        # use real tab characters for indentation
-TabWidth: 4                   # 1 tab = 4 spaces wide (matches CLion default display)
-IndentWidth: 4
-ContinuationIndentWidth: 4
-
-# --- Brace style: Custom ---
-# Functions, classes, namespaces: brace on new line
-# Control flow (if/while/for/try): brace on same line  <- matches your code
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterFunction:        true   # void Foo()\n{
-  AfterClass:           true   # class Foo\n{
-  AfterNamespace:       true   # namespace foo\n{
-  AfterStruct:          true
-  AfterEnum:            true
-  AfterUnion:           true
-  AfterControlStatement: Never # if (...) {  /  while (...) {  /  try {
-  BeforeElse:           false  # } else {
-  BeforeCatch:          false  # } catch (...) {
-  IndentBraces:         false
-
-# --- Line length ---
-ColumnLimit: 120
-
-# --- Namespace ---
-NamespaceIndentation: None    # don't indent inside namespace {}
-CompactNamespaces: false
-
-# --- Includes ---
-SortIncludes: Never           # keep your include order as-is
-
-# --- Alignment ---
-AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
-AlignTrailingComments: true
-
-# --- Spaces ---
-SpaceBeforeParens: ControlStatements   # space before ( in if/while/for
-SpaceInEmptyParentheses: false
-SpacesInAngles: false
-SpacesInContainerLiterals: false
-
-# --- Short blocks ---
-AllowShortBlocksOnASingleLine: Never
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-
-# --- Constructor initializer lists ---
-BreakConstructorInitializers: BeforeComma
-ConstructorInitializerIndentWidth: 4
-
-# --- Template ---
-AlwaysBreakTemplateDeclarations: Yes
-
-# --- Pointer alignment ---
-PointerAlignment: Left        # int* ptr style
+---
+BasedOnStyle: Mozilla
+AccessModifierOffset: '-4'
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: 'true'
+AlignConsecutiveDeclarations: 'true'
+AlignEscapedNewlinesLeft: 'false'
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+AllowAllParametersOfDeclarationOnNextLine: 'true'
+AllowShortBlocksOnASingleLine: 'true'
+AllowShortCaseLabelsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: 'false'
+AllowShortLoopsOnASingleLine: 'false'
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: 'true'
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: 'true'
+BreakConstructorInitializersBeforeComma: 'true'
+BreakStringLiterals: 'false'
+ColumnLimit: '100'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
+ConstructorInitializerIndentWidth: '0'
+ContinuationIndentWidth: '4'
+Cpp11BracedListStyle: 'false'
+DerivePointerAlignment: 'false'
+DisableFormat: 'false'
+ExperimentalAutoDetectBinPacking: 'true'
+IndentCaseLabels: 'true'
+IndentWidth: '4'
+IndentWrappedFunctionNames: 'false'
+JavaScriptQuotes: Single
+KeepEmptyLinesAtTheStartOfBlocks: 'false'
+Language: Cpp
+MaxEmptyLinesToKeep: '2'
+NamespaceIndentation: None
+ObjCBlockIndentWidth: '4'
+ObjCSpaceAfterProperty: 'false'
+ObjCSpaceBeforeProtocolList: 'false'
+PointerAlignment: Left
+ReflowComments: 'true'
+SortIncludes: 'false'
+SpaceAfterCStyleCast: 'true'
+SpaceBeforeAssignmentOperators: 'true'
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: 'false'
+SpacesBeforeTrailingComments: '2'
+SpacesInAngles: 'false'
+SpacesInCStyleCastParentheses: 'false'
+SpacesInContainerLiterals: 'false'
+SpacesInParentheses: 'false'
+SpacesInSquareBrackets: 'false'
+Standard: Cpp11
+TabWidth: '4'
+UseTab: Never
+...

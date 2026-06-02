@@ -4,13 +4,15 @@
 
 namespace davincpp
 {
-std::shared_ptr<davscript::AstNode> davscript::ModuleNodeParser::parseNode(DavScriptParser* scriptParser)
+std::shared_ptr<davscript::AstNode> davscript::ModuleNodeParser::parseNode(
+    DavScriptParser* scriptParser)
 {
-	assert(assertTokenType(scriptParser, scriptParser->advanceToken(), Token(MODULE, KEYWORD)));
+    assert(assertTokenType(scriptParser, scriptParser->advanceToken(), Token(MODULE, KEYWORD)));
 
-	auto moduleName = std::dynamic_pointer_cast<IdentifierNode>(m_IdentifierParser.parseNode(scriptParser));
-	assert(assertValidNode(moduleName));
+    auto moduleName
+        = std::dynamic_pointer_cast<IdentifierNode>(m_IdentifierParser.parseNode(scriptParser));
+    assert(assertValidNode(moduleName));
 
-	return moduleName;
+    return moduleName;
 }
-} // namespace davincpp
+}  // namespace davincpp

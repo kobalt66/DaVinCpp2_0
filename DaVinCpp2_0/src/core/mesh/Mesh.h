@@ -6,21 +6,23 @@
 
 namespace davincpp
 {
-template <class T>
+template<class T>
 class Mesh
 {
-  public:
-	Mesh() = default;
+public:
+    Mesh() = default;
 
-	void createMesh(const std::vector<T>& vertices, const std::vector<uint32_t>& indices, const Shader& shader);
-	void bind();
-	void unbind();
+    void createMesh(const std::vector<T>&        vertices,
+                    const std::vector<uint32_t>& indices,
+                    const Shader&                shader);
+    void bind();
+    void unbind();
 
-	void render();
+    void render();
 
-  private:
-	Vao m_Vao;
-	Vbo m_Vbo;
-	Ibo m_Ibo;
+private:
+    Vao m_Vao;
+    Vbo m_Vbo;
+    Ibo m_Ibo;
 };
-} // namespace davincpp
+}  // namespace davincpp

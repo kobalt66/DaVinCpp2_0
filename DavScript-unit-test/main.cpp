@@ -8,16 +8,20 @@
 
 int main()
 {
-    try {
+    try
+    {
         davincpp::unittest::UnitTestEnvironment testEnvironment;
 
         testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptFileTest>());
         testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptLexerTest>());
         testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptParserTest>());
-        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptCodeExecutionTest>());
+        testEnvironment.addUnitTest(
+            std::make_unique<davincpp::davscript::DavScriptCodeExecutionTest>());
 
         testEnvironment.execute();
-    } catch (std::exception& exception) {
+    }
+    catch (std::exception& exception)
+    {
         throw davincpp::davincpp_error(exception.what());
     }
 

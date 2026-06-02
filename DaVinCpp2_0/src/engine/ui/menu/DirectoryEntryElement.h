@@ -6,16 +6,14 @@ namespace davincpp
 {
 class DirectoryEntryElement : public MenuElement
 {
-  public:
-	DirectoryEntryElement(const std::string& displayText, std::filesystem::path directoryPath);
+public:
+    DirectoryEntryElement(const std::string& displayText, std::filesystem::path directoryPath);
 
-	void onInteraction(SelectionMenu* selectionMenu) override
-	{
-	}
+    void onInteraction(SelectionMenu* selectionMenu) override {}
 
-	[[nodiscard]] std::filesystem::path getDirectoryEntryPath() const;
+    [[nodiscard]] std::filesystem::path getDirectoryEntryPath() const;
 
-  private:
-	std::filesystem::path m_DirectoryEntryPath;
+private:
+    std::filesystem::path m_DirectoryEntryPath;
 };
-} // namespace davincpp
+}  // namespace davincpp

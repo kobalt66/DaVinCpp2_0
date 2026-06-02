@@ -3,9 +3,9 @@
 
 namespace davincpp::unittest
 {
-    struct TestResult
-    {
-        bool success;
-        std::string errorMsg;
-    };
+struct TestResult
+{
+    bool        success;
+    std::string errorMsg;
+};
 }

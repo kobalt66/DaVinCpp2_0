@@ -5,11 +5,9 @@ namespace davincpp
 {
 class BreakElement : public MenuElement
 {
-  public:
-	BreakElement();
+public:
+    BreakElement();
 
-	void onInteraction(SelectionMenu* selectionMenu) override
-	{
-	}
+    void onInteraction(SelectionMenu* selectionMenu) override {}
 };
-} // namespace davincpp
+}  // namespace davincpp

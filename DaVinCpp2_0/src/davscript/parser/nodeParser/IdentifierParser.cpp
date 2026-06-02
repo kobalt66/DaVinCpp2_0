@@ -6,17 +6,20 @@ namespace davincpp::davscript
 {
 std::shared_ptr<AstNode> IdentifierParser::parseNode(DavScriptParser* scriptParser)
 {
-	assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
-	Token identifier = scriptParser->advanceToken();
+    assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
+    Token identifier = scriptParser->advanceToken();
 
-	while (checkTokenType(scriptParser->peakNextToken(), Token(DOT))) {
-		scriptParser->advanceToken();
-		assert(assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
+    while (checkTokenType(scriptParser->peakNextToken(), Token(DOT)))
+    {
+        scriptParser->advanceToken();
+        assert(
+            assertTokenRole(scriptParser, scriptParser->peakNextToken(), Token(NONE, IDENTIFIER)));
 
-		Token nextIdentifier = scriptParser->advanceToken();
-		identifier.setActualValue(identifier.getActualValue() + "." + nextIdentifier.getActualValue());
-	}
+        Token nextIdentifier = scriptParser->advanceToken();
+        identifier.setActualValue(identifier.getActualValue() + "."
+                                  + nextIdentifier.getActualValue());
+    }
 
-	return std::make_shared<IdentifierNode>(identifier);
+    return std::make_shared<IdentifierNode>(identifier);
 }
-} // namespace davincpp::davscript
+}  // namespace davincpp::davscript

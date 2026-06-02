@@ -29,7 +29,7 @@
 \x64
 .vs
 .idea
+.clangd
 \cmake-build-debug
 \cmake-build-release
 \build
-compile_commands.json  
