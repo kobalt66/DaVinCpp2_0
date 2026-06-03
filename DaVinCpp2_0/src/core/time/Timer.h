@@ -1,11 +1,9 @@
 #pragma once
 #include <DaVinCppTypes.h>
 
-namespace davincpp
-{
-class Timer
-{
-public:
+namespace davincpp {
+class Timer {
+  public:
     void start();
     void stop();
     void reset();
@@ -14,8 +12,8 @@ public:
     [[nodiscard]] sec fetchTimeSec() const;
     [[nodiscard]] min fetchTimeMin() const;
 
-private:
+  private:
     timestamp m_StartTime;
     timestamp m_StopTime;
 };
-}  // namespace davincpp
+} // namespace davincpp

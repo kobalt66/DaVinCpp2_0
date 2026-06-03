@@ -1,15 +1,13 @@
 #pragma once
-#include <mesh/Mesh.h>
-#include <texture/Texture.h>
 #include <FrameBuffer.h>
 #include <gameobjects/GameObject.h>
 #include <gameprojects/ProjectConfig.h>
+#include <mesh/Mesh.h>
+#include <texture/Texture.h>
 
-namespace davincpp
-{
-class GameWindow
-{
-public:
+namespace davincpp {
+class GameWindow {
+  public:
     explicit GameWindow(const ProjectConfig& projectConfig);
 
     void onSetup();
@@ -24,10 +22,10 @@ public:
     FrameBuffer&                getFrameBuffer();
     std::shared_ptr<GameObject> getCursor();
 
-private:
+  private:
     void updateCursorPosition();
 
-private:
+  private:
     uint32_t m_Width = 0, m_Height = 0;
 
     std::vector<float>    m_Vertices;
@@ -42,4 +40,4 @@ private:
     glm::ivec2                  m_MousePosition = glm::ivec2(0);
     glm::vec4                   m_CursorColor;
 };
-}  // namespace davincpp
+} // namespace davincpp

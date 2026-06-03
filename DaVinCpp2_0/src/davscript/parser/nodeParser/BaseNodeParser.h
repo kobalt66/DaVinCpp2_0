@@ -2,29 +2,30 @@
 #include <memory>
 #include <parser/ast/AstNode.h>
 #include <parser/ast/IdentifierNode.h>
-#include <tokens/Token.h>
-
 #include <parser/ast/InvalidNode.h>
-#define assert(assertion)                                                                          \
-    if (!(assertion))                                                                              \
+#include <tokens/Token.h>
+#define assert(assertion)                                                      \
+    if (!(assertion))                                                          \
     return std::make_shared<InvalidNode>()
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 class DavScriptParser;
 
-class BaseNodeParser
-{
-public:
+class BaseNodeParser {
+  public:
     BaseNodeParser()          = default;
     virtual ~BaseNodeParser() = default;
 
-    [[nodiscard]] virtual std::shared_ptr<AstNode> parseNode(DavScriptParser* scriptParser) = 0;
+    [[nodiscard]] virtual std::shared_ptr<AstNode>
+    parseNode(DavScriptParser* scriptParser) = 0;
 
-protected:
-    static bool checkToken(const Token& actualToken, const Token& expectedToken);
-    static bool checkTokenRole(const Token& actualToken, const Token& expectedToken);
-    static bool checkTokenType(const Token& actualToken, const Token& expectedToken);
+  protected:
+    static bool checkToken(const Token& actualToken,
+                           const Token& expectedToken);
+    static bool checkTokenRole(const Token& actualToken,
+                               const Token& expectedToken);
+    static bool checkTokenType(const Token& actualToken,
+                               const Token& expectedToken);
 
     static bool assertTokenValue(DavScriptParser* scriptParser,
                                  const Token&     value,
@@ -47,21 +48,26 @@ protected:
     static bool assertNotTokenType(DavScriptParser* scriptParser,
                                    const Token&     actualToken,
                                    const Token&     expectedToken);
-    static bool assertSymbolAccess(DavScriptParser*                       scriptParser,
-                                   const std::shared_ptr<IdentifierNode>& identifierNode,
-                                   SymbolType                             symbolType);
-    static bool assertSymbolNoAccess(DavScriptParser*                       scriptParser,
-                                     const std::shared_ptr<IdentifierNode>& identifierNode,
-                                     SymbolType                             symbolType);
-    static bool assertSymbolAccess(DavScriptParser*                       scriptParser,
-                                   const std::shared_ptr<IdentifierNode>& identifierNode,
-                                   std::vector<SymbolType>                symbolTypes);
-    static bool assertSymbolNoAccess(DavScriptParser*                       scriptParser,
+    static bool
+    assertSymbolAccess(DavScriptParser*                       scriptParser,
+                       const std::shared_ptr<IdentifierNode>& identifierNode,
+                       SymbolType                             symbolType);
+    static bool
+    assertSymbolNoAccess(DavScriptParser*                       scriptParser,
+                         const std::shared_ptr<IdentifierNode>& identifierNode,
+                         SymbolType                             symbolType);
+    static bool
+    assertSymbolAccess(DavScriptParser*                       scriptParser,
+                       const std::shared_ptr<IdentifierNode>& identifierNode,
+                       std::vector<SymbolType>                symbolTypes);
+    static bool
+                assertSymbolNoAccess(DavScriptParser*                       scriptParser,
                                      const std::shared_ptr<IdentifierNode>& identifierNode,
                                      std::vector<SymbolType>                symbolTypes);
-    static bool assertSymbolDoesntExist(DavScriptParser*                       scriptParser,
-                                        const std::shared_ptr<IdentifierNode>& identifierNode,
-                                        SymbolType                             symbolType);
+    static bool assertSymbolDoesntExist(
+        DavScriptParser*                       scriptParser,
+        const std::shared_ptr<IdentifierNode>& identifierNode,
+        SymbolType                             symbolType);
     static bool assertValidNode(const std::shared_ptr<AstNode>& node);
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

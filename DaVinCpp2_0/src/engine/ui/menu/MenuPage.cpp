@@ -1,20 +1,18 @@
 #include "MenuPage.h"
-#include <ui/menu/SelectionMenu.h>
+
+#include <Console.h>
 #include <DaVinCppString.h>
 #include <ui/menu/BreakElement.h>
+#include <ui/menu/SelectionMenu.h>
 #include <ui/menu/TextElement.h>
-#include <Console.h>
 
-namespace davincpp
-{
-void MenuPage::onRender()
-{
+namespace davincpp {
+void MenuPage::onRender() {
 #ifdef _WIN32
     onRenderHeader();
     Console::newline();
 
-    for (std::shared_ptr<MenuElement> menuElement : m_MenuElements)
-    {
+    for (std::shared_ptr<MenuElement> menuElement : m_MenuElements) {
         menuElement->onRender(m_SelectedElement.get() == menuElement.get());
     }
 
@@ -23,8 +21,7 @@ void MenuPage::onRender()
 #else
     onRenderHeader();
 
-    for (const std::shared_ptr<MenuElement>& menuElement : m_MenuElements)
-    {
+    for (const std::shared_ptr<MenuElement>& menuElement : m_MenuElements) {
         menuElement->setCliY(advanceRow());
         menuElement->onRender(m_SelectedElement.get() == menuElement.get());
     }
@@ -33,50 +30,39 @@ void MenuPage::onRender()
 #endif
 }
 
-void MenuPage::onUpdate(SelectionMenu* selectionMenu, int input)
-{
+void MenuPage::onUpdate(SelectionMenu* selectionMenu, int input) {
     SelectionMenu::displayDescription(
-        Console::fmtTxt(
-            SelectionMenu::WRN_INVALID_INPUT, "(", Console::getInputKeyByCode(input), ") "),
+        Console::fmtTxt(SelectionMenu::WRN_INVALID_INPUT, "(",
+                        Console::getInputKeyByCode(input), ") "),
         Console::BLACK_YELLOW_PAIR);
 }
 
-void MenuPage::switchElement(int switchDirection)
-{
-    while (true)
-    {
-        if (m_MenuElements.empty())
-        {
+void MenuPage::switchElement(int switchDirection) {
+    while (true) {
+        if (m_MenuElements.empty()) {
             return;
         }
 
         int newSelectedElementIdx = m_SelectedElementIdx;
-        if ((m_SelectedElementIdx + switchDirection) < 0)
-        {
+        if ((m_SelectedElementIdx + switchDirection) < 0) {
             newSelectedElementIdx = static_cast<int>(m_MenuElements.size() - 1);
-        }
-        else if ((m_SelectedElementIdx + switchDirection) >= m_MenuElements.size())
-        {
+        } else if ((m_SelectedElementIdx + switchDirection) >=
+                   m_MenuElements.size()) {
             newSelectedElementIdx = 0;
-        }
-        else
-        {
+        } else {
             newSelectedElementIdx += switchDirection;
         }
 
         m_SelectedElementIdx = newSelectedElementIdx;
 
-        if (auto textElement
-            = dynamic_cast<TextElement*>(m_MenuElements.at(newSelectedElementIdx).get()))
-        {
-            if (textElement->isSkippable())
-            {
+        if (auto textElement = dynamic_cast<TextElement*>(
+                m_MenuElements.at(newSelectedElementIdx).get())) {
+            if (textElement->isSkippable()) {
                 continue;
             }
-        }
-        else if (dynamic_cast<BreakElement*>(m_MenuElements.at(newSelectedElementIdx).get())
-                 != nullptr)
-        {
+        } else if (dynamic_cast<BreakElement*>(
+                       m_MenuElements.at(newSelectedElementIdx).get()) !=
+                   nullptr) {
             continue;
         }
 
@@ -85,40 +71,33 @@ void MenuPage::switchElement(int switchDirection)
     }
 }
 
-void MenuPage::interact(SelectionMenu* selectionMenu)
-{
-    if (m_SelectedElement == nullptr)
-    {
+void MenuPage::interact(SelectionMenu* selectionMenu) {
+    if (m_SelectedElement == nullptr) {
         return;
     }
 
     m_SelectedElement->onInteraction(selectionMenu);
 }
 
-void MenuPage::addMenuElement(const std::shared_ptr<MenuElement>& menuElement)
-{
+void MenuPage::addMenuElement(const std::shared_ptr<MenuElement>& menuElement) {
     m_MenuElements.emplace_back(menuElement);
 }
 
-int MenuPage::getStartCliY() const
-{
-    if (m_MenuElements.empty())
-    {
+int MenuPage::getStartCliY() const {
+    if (m_MenuElements.empty()) {
         return 0;
     }
 
     return m_MenuElements.at(0)->getCliY();
 }
 
-void MenuPage::onRenderHeader()
-{
+void MenuPage::onRenderHeader() {
 #ifdef _WIN32
     std::vector<std::string> headerLines = DaVinCppString::split(m_Title, '\n');
 
     Console::printNChar('#', Console::getConsoleWidth(), Console::GREEN);
 
-    for (std::string& headerLine : headerLines)
-    {
+    for (std::string& headerLine : headerLines) {
         Console::printCenteredText(headerLine, Console::GREEN, '#', '#');
     }
 
@@ -130,16 +109,17 @@ void MenuPage::onRenderHeader()
     box(stdscr, 0, 0);
     attroff(COLOR_PAIR(Console::GREEN_BLACK_PAIR));
 
-    for (std::string& headerLine : headerLines)
-    {
-        Console::printCenteredText(headerLine, Console::GREEN_BLACK_PAIR, advanceRow());
+    for (std::string& headerLine : headerLines) {
+        Console::printCenteredText(headerLine, Console::GREEN_BLACK_PAIR,
+                                   advanceRow());
     }
 
-    Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 1, 1, advanceRow());
+    Console::printNChar(ACS_HLINE, Console::GREEN_BLACK_PAIR, stdscr->_maxx - 1,
+                        1, advanceRow());
 #endif
 }
 
 #ifndef _WIN32
 int MenuPage::advanceRow() { return ++m_CurrentRow; }
 #endif
-}  // namespace davincpp
+} // namespace davincpp

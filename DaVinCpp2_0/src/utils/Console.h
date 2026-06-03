@@ -1,17 +1,15 @@
 #pragma once
-#include <string>
-#include <sstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 #if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
 #include <csignal>
 #include <ncurses/curses.h>
 #endif
 
-namespace davincpp
-{
-class Console
-{
-public:
+namespace davincpp {
+class Console {
+  public:
     static void onLoad();
     static void onUpdate();
 
@@ -22,18 +20,14 @@ public:
     static bool clsResized();
     static void resetResizeFlag();
 
-    template<class... Args>
-    static void raw(const char* color, Args... args)
-    {
+    template <class... Args> static void raw(const char* color, Args... args) {
         std::cout << color;
         (std::cout << ... << args);
         std::cout << "\033[0m";
         newline();
     }
 
-    template<class... Args>
-    static void log(Args... args)
-    {
+    template <class... Args> static void log(Args... args) {
         std::cout << CYAN;
         std::cout << LOG_PREFIX;
         (std::cout << ... << args);
@@ -41,9 +35,7 @@ public:
         newline();
     }
 
-    template<class... Args>
-    static void err(Args... args)
-    {
+    template <class... Args> static void err(Args... args) {
         std::cout << RED;
         std::cout << ERR_PREFIX;
         (std::cout << ... << args);
@@ -51,9 +43,7 @@ public:
         newline();
     }
 
-    template<class... Args>
-    static void openglErr(Args... args)
-    {
+    template <class... Args> static void openglErr(Args... args) {
         std::cout << MAGENTA;
         std::cout << OPENGL_ERR_PREFIX;
         (std::cout << ... << args);
@@ -61,9 +51,7 @@ public:
         newline();
     }
 
-    template<class... Args>
-    static void wrn(Args... args)
-    {
+    template <class... Args> static void wrn(Args... args) {
         std::cout << YELLOW;
         std::cout << WRN_PREFIX;
         (std::cout << ... << args);
@@ -71,9 +59,7 @@ public:
         newline();
     }
 
-    template<class... Args>
-    static std::string fmtTxt(Args... args)
-    {
+    template <class... Args> static std::string fmtTxt(Args... args) {
         std::stringstream output;
 
         (output << ... << args);
@@ -81,9 +67,8 @@ public:
         return output.str();
     }
 
-    template<class... Args>
-    static std::string fmtRaw(const char* color, Args... args)
-    {
+    template <class... Args>
+    static std::string fmtRaw(const char* color, Args... args) {
         std::stringstream output;
 
         output << color;
@@ -93,9 +78,7 @@ public:
         return output.str().c_str();
     }
 
-    template<class... Args>
-    static std::string fmtLog(Args... args)
-    {
+    template <class... Args> static std::string fmtLog(Args... args) {
         std::stringstream output;
 
         output << CYAN;
@@ -107,9 +90,7 @@ public:
         return output.str().c_str();
     }
 
-    template<class... Args>
-    static std::string fmtErr(Args... args)
-    {
+    template <class... Args> static std::string fmtErr(Args... args) {
         std::stringstream output;
 
         output << RED;
@@ -121,9 +102,7 @@ public:
         return output.str().c_str();
     }
 
-    template<class... Args>
-    static std::string fmtOpenglErr(Args... args)
-    {
+    template <class... Args> static std::string fmtOpenglErr(Args... args) {
         std::stringstream output;
 
         output << MAGENTA;
@@ -135,9 +114,7 @@ public:
         return output.str().c_str();
     }
 
-    template<class... Args>
-    static std::string fmtWrn(Args... args)
-    {
+    template <class... Args> static std::string fmtWrn(Args... args) {
         std::stringstream output;
 
         output << YELLOW;
@@ -156,28 +133,21 @@ public:
 
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
     static void printNChar(char c, int count, const char* color);
-    static void printCenteredText(std::string_view text,
-                                  const char*      color,
-                                  char             firstChar = ' ',
-                                  char             lastChar  = ' ');
+    static void printCenteredText(std::string_view text, const char* color,
+                                  char firstChar = ' ', char lastChar = ' ');
 #else
-    static void printCenteredText(std::string_view text, int colorPair, int cliY);
+    static void printCenteredText(std::string_view text, int colorPair,
+                                  int cliY);
     static void printText(std::string_view text, int colorPair, int cliY);
-    static void printNChar(int c, int colorPair, int length, int cliX, int cliY);
-    static void printTextMarginL(std::string_view textLeft,
-                                 int              colorPair,
-                                 int              cliY,
-                                 int              marginLeft);
-    static void printTextMarginR(std::string_view textRight,
-                                 int              colorPair,
-                                 int              cliY,
-                                 int              marginRight);
+    static void printNChar(int c, int colorPair, int length, int cliX,
+                           int cliY);
+    static void printTextMarginL(std::string_view textLeft, int colorPair,
+                                 int cliY, int marginLeft);
+    static void printTextMarginR(std::string_view textRight, int colorPair,
+                                 int cliY, int marginRight);
     static void printTextMarginLR(std::string_view textLeft,
-                                  std::string_view textRight,
-                                  int              colorPair,
-                                  int              cliY,
-                                  int              marginLeft,
-                                  int              marginRight);
+                                  std::string_view textRight, int colorPair,
+                                  int cliY, int marginLeft, int marginRight);
 #endif
 
     static void clear();
@@ -193,12 +163,12 @@ public:
     static std::string getInputKeyByCode(int keyCode);
     static int         awaitKeyInput();
 
-private:
+  private:
 #if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
     static void handle_resize(int sig);
 #endif
 
-public:
+  public:
     static constexpr const char* LOG_PREFIX        = "[Log]     | ";
     static constexpr const char* ERR_PREFIX        = "[Error]   | ";
     static constexpr const char* OPENGL_ERR_PREFIX = "[OpenGL]  | ";
@@ -238,7 +208,7 @@ public:
     static constexpr int KEY_DELETE      = 330;
 #endif
 
-private:
+  private:
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
     static int m_ResizeFlag;
     static int m_ClsWidth, m_ClsHeight;
@@ -247,4 +217,4 @@ private:
 #endif
 };
 
-}  // namespace davincpp
+} // namespace davincpp

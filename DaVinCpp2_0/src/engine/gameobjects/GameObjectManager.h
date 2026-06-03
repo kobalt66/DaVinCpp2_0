@@ -2,11 +2,9 @@
 #include <gameobjects/GameObject.h>
 #include <unordered_map>
 
-namespace davincpp
-{
-class GameObjectManager
-{
-public:
+namespace davincpp {
+class GameObjectManager {
+  public:
     GameObjectManager() = default;
 
     void onLoad();
@@ -17,10 +15,10 @@ public:
     void                        registerGameObject(GameObject* gameObject);
     std::shared_ptr<GameObject> getGameObject(std::string_view objectName);
 
-private:
+  private:
     void validateGameObjectNaming(GameObject* gameObject);
 
-private:
+  private:
     std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 };
-}  // namespace davincpp
+} // namespace davincpp

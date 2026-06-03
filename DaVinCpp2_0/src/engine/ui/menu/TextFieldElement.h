@@ -1,14 +1,11 @@
 #pragma once
 #include <ui/menu/MenuElement.h>
 
-namespace davincpp
-{
-class TextFieldElement : public MenuElement
-{
-public:
+namespace davincpp {
+class TextFieldElement : public MenuElement {
+  public:
     TextFieldElement(const std::string& displayText,
-                     std::string        placeHolderText,
-                     int                characterLimit,
+                     std::string placeHolderText, int characterLimit,
                      const std::string& uniqueTag = "");
 
     void onSwitchPage(SelectionMenu* selectionMenu) override;
@@ -19,9 +16,9 @@ public:
     void                      setEnteredText(std::string enteredText);
     [[nodiscard]] std::string getEnteredText() const;
 
-private:
+  private:
     const std::string m_PlaceHolderText;
     std::string       m_EnteredText;
     int               m_CharacterLimit;
 };
-}  // namespace davincpp
+} // namespace davincpp

@@ -5,27 +5,27 @@
 /// https://web.archive.org/web/20050408192410/http://sw-shader.sourceforge.net/rasterizer.html
 ///
 
-namespace davincpp
-{
-Triangle::Triangle(glm::vec2 position1, glm::vec2 position2, glm::vec2 position3, glm::vec4 color)
-: Renderable(glm::vec2(std::min(position1.x, std::min(position2.x, position3.x)),
-                       std::min(position1.y, std::min(position2.y, position3.y))),
-             color)
-, m_Position1(position1)
-, m_Position2(position2)
-, m_Position3(position3)
-{
-}
+namespace davincpp {
+Triangle::Triangle(glm::vec2 position1, glm::vec2 position2,
+                   glm::vec2 position3, glm::vec4 color)
+    : Renderable(
+          glm::vec2(std::min(position1.x, std::min(position2.x, position3.x)),
+                    std::min(position1.y, std::min(position2.y, position3.y))),
+          color),
+      m_Position1(position1), m_Position2(position2), m_Position3(position3) {}
 
-void Triangle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& frameBuffer) const
-{
-    glm::vec2 surfaceScale
-        = glm::vec2(std::max(m_Position1.x - m_Position.x,
-                             std::max(m_Position2.x - m_Position.x, m_Position3.x - m_Position.x)),
-                    std::max(m_Position1.y - m_Position.y,
-                             std::max(m_Position2.y - m_Position.y, m_Position3.y - m_Position.y)));
+void Triangle::onRender(const GameObjectStats& gameObjectStats,
+                        FrameBuffer&           frameBuffer) const {
+    glm::vec2 surfaceScale =
+        glm::vec2(std::max(m_Position1.x - m_Position.x,
+                           std::max(m_Position2.x - m_Position.x,
+                                    m_Position3.x - m_Position.x)),
+                  std::max(m_Position1.y - m_Position.y,
+                           std::max(m_Position2.y - m_Position.y,
+                                    m_Position3.y - m_Position.y)));
 
-    std::shared_ptr<Texture2D> texture = gameObjectStats.m_ObjectPtr->getTexture();
+    std::shared_ptr<Texture2D> texture =
+        gameObjectStats.m_ObjectPtr->getTexture();
 
     const int Y1 = (int) glm::round(16.0f * m_Position1.y);
     const int Y2 = (int) glm::round(16.0f * m_Position2.y);
@@ -72,10 +72,8 @@ void Triangle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& fra
     if (DY31 < 0 || (DY31 == 0 && DX31 > 0))
         C3++;
 
-    for (int y = miny; y < maxy; y += q)
-    {
-        for (int x = minx; x < maxx; x += q)
-        {
+    for (int y = miny; y < maxy; y += q) {
+        for (int x = minx; x < maxx; x += q) {
             int x0 = x << 4;
             int x1 = (x + q - 1) << 4;
             int y0 = y << 4;
@@ -102,42 +100,34 @@ void Triangle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& fra
             if (a == 0x0 || b == 0x0 || c == 0x0)
                 continue;
 
-            if (a == 0xF && b == 0xF && c == 0xF)
-            {
-                for (int iy = 0; iy < q; iy++)
-                {
-                    for (int ix = x; ix < x + q; ix++)
-                    {
+            if (a == 0xF && b == 0xF && c == 0xF) {
+                for (int iy = 0; iy < q; iy++) {
+                    for (int ix = x; ix < x + q; ix++) {
                         frameBuffer.setPixel(
-                            ix,
-                            y + iy,
-                            texture ? mapTextureByUVCoords(
-                                          texture, ix, y + iy, surfaceScale.x, surfaceScale.y)
+                            ix, y + iy,
+                            texture ? mapTextureByUVCoords(texture, ix, y + iy,
+                                                           surfaceScale.x,
+                                                           surfaceScale.y)
                                     : m_Color);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 int CY1 = C1 + DX12 * y0 - DY12 * x0;
                 int CY2 = C2 + DX23 * y0 - DY23 * x0;
                 int CY3 = C3 + DX31 * y0 - DY31 * x0;
 
-                for (int iy = y; iy < y + q; iy++)
-                {
+                for (int iy = y; iy < y + q; iy++) {
                     int CX1 = CY1;
                     int CX2 = CY2;
                     int CX3 = CY3;
 
-                    for (int ix = x; ix < x + q; ix++)
-                    {
-                        if (CX1 > 0 && CX2 > 0 && CX3 > 0)
-                        {
+                    for (int ix = x; ix < x + q; ix++) {
+                        if (CX1 > 0 && CX2 > 0 && CX3 > 0) {
                             frameBuffer.setPixel(
-                                ix,
-                                iy,
-                                texture ? mapTextureByUVCoords(
-                                              texture, ix, iy, surfaceScale.x, surfaceScale.y)
+                                ix, iy,
+                                texture ? mapTextureByUVCoords(texture, ix, iy,
+                                                               surfaceScale.x,
+                                                               surfaceScale.y)
                                         : m_Color);
                         }
 
@@ -154,4 +144,4 @@ void Triangle::onRender(const GameObjectStats& gameObjectStats, FrameBuffer& fra
         }
     }
 }
-}  // namespace davincpp
+} // namespace davincpp

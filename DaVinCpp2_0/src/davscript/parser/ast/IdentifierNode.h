@@ -1,13 +1,11 @@
 #pragma once
-#include <string>
 #include <parser/ast/AstNode.h>
+#include <string>
 #include <tokens/Token.h>
 
-namespace davincpp::davscript
-{
-class IdentifierNode final : public AstNode
-{
-public:
+namespace davincpp::davscript {
+class IdentifierNode final : public AstNode {
+  public:
     IdentifierNode() = default;
     explicit IdentifierNode(Token name);
 
@@ -22,20 +20,17 @@ public:
 
     std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override;
 
-private:
+  private:
     std::vector<std::string> m_NameSegments;
     Token                    m_Name;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript
 
-namespace std
-{
-template<>
-struct hash<davincpp::davscript::IdentifierNode>
-{
-    size_t operator()(const davincpp::davscript::IdentifierNode& node) const noexcept
-    {
+namespace std {
+template <> struct hash<davincpp::davscript::IdentifierNode> {
+    size_t
+    operator()(const davincpp::davscript::IdentifierNode& node) const noexcept {
         return std::hash<std::string>()(node.getName().getActualValue());
     }
 };
-}  // namespace std
+} // namespace std

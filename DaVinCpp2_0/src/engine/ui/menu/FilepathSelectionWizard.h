@@ -2,11 +2,9 @@
 #include <filesystem>
 #include <ui/menu/MenuPage.h>
 
-namespace davincpp
-{
-class FilepathSelectionWizard : public MenuPage
-{
-public:
+namespace davincpp {
+class FilepathSelectionWizard : public MenuPage {
+  public:
     explicit FilepathSelectionWizard(std::string_view title);
 
     void onSwitchPage(SelectionMenu* selectionMenu) override;
@@ -17,10 +15,10 @@ public:
     void setPathVariable(std::filesystem::path* pathRef);
     void showOnlyDirectories(bool showOnlyDirectories);
 
-private:
+  private:
     void selectDefaultElement();
 
-private:
+  private:
     const int DEFAULT_SELECTED_IDX = 3;
 
     std::filesystem::path* m_PathRef = nullptr;
@@ -28,4 +26,4 @@ private:
 
     bool m_ShowOnlyDirectories = false;
 };
-}  // namespace davincpp
+} // namespace davincpp

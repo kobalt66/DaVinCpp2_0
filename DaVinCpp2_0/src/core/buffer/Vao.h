@@ -2,11 +2,9 @@
 #include <cstdint>
 #include <opengl.h>
 
-namespace davincpp
-{
-class Vao
-{
-public:
+namespace davincpp {
+class Vao {
+  public:
     Vao() = default;
     ~Vao();
 
@@ -15,8 +13,8 @@ public:
     void unbind();
     bool bound() const;
 
-private:
+  private:
     uint32_t m_ID    = 0;
     bool     m_Bound = false;
 };
-}  // namespace davincpp
+} // namespace davincpp

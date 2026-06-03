@@ -2,11 +2,9 @@
 #include <parser/ast/AstNode.h>
 #include <tokens/Token.h>
 
-namespace davincpp::davscript
-{
-class VariableAccessNode final : public AstNode
-{
-public:
+namespace davincpp::davscript {
+class VariableAccessNode final : public AstNode {
+  public:
     explicit VariableAccessNode(Token variableName);
 
     [[nodiscard]] Token getVariableName() const;
@@ -15,7 +13,7 @@ public:
 
     std::vector<uint8_t> generateByteCode(DavScriptCompiler* compiler) override;
 
-private:
+  private:
     Token m_VariableName;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

@@ -1,20 +1,18 @@
 #pragma once
 #include <DavScript.h>
-#include <vector>
 #include <tokens/Token.h>
+#include <vector>
 
-namespace davincpp::davscript
-{
-class DavScriptLexer
-{
-public:
+namespace davincpp::davscript {
+class DavScriptLexer {
+  public:
     explicit DavScriptLexer(DavScript davScript);
 
     void generateTokens();
 
     [[nodiscard]] const std::vector<Token>& getTokens() const;
 
-private:
+  private:
     void lexSingleCharTokens();
     void lexMultiCharTokens();
     void lexCommentToken();
@@ -25,21 +23,25 @@ private:
     void lexStringToken();
     void lexOperators();
 
-    char                       advanceChar(int positionAdvanceStep = 1);
-    char                       peakNextChar(int peakAheadStep = 1) const;
-    [[nodiscard]] CharPosition getNextCharPosition(int positionAdvanceStep = 1) const;
+    char advanceChar(int positionAdvanceStep = 1);
+    char peakNextChar(int peakAheadStep = 1) const;
+    [[nodiscard]] CharPosition
+    getNextCharPosition(int positionAdvanceStep = 1) const;
 
     [[nodiscard]] bool isSingleCharToken() const;
     [[nodiscard]] bool isMultiCharToken() const;
     [[nodiscard]] bool isOperatorToken() const;
 
-    static bool charOnWhiteList(char character, const std::vector<char>& blackList);
-    static bool charOnBlackList(char character, const std::vector<char>& blackList);
-    static bool tokenValueOnWhiteList(std::string_view                                  tokenValue,
-                                      const std::unordered_map<std::string, TokenType>& whiteList);
+    static bool charOnWhiteList(char                     character,
+                                const std::vector<char>& blackList);
+    static bool charOnBlackList(char                     character,
+                                const std::vector<char>& blackList);
+    static bool tokenValueOnWhiteList(
+        std::string_view                                  tokenValue,
+        const std::unordered_map<std::string, TokenType>& whiteList);
     static bool charInCharList(char character, const std::string& charList);
 
-private:
+  private:
     DavScript m_DavScript;
 
     std::vector<Token> m_Tokens;
@@ -47,4 +49,4 @@ private:
     CharPosition m_CurrentCharPosition;
     char         m_CurrentChar = '\0';
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

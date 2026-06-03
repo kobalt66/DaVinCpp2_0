@@ -1,19 +1,20 @@
 #pragma once
-#include <ui/menu/MenuElement.h>
 #include <functional>
+#include <ui/menu/MenuElement.h>
 
-namespace davincpp
-{
-class ActionButton : public MenuElement
-{
-public:
+namespace davincpp {
+class ActionButton : public MenuElement {
+  public:
     ActionButton(const std::string& displayText,
-                 std::function<void(SelectionMenu* selectionMenu, ActionButton* buttonRef)> action,
+                 std::function<void(SelectionMenu* selectionMenu,
+                                    ActionButton*  buttonRef)>
+                                    action,
                  const std::string& uniqueTag = "");
 
     void onInteraction(SelectionMenu* selectionMenu) override;
 
-protected:
-    std::function<void(SelectionMenu* selectionMenu, ActionButton* buttonRef)> m_Action;
+  protected:
+    std::function<void(SelectionMenu* selectionMenu, ActionButton* buttonRef)>
+        m_Action;
 };
-}  // namespace davincpp
+} // namespace davincpp

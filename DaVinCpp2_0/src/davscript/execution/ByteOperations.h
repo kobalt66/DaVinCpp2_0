@@ -1,8 +1,7 @@
 #pragma once
 #include <cstdint>
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 constexpr uint8_t NUL        = 0x00;
 constexpr uint8_t SUB        = 0x01;
 constexpr uint8_t MUL        = 0x02;
@@ -28,4 +27,4 @@ constexpr uint8_t DIE        = 0x15;
 constexpr uint8_t CALL       = 0x16;
 constexpr uint8_t JMP        = 0x17;
 constexpr uint8_t LD_LIB     = 0x18;
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

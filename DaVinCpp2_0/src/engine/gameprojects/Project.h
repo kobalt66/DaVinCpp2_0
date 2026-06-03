@@ -2,11 +2,9 @@
 #include <gameprojects/ProjectConfig.h>
 #include <yaml-cpp/yaml.h>
 
-namespace davincpp
-{
-class Project
-{
-public:
+namespace davincpp {
+class Project {
+  public:
     Project() = default;
     explicit Project(std::string_view projectPath);
 
@@ -14,17 +12,14 @@ public:
 
     [[nodiscard]] const ProjectConfig& getProjectConfig() const;
 
-private:
+  private:
     ProjectConfig m_Config;
     std::string   m_ProjectPath;
 };
-}  // namespace davincpp
+} // namespace davincpp
 
-namespace YAML
-{
-template<>
-struct convert<davincpp::Project>
-{
+namespace YAML {
+template <> struct convert<davincpp::Project> {
     static bool decode(const Node& node, davincpp::Project& rhs);
 };
-}  // namespace YAML
+} // namespace YAML

@@ -3,19 +3,15 @@
 #include <string>
 #include <tokens/TokenData.h>
 
-namespace davincpp::davscript
-{
-class Token
-{
-public:
+namespace davincpp::davscript {
+class Token {
+  public:
     Token() = default;
-    Token(DavScript    davScript,
-          CharPosition position,
-          std::string  value,
-          TokenType    type,
-          TokenRole    role = NORMAL);
+    Token(DavScript davScript, CharPosition position, std::string value,
+          TokenType type, TokenRole role = NORMAL);
 
-    explicit Token(TokenType type, TokenRole role = NORMAL, std::string specificValue = ANY_VALUE);
+    explicit Token(TokenType type, TokenRole role = NORMAL,
+                   std::string specificValue = ANY_VALUE);
 
     bool operator==(const Token& other) const;
 
@@ -33,7 +29,7 @@ public:
 
     [[nodiscard]] std::string toString() const;
 
-private:
+  private:
     DavScript m_DavScript;
 
     TokenType m_Type = NONE;
@@ -42,4 +38,4 @@ private:
     std::string  m_ActualValue;
     CharPosition m_Position;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

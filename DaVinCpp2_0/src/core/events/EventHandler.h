@@ -1,15 +1,13 @@
 #pragma once
 #include "Event.h"
 
-namespace davincpp
-{
-class EventHandler
-{
-public:
+namespace davincpp {
+class EventHandler {
+  public:
     static void addEvent(Event&& event);
     static void onUpdate();
 
-private:
+  private:
     static std::vector<Event> m_Events;
 };
-}  // namespace davincpp
+} // namespace davincpp

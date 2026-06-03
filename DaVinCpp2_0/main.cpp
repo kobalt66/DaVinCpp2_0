@@ -1,29 +1,24 @@
+#include "DaVinCppFileSystem.h"
 #include "src/engine/Application.h"
+
 #include <Console.h>
 
-#include "DaVinCppFileSystem.h"
-
-int main()
-{
-    try
-    {
+int main() {
+    try {
         davincpp::DaVinCppFileSystem::canWrite("/root");
 
         davincpp::Application app;
         app.onStartEngine();
         app.onLoad();
 
-        while (!app.shouldShutdown())
-        {
+        while (!app.shouldShutdown()) {
             app.onClear();
             app.onRender();
             app.onUpdate();
         }
 
         app.onShutdown();
-    }
-    catch (std::exception& exception)
-    {
+    } catch (std::exception& exception) {
 #ifdef __linux__
         davincpp::Console::shutDownNcurses();
 #endif

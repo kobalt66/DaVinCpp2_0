@@ -1,31 +1,32 @@
 #include "DavScriptLexerTest.h"
+
 #include <algorithm>
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 DavScriptLexerTest::DavScriptLexerTest()
-: UnitTest("Testing the functionality of the DavScript lexer")
-{
+    : UnitTest("Testing the functionality of the DavScript lexer") {}
+
+void DavScriptLexerTest::onSetup() noexcept {
+    registerTestStep(
+        {"lexing: single char tokens", [] { testSingleCharTokens(); }});
+    registerTestStep({"lexing: comments", [] { testComments(); }});
+    registerTestStep({"lexing: variable types", [] { testVariableType(); }});
+    registerTestStep(
+        {"lexing: wrong variable types", [] { testWrongVariableType(); }});
+    registerTestStep({"lexing: words", [] { testWords(); }});
+    registerTestStep({"lexing: numbers", [] { testNumbers(); }});
+    registerTestStep({"lexing: strings", [] { testStrings(); }});
+    registerTestStep({"lexing: wrong strings", [] { testWrongStrings(); }});
+    registerTestStep(
+        {"lexing: function documentation", [] { testFunctionDoc(); }});
+    registerTestStep({"lexing: wrong function documentation",
+                      [] { testWrongFunctionDoc(); }});
+    registerTestStep({"lexing: bulk test (big script)", [] { testBulk(); }});
 }
 
-void DavScriptLexerTest::onSetup() noexcept
-{
-    registerTestStep({ "lexing: single char tokens", [] { testSingleCharTokens(); } });
-    registerTestStep({ "lexing: comments", [] { testComments(); } });
-    registerTestStep({ "lexing: variable types", [] { testVariableType(); } });
-    registerTestStep({ "lexing: wrong variable types", [] { testWrongVariableType(); } });
-    registerTestStep({ "lexing: words", [] { testWords(); } });
-    registerTestStep({ "lexing: numbers", [] { testNumbers(); } });
-    registerTestStep({ "lexing: strings", [] { testStrings(); } });
-    registerTestStep({ "lexing: wrong strings", [] { testWrongStrings(); } });
-    registerTestStep({ "lexing: function documentation", [] { testFunctionDoc(); } });
-    registerTestStep({ "lexing: wrong function documentation", [] { testWrongFunctionDoc(); } });
-    registerTestStep({ "lexing: bulk test (big script)", [] { testBulk(); } });
-}
-
-void DavScriptLexerTest::testSingleCharTokens()
-{
-    DavScript      davScript("../Tests/DavScriptLexer/TestFiles/singleCharTokens.dav");
+void DavScriptLexerTest::testSingleCharTokens() {
+    DavScript davScript(
+        "../Tests/DavScriptLexer/TestFiles/singleCharTokens.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
@@ -35,18 +36,16 @@ void DavScriptLexerTest::testSingleCharTokens()
     tokens.pop_back();
 
     assertEquals(SINGLE_CHAR_TOKENS.size(),
-                 getTokenCountByTokenRoles({ NORMAL, OPERATOR }, tokens));
+                 getTokenCountByTokenRoles({NORMAL, OPERATOR}, tokens));
 
-    for (Token& token : tokens)
-    {
+    for (Token& token : tokens) {
         assertEquals(1, token.getActualValue().size());
-        assertTrue(SINGLE_CHAR_TOKENS.find(token.getActualValue().at(0))
-                   != SINGLE_CHAR_TOKENS.end());
+        assertTrue(SINGLE_CHAR_TOKENS.find(token.getActualValue().at(0)) !=
+                   SINGLE_CHAR_TOKENS.end());
     }
 }
 
-void DavScriptLexerTest::testComments()
-{
+void DavScriptLexerTest::testComments() {
     DavScript      davScript("../Tests/DavScriptLexer/TestFiles/comments.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -60,9 +59,8 @@ void DavScriptLexerTest::testComments()
     assertEquals("# this is a comment #", tokens.at(0).getActualValue());
 }
 
-void DavScriptLexerTest::testVariableType()
-{
-    DavScript      davScript("../Tests/DavScriptLexer/TestFiles/variableTypes.dav");
+void DavScriptLexerTest::testVariableType() {
+    DavScript davScript("../Tests/DavScriptLexer/TestFiles/variableTypes.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
@@ -71,17 +69,18 @@ void DavScriptLexerTest::testVariableType()
     assertEquals(ENDOFFILE, tokens.at(tokens.size() - 1).getTokenRole());
     tokens.pop_back();
 
-    assertEquals(VARIABLE_TYPE_TOKENS.size(), getTokenCountByTokenRole(VARIABLETYPE, tokens));
+    assertEquals(VARIABLE_TYPE_TOKENS.size(),
+                 getTokenCountByTokenRole(VARIABLETYPE, tokens));
 
-    for (Token& token : tokens)
-    {
-        assertTrue(findTokenInWhiteListExept(VARIABLE_TYPE_TOKENS, { NEWLINE }, token));
+    for (Token& token : tokens) {
+        assertTrue(
+            findTokenInWhiteListExept(VARIABLE_TYPE_TOKENS, {NEWLINE}, token));
     }
 }
 
-void DavScriptLexerTest::testWrongVariableType()
-{
-    DavScript      davScript("../Tests/DavScriptLexer/TestFiles/wrongVariableTypes.dav");
+void DavScriptLexerTest::testWrongVariableType() {
+    DavScript davScript(
+        "../Tests/DavScriptLexer/TestFiles/wrongVariableTypes.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
@@ -93,8 +92,7 @@ void DavScriptLexerTest::testWrongVariableType()
     assertEquals(1, getTokensByTokenRole(INVALID, tokens).size());
 }
 
-void DavScriptLexerTest::testWords()
-{
+void DavScriptLexerTest::testWords() {
     DavScript      davScript("../Tests/DavScriptLexer/TestFiles/words.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -110,8 +108,7 @@ void DavScriptLexerTest::testWords()
     assertEquals(2, getTokenCountByTokenRole(DATAVALUE, tokens));
 }
 
-void DavScriptLexerTest::testNumbers()
-{
+void DavScriptLexerTest::testNumbers() {
     DavScript      davScript("../Tests/DavScriptLexer/TestFiles/numbers.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -123,17 +120,15 @@ void DavScriptLexerTest::testNumbers()
 
     assertEquals(10, getTokenCountByTokenRole(DATAVALUE, tokens));
 
-    std::vector<TokenType> expectedTypes{ NUMBERINT, NUMBERFLOAT };
+    std::vector<TokenType> expectedTypes{NUMBERINT, NUMBERFLOAT};
 
-    for (Token& token : getTokensByTokenRole(DATAVALUE, tokens))
-    {
-        assertTrue(std::find(expectedTypes.begin(), expectedTypes.end(), token.getTokenType())
-                   != expectedTypes.end());
+    for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
+        assertTrue(std::find(expectedTypes.begin(), expectedTypes.end(),
+                             token.getTokenType()) != expectedTypes.end());
     }
 }
 
-void DavScriptLexerTest::testStrings()
-{
+void DavScriptLexerTest::testStrings() {
     DavScript      davScript("../Tests/DavScriptLexer/TestFiles/strings.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -145,15 +140,13 @@ void DavScriptLexerTest::testStrings()
 
     assertEquals(4, getTokenCountByTokenRole(DATAVALUE, tokens));
 
-    for (Token& token : getTokensByTokenRole(DATAVALUE, tokens))
-    {
+    for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
         assertTrue(token.getTokenType() == STRING);
     }
 }
 
-void DavScriptLexerTest::testWrongStrings()
-{
-    DavScript      davScript("../Tests/DavScriptLexer/TestFiles/wrongStrings.dav");
+void DavScriptLexerTest::testWrongStrings() {
+    DavScript davScript("../Tests/DavScriptLexer/TestFiles/wrongStrings.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
@@ -164,15 +157,13 @@ void DavScriptLexerTest::testWrongStrings()
 
     assertEquals(2, getTokenCountByTokenRole(INVALID, tokens));
 
-    for (Token& token : getTokensByTokenRole(DATAVALUE, tokens))
-    {
+    for (Token& token : getTokensByTokenRole(DATAVALUE, tokens)) {
         assertTrue(token.getTokenType() == STRING);
     }
 }
 
-void DavScriptLexerTest::testFunctionDoc()
-{
-    DavScript      davScript("../Tests/DavScriptLexer/TestFiles/functionDoc.dav");
+void DavScriptLexerTest::testFunctionDoc() {
+    DavScript davScript("../Tests/DavScriptLexer/TestFiles/functionDoc.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
@@ -184,9 +175,9 @@ void DavScriptLexerTest::testFunctionDoc()
     assertEquals(2, getTokenCountByTokenRole(FUNCTIONDOC, tokens));
 }
 
-void DavScriptLexerTest::testWrongFunctionDoc()
-{
-    DavScript      davScript("../Tests/DavScriptLexer/TestFiles/wrongFunctionDoc.dav");
+void DavScriptLexerTest::testWrongFunctionDoc() {
+    DavScript davScript(
+        "../Tests/DavScriptLexer/TestFiles/wrongFunctionDoc.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
@@ -198,73 +189,68 @@ void DavScriptLexerTest::testWrongFunctionDoc()
     assertEquals(2, getTokenCountByTokenRole(INVALID, tokens));
 }
 
-void DavScriptLexerTest::testBulk()
-{
+void DavScriptLexerTest::testBulk() {
     DavScript      davScript("../Tests/DavScriptLexer/TestFiles/bulkTest.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
-    std::vector<Token> invalidTokens = getTokensByTokenRole(INVALID, lexer.getTokens());
+    std::vector<Token> invalidTokens =
+        getTokensByTokenRole(INVALID, lexer.getTokens());
 
     bool foundInvalidTokens = !invalidTokens.empty();
-    if (foundInvalidTokens)
-    {
+    if (foundInvalidTokens) {
         Console::newline();
-        Console::raw(Console::RED, "-------------------------------------------");
+        Console::raw(Console::RED,
+                     "-------------------------------------------");
         Console::raw(Console::RED, "INVALID TOKENS FOUND:");
-        Console::raw(Console::RED, "-------------------------------------------");
+        Console::raw(Console::RED,
+                     "-------------------------------------------");
         Console::newline();
     }
 
-    for (Token& token : invalidTokens)
-    {
+    for (Token& token : invalidTokens) {
         Console::err(token.getActualValue());
     }
 
-    if (foundInvalidTokens)
-    {
+    if (foundInvalidTokens) {
         Console::newline();
-        Console::raw(Console::RED, "Invalid tokens found in total: ", invalidTokens.size());
+        Console::raw(Console::RED,
+                     "Invalid tokens found in total: ", invalidTokens.size());
         Console::newline();
     }
 }
 
-
-int DavScriptLexerTest::getTokenCountByTokenRole(TokenRole role, const std::vector<Token>& tokens)
-{
+int DavScriptLexerTest::getTokenCountByTokenRole(
+    TokenRole role, const std::vector<Token>& tokens) {
     int totalTokenCount = 0;
 
-    for (const Token& token : tokens)
-    {
+    for (const Token& token : tokens) {
         totalTokenCount += static_cast<int>(token.getTokenRole() == role);
     }
 
     return totalTokenCount;
 }
 
-int DavScriptLexerTest::getTokenCountByTokenRoles(std::vector<TokenRole>&&  roles,
-                                                  const std::vector<Token>& tokens)
-{
+int DavScriptLexerTest::getTokenCountByTokenRoles(
+    std::vector<TokenRole>&& roles, const std::vector<Token>& tokens) {
     int totalTokenCount = 0;
 
-    for (const Token& token : tokens)
-    {
-        totalTokenCount += static_cast<int>(
-            std::find(roles.begin(), roles.end(), token.getTokenRole()) != roles.end());
+    for (const Token& token : tokens) {
+        totalTokenCount +=
+            static_cast<int>(std::find(roles.begin(), roles.end(),
+                                       token.getTokenRole()) != roles.end());
     }
 
     return totalTokenCount;
 }
 
-std::vector<Token> DavScriptLexerTest::getTokensByTokenRole(TokenRole                 role,
-                                                            const std::vector<Token>& tokens)
-{
+std::vector<Token>
+DavScriptLexerTest::getTokensByTokenRole(TokenRole                 role,
+                                         const std::vector<Token>& tokens) {
     std::vector<Token> filteredTokenList;
 
-    for (const Token& token : tokens)
-    {
-        if (token.getTokenRole() == role)
-        {
+    for (const Token& token : tokens) {
+        if (token.getTokenRole() == role) {
             filteredTokenList.emplace_back(token);
         }
     }
@@ -274,10 +260,9 @@ std::vector<Token> DavScriptLexerTest::getTokensByTokenRole(TokenRole           
 
 bool DavScriptLexerTest::findTokenInWhiteListExept(
     const std::unordered_map<std::string, TokenType>& whiteList,
-    std::vector<TokenType>&&                          exept,
-    const Token&                                      token)
-{
-    return whiteList.find(token.getActualValue()) != whiteList.end()
-           || std::find(exept.begin(), exept.end(), token.getTokenType()) != exept.end();
+    std::vector<TokenType>&& exept, const Token& token) {
+    return whiteList.find(token.getActualValue()) != whiteList.end() ||
+           std::find(exept.begin(), exept.end(), token.getTokenType()) !=
+               exept.end();
 }
-}
+} // namespace davincpp::davscript

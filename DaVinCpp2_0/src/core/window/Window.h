@@ -3,11 +3,9 @@
 #include <opengl.h>
 #include <window/GameWindow.h>
 
-namespace davincpp
-{
-class Window
-{
-public:
+namespace davincpp {
+class Window {
+  public:
     Window() = default;
     explicit Window(const ProjectConfig& projectConfig);
 
@@ -34,7 +32,7 @@ public:
     glm::ivec2   getFrameSize() const;
     FrameBuffer& getFrameBuffer();
 
-private:
+  private:
     uint32_t    m_Width = 0, m_Height = 0;
     std::string m_Title;
 
@@ -44,4 +42,4 @@ private:
     bool m_ShowFps  = false;
     int  m_FpsCount = 0;
 };
-}  // namespace davincpp
+} // namespace davincpp

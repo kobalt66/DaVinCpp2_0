@@ -1,13 +1,11 @@
 #include "OpenGLUtils.h"
+
 #include <DaVinCppExceptions.h>
 #include <opengl.h>
 
-namespace davincpp
-{
-void OpenGLUtils::loadGFLW()
-{
-    if (glfwInit() != -1)
-    {
+namespace davincpp {
+void OpenGLUtils::loadGFLW() {
+    if (glfwInit() != -1) {
         return;
     }
 
@@ -15,10 +13,8 @@ void OpenGLUtils::loadGFLW()
     throw glfw_error();
 }
 
-void OpenGLUtils::loadOpenGL()
-{
-    if (gladLoadGL() != -1)
-    {
+void OpenGLUtils::loadOpenGL() {
+    if (gladLoadGL() != -1) {
         return;
     }
 
@@ -26,31 +22,29 @@ void OpenGLUtils::loadOpenGL()
     throw opengl_error();
 }
 
-void OpenGLUtils::setGLErrorCallback()
-{
-    glfwSetErrorCallback([](int code, const char* msg)
-                         { Console::openglErr("[GLFW] (", code, ") ", msg); });
+void OpenGLUtils::setGLErrorCallback() {
+    glfwSetErrorCallback([](int code, const char* msg) {
+        Console::openglErr("[GLFW] (", code, ") ", msg);
+    });
 }
 
 void OpenGLUtils::setWindowHints(uint32_t glVersionMinor,
-                                 uint32_t glVersionMajor,
-                                 uint32_t glProfile)
-{
+                                 uint32_t glVersionMajor, uint32_t glProfile) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glVersionMinor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glVersionMajor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, glProfile);
 }
 
-GLFWwindow* OpenGLUtils::createWindow(uint32_t width, uint32_t height, const char* title)
-{
-    GLFWwindow* windowPtr = glfwCreateWindow((int) width, (int) height, title, nullptr, nullptr);
+GLFWwindow* OpenGLUtils::createWindow(uint32_t width, uint32_t height,
+                                      const char* title) {
+    GLFWwindow* windowPtr =
+        glfwCreateWindow((int) width, (int) height, title, nullptr, nullptr);
 
-    if (windowPtr != nullptr)
-    {
+    if (windowPtr != nullptr) {
         return windowPtr;
     }
 
     Console::err("Failed to create window!");
     throw glfw_error();
 }
-}  // namespace davincpp
+} // namespace davincpp

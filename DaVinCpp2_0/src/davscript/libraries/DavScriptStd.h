@@ -1,11 +1,9 @@
 #pragma once
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 class DavScriptVirtualMachine;
 
-namespace stdlib::io
-{
+namespace stdlib::io {
 void print(DavScriptVirtualMachine* vm);
 }
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

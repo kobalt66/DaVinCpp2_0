@@ -2,8 +2,8 @@
 
 #include <DaVinCppString.h>
 #ifdef _WIN32
-#include <windows.h>
 #include <conio.h>
+#include <windows.h>
 #else
 #include <sys/ioctl.h>
 #endif
@@ -12,8 +12,7 @@
 #endif
 #include <iomanip>
 
-namespace davincpp
-{
+namespace davincpp {
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
 int Console::m_ResizeFlag = 0;
 int Console::m_ClsWidth   = 0;
@@ -22,20 +21,17 @@ int Console::m_ClsHeight  = 0;
 volatile sig_atomic_t Console::m_ResizeFlag = 0;
 #endif
 
-void Console::onLoad()
-{
+void Console::onLoad() {
 #if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
     signal(SIGWINCH, handle_resize);
 #endif
 }
 
-void Console::onUpdate()
-{
+void Console::onUpdate() {
 #if defined(_WIN32)
     std::pair<int, int> clsSize = getConsoleSize();
 
-    if (clsSize.first != m_ClsWidth || clsSize.second != m_ClsHeight)
-    {
+    if (clsSize.first != m_ClsWidth || clsSize.second != m_ClsHeight) {
         m_ResizeFlag = 1;
     }
 
@@ -44,8 +40,7 @@ void Console::onUpdate()
 #endif
 }
 
-void Console::loadNcurses()
-{
+void Console::loadNcurses() {
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
     throw not_implemented(__LINE__, __FILE__);
 #else
@@ -64,8 +59,7 @@ void Console::loadNcurses()
 #endif
 }
 
-void Console::shutDownNcurses()
-{
+void Console::shutDownNcurses() {
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
     throw not_implemented(__LINE__, __FILE__);
 #else
@@ -75,8 +69,7 @@ void Console::shutDownNcurses()
 #endif
 }
 
-void Console::resizeNcurses()
-{
+void Console::resizeNcurses() {
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
     throw not_implemented(__LINE__, __FILE__);
 #else
@@ -89,19 +82,16 @@ bool Console::clsResized() { return m_ResizeFlag == 1; }
 
 void Console::resetResizeFlag() { m_ResizeFlag = 0; }
 
-std::string Console::cleanseText(std::string_view text)
-{
+std::string Console::cleanseText(std::string_view text) {
     return DaVinCppString::findReplaceAllByRegex(
         text, std::regex(R"(\x1B\[[0-9;]*m|033\[[0-9;]*m)"), "");
 }
 
 #ifdef _WIN32
-void Console::printNChar(char c, int length, const char* color)
-{
+void Console::printNChar(char c, int length, const char* color) {
     std::cout << color;
 
-    for (int i = 0; i < length; i++)
-    {
+    for (int i = 0; i < length; i++) {
         std::cout << c;
     }
 
@@ -109,11 +99,8 @@ void Console::printNChar(char c, int length, const char* color)
     std::cout << "\033[0m";
 }
 
-void Console::printCenteredText(std::string_view text,
-                                const char*      color,
-                                char             firstChar,
-                                char             lastChar)
-{
+void Console::printCenteredText(std::string_view text, const char* color,
+                                char firstChar, char lastChar) {
     int consoleWidth = Console::getConsoleWidth();
     int padding      = static_cast<int>((consoleWidth + text.size() - 1) / 2);
 
@@ -124,8 +111,8 @@ void Console::printCenteredText(std::string_view text,
     std::cout << "\033[0m";
 }
 #elif !defined(DAVSCRIPT_UNIT_TEST)
-void Console::printCenteredText(std::string_view text, int colorPair, int cliY)
-{
+void Console::printCenteredText(std::string_view text, int colorPair,
+                                int cliY) {
     int maxx    = stdscr->_maxx;
     int length  = static_cast<int>(text.length());
     int padding = (maxx - length) / 2;
@@ -138,8 +125,7 @@ void Console::printCenteredText(std::string_view text, int colorPair, int cliY)
     refresh();
 }
 
-void Console::printText(std::string_view text, int colorPair, int cliY)
-{
+void Console::printText(std::string_view text, int colorPair, int cliY) {
     int maxx   = stdscr->_maxx;
     int length = static_cast<int>(text.length());
 
@@ -151,16 +137,15 @@ void Console::printText(std::string_view text, int colorPair, int cliY)
     refresh();
 }
 
-void Console::printNChar(int c, int colorPair, int length, int cliX, int cliY)
-{
+void Console::printNChar(int c, int colorPair, int length, int cliX, int cliY) {
     attron(COLOR_PAIR(colorPair));
     mvhline(cliY, cliX, c, length);
     attroff(COLOR_PAIR(colorPair));
     refresh();
 }
 
-void Console::printTextMarginL(std::string_view textLeft, int colorPair, int cliY, int marginLeft)
-{
+void Console::printTextMarginL(std::string_view textLeft, int colorPair,
+                               int cliY, int marginLeft) {
     int maxx = stdscr->_maxx;
 
     int marginLeftStart = 1;
@@ -170,17 +155,18 @@ void Console::printTextMarginL(std::string_view textLeft, int colorPair, int cli
     attron(COLOR_PAIR(colorPair));
     mvhline(cliY, marginLeftStart, ' ', marginLeftEnd);
     mvprintw(cliY, textLeftStart, textLeft.data());
-    mvhline(cliY, marginLeftEnd + textLeft.size(), ' ', maxx - marginLeftEnd - textLeft.size());
+    mvhline(cliY, marginLeftEnd + textLeft.size(), ' ',
+            maxx - marginLeftEnd - textLeft.size());
     attroff(COLOR_PAIR(colorPair));
     refresh();
 }
 
-void Console::printTextMarginR(std::string_view textRight, int colorPair, int cliY, int marginRight)
-{
+void Console::printTextMarginR(std::string_view textRight, int colorPair,
+                               int cliY, int marginRight) {
     int maxx = stdscr->_maxx;
 
     int marginRightStart = maxx - marginRight;
-    int textRightStart   = static_cast<int>(marginRightStart - textRight.size());
+    int textRightStart = static_cast<int>(marginRightStart - textRight.size());
 
     attron(COLOR_PAIR(colorPair));
     mvhline(cliY, 1, ' ', textRightStart);
@@ -191,12 +177,8 @@ void Console::printTextMarginR(std::string_view textRight, int colorPair, int cl
 }
 
 void Console::printTextMarginLR(std::string_view textLeft,
-                                std::string_view textRight,
-                                int              colorPair,
-                                int              cliY,
-                                int              marginLeft,
-                                int              marginRight)
-{
+                                std::string_view textRight, int colorPair,
+                                int cliY, int marginLeft, int marginRight) {
     int maxx = stdscr->_maxx;
 
     int marginLeftStart = 1;
@@ -204,15 +186,13 @@ void Console::printTextMarginLR(std::string_view textLeft,
     int textLeftStart   = marginLeftEnd + 1;
 
     int marginRightStart = maxx - marginRight;
-    int textRightStart   = static_cast<int>(marginRightStart - textRight.size());
+    int textRightStart = static_cast<int>(marginRightStart - textRight.size());
 
     attron(COLOR_PAIR(colorPair));
     mvhline(cliY, marginLeftStart, ' ', marginLeftEnd);
     mvprintw(cliY, textLeftStart, textLeft.data());
 
-    mvhline(cliY,
-            marginLeftEnd + textLeft.size(),
-            ' ',
+    mvhline(cliY, marginLeftEnd + textLeft.size(), ' ',
             textRightStart - (marginLeftEnd + textLeft.size()));
 
     mvprintw(cliY, textRightStart, textRight.data());
@@ -222,8 +202,7 @@ void Console::printTextMarginLR(std::string_view textLeft,
 }
 #endif
 
-void Console::clear()
-{
+void Console::clear() {
 #if defined(_WIN32) || defined(DAVSCRIPT_UNIT_TEST)
     system("cls");
 #else
@@ -233,11 +212,9 @@ void Console::clear()
 
 void Console::newline() { std::cout << "\n"; }
 
-void Console::showCursor(bool show)
-{
+void Console::showCursor(bool show) {
 #ifdef _WIN32
-    if (!show)
-    {
+    if (!show) {
         std::cout << "\033[?25l";
         return;
     }
@@ -248,10 +225,11 @@ void Console::showCursor(bool show)
 #endif
 }
 
-void Console::setCursor(int row, int xIdx) { std::cout << "\033[" << row << ";" << xIdx << "H"; }
+void Console::setCursor(int row, int xIdx) {
+    std::cout << "\033[" << row << ";" << xIdx << "H";
+}
 
-int Console::getConsoleWidth()
-{
+int Console::getConsoleWidth() {
 #ifdef _WIN32
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -265,8 +243,7 @@ int Console::getConsoleWidth()
 #endif
 }
 
-int Console::getConsoleHeight()
-{
+int Console::getConsoleHeight() {
 #ifdef _WIN32
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -280,35 +257,31 @@ int Console::getConsoleHeight()
 #endif
 }
 
-std::pair<int, int> Console::getConsoleSize()
-{
+std::pair<int, int> Console::getConsoleSize() {
 #ifdef _WIN32
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    return { csbi.srWindow.Right - csbi.srWindow.Left + 1,
-             csbi.srWindow.Bottom - csbi.srWindow.Top + 1 };
+    return {csbi.srWindow.Right - csbi.srWindow.Left + 1,
+            csbi.srWindow.Bottom - csbi.srWindow.Top + 1};
 #elif !defined(DAVSCRIPT_UNIT_TEST)
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return { w.ws_col, w.ws_row };
+    return {w.ws_col, w.ws_row};
 #else
-    return { 0, 0 };
+    return {0, 0};
 #endif
 }
 
-int Console::getInputKey()
-{
+int Console::getInputKey() {
 #ifdef _WIN32
-    if (!_kbhit())
-    {
+    if (!_kbhit()) {
         return KEY_NULL;
     }
 
     return static_cast<int>(_getch());
 #elif !defined(DAVSCRIPT_UNIT_TEST)
     int c = getch();
-    if (c == ERR)
-    {
+    if (c == ERR) {
         return KEY_NULL;
     }
 
@@ -318,10 +291,8 @@ int Console::getInputKey()
 #endif
 }
 
-std::string Console::getInputKeyByCode(int keyCode)
-{
-    switch (keyCode)
-    {
+std::string Console::getInputKeyByCode(int keyCode) {
+    switch (keyCode) {
         case KEY_NEWLINE:
             return "NL";
         case KEY_ESCAPE:
@@ -339,8 +310,7 @@ std::string Console::getInputKeyByCode(int keyCode)
     }
 }
 
-int Console::awaitKeyInput()
-{
+int Console::awaitKeyInput() {
 #ifdef _WIN32
     return static_cast<int>(_getch());
 #elif !defined(DAVSCRIPT_UNIT_TEST)
@@ -353,4 +323,4 @@ int Console::awaitKeyInput()
 #if !defined(_WIN32) && !defined(DAVSCRIPT_UNIT_TEST)
 void Console::handle_resize(int sig) { m_ResizeFlag = 1; }
 #endif
-}  // namespace davincpp
+} // namespace davincpp

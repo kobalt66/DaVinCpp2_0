@@ -1,35 +1,32 @@
 #include "DavScriptCodeExecutionTest.h"
+
 #include <DavScript.h>
 #include <execution/DavScriptCompiler.h>
 #include <execution/DavScriptVirtualMachine.h>
 #include <lexer/DavScriptLexer.h>
 #include <parser/DavScriptParser.h>
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 DavScriptCodeExecutionTest::DavScriptCodeExecutionTest()
-: UnitTest("Testing the functionality of the DavScript compiler and vm")
-{
+    : UnitTest("Testing the functionality of the DavScript compiler and vm") {}
+
+void DavScriptCodeExecutionTest::onSetup() noexcept {
+    registerTestStep({"compiler & vm: variable assignments",
+                      [] { testVariableAssignment(); }});
+    registerTestStep({"compiler & vm: simple print function call",
+                      [this] { testSimplePrintFunctionCall(); }});
 }
 
-void DavScriptCodeExecutionTest::onSetup() noexcept
-{
-    registerTestStep({ "compiler & vm: variable assignments", [] { testVariableAssignment(); } });
-    registerTestStep(
-        { "compiler & vm: simple print function call", [this] { testSimplePrintFunctionCall(); } });
-}
-
-void DavScriptCodeExecutionTest::testVariableAssignment()
-{
+void DavScriptCodeExecutionTest::testVariableAssignment() {
     Value expectedIntValue(1L);
     Value expectedBoolValue(false);
     Value expectedFloatValue(0.123);
     Value expectedStringValue(std::string("Hello World!"));
 
-    std::filesystem::path projectPath
-        = "../Tests/DavScriptCodeExecution/TestFiles/VariableAssignment";
-    DavScript davScript(
-        "../Tests/DavScriptCodeExecution/TestFiles/VariableAssignment/Assignment.dav");
+    std::filesystem::path projectPath =
+        "../Tests/DavScriptCodeExecution/TestFiles/VariableAssignment";
+    DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/"
+                        "VariableAssignment/Assignment.dav");
 
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -38,7 +35,8 @@ void DavScriptCodeExecutionTest::testVariableAssignment()
     parser.mapScriptsToModules(projectPath);
     parser.generateAst();
 
-    DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), projectPath);
+    DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(),
+                               projectPath);
     compiler.compile();
     compiler.saveByteCode();
 
@@ -57,19 +55,20 @@ void DavScriptCodeExecutionTest::testVariableAssignment()
     assertTrue(expectedStringValue == actualStringStackValue);
 }
 
-void DavScriptCodeExecutionTest::testSimplePrintFunctionCall()
-{
-    std::string expectedOutput = Console::cleanseText(
-        Console::fmtTxt(Console::fmtLog("Hello World!"), Console::fmtLog("<int> 1")));
+void DavScriptCodeExecutionTest::testSimplePrintFunctionCall() {
+    std::string expectedOutput = Console::cleanseText(Console::fmtTxt(
+        Console::fmtLog("Hello World!"), Console::fmtLog("<int> 1")));
 
-    DavScript davScript("../Tests/DavScriptCodeExecution/TestFiles/SimplePrintFunctionCall.dav");
+    DavScript      davScript("../Tests/DavScriptCodeExecution/TestFiles/"
+                                  "SimplePrintFunctionCall.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
     DavScriptParser parser(davScript, lexer.getTokens());
     parser.generateAst();
 
-    DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), PROJECT_DIRECTORY);
+    DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(),
+                               PROJECT_DIRECTORY);
     compiler.compile();
     compiler.saveByteCode();
 
@@ -85,18 +84,19 @@ void DavScriptCodeExecutionTest::testSimplePrintFunctionCall()
     assertEquals(expectedOutput, output);
 }
 
-void DavScriptCodeExecutionTest::testUsingVariable()
-{
+void DavScriptCodeExecutionTest::testUsingVariable() {
     Value expectedIntValue(1L);
 
-    DavScript      davScript("../Tests/DavScriptCodeExecution/TestFiles/UsingVariable.dav");
+    DavScript davScript(
+        "../Tests/DavScriptCodeExecution/TestFiles/UsingVariable.dav");
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
 
     DavScriptParser parser(davScript, lexer.getTokens());
     parser.generateAst();
 
-    DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(), PROJECT_DIRECTORY);
+    DavScriptCompiler compiler(parser.getAst(), parser.getUsedNamespaces(),
+                               PROJECT_DIRECTORY);
     compiler.compile();
     compiler.saveByteCode();
 
@@ -112,7 +112,8 @@ void DavScriptCodeExecutionTest::testUsingVariable()
     Value actualIntStackValue = vm.readMemory(0);
     assertTrue(expectedIntValue == actualIntStackValue);
 
-    std::string expectedOutput = Console::cleanseText(Console::fmtLog("<int> 1"));
+    std::string expectedOutput =
+        Console::cleanseText(Console::fmtLog("<int> 1"));
     assertEquals(expectedOutput, output);
 }
-}
+} // namespace davincpp::davscript

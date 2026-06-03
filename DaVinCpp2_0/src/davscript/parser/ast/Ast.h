@@ -3,11 +3,9 @@
 #include <parser/ast/IdentifierNode.h>
 #include <tokens/Token.h>
 
-namespace davincpp::davscript
-{
-class Ast final : public CallStackNode
-{
-public:
+namespace davincpp::davscript {
+class Ast final : public CallStackNode {
+  public:
     Ast() = default;
     explicit Ast(IdentifierNode script);
 
@@ -17,7 +15,7 @@ public:
 
     [[nodiscard]] IdentifierNode getModuleNamespace() const;
 
-private:
+  private:
     IdentifierNode m_ModuleNamespace;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

@@ -1,27 +1,27 @@
 #include <DaVinCppExceptions.h>
 #include <DaVinCppFileSystem.h>
-#include <UnitTestEnvironment.h>
-#include <DavScriptFiles/DavScriptFileTest.h>
 #include <DavScriptCodeExecution/DavScriptCodeExecutionTest.h>
+#include <DavScriptFiles/DavScriptFileTest.h>
 #include <DavScriptLexer/DavScriptLexerTest.h>
 #include <DavScriptParser/DavScriptParserTest.h>
+#include <UnitTestEnvironment.h>
 
-int main()
-{
-    try
-    {
+int main() {
+    try {
         davincpp::unittest::UnitTestEnvironment testEnvironment;
 
-        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptFileTest>());
-        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptLexerTest>());
-        testEnvironment.addUnitTest(std::make_unique<davincpp::davscript::DavScriptParserTest>());
         testEnvironment.addUnitTest(
-            std::make_unique<davincpp::davscript::DavScriptCodeExecutionTest>());
+            std::make_unique<davincpp::davscript::DavScriptFileTest>());
+        testEnvironment.addUnitTest(
+            std::make_unique<davincpp::davscript::DavScriptLexerTest>());
+        testEnvironment.addUnitTest(
+            std::make_unique<davincpp::davscript::DavScriptParserTest>());
+        testEnvironment.addUnitTest(
+            std::make_unique<
+                davincpp::davscript::DavScriptCodeExecutionTest>());
 
         testEnvironment.execute();
-    }
-    catch (std::exception& exception)
-    {
+    } catch (std::exception& exception) {
         throw davincpp::davincpp_error(exception.what());
     }
 

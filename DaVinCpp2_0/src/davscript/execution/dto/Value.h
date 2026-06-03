@@ -2,10 +2,8 @@
 #include <memory>
 #include <tokens/TokenData.h>
 
-namespace davincpp::davscript
-{
-enum class ValueType : int8_t
-{
+namespace davincpp::davscript {
+enum class ValueType : int8_t {
     NONE,
     INT,
     BOOL,
@@ -14,8 +12,7 @@ enum class ValueType : int8_t
     OBJECT,
 };
 
-struct Value
-{
+struct Value {
     explicit Value();
     Value(int64_t value);
     Value(bool value);
@@ -30,8 +27,7 @@ struct Value
     Value& operator=(Value&& other) noexcept;
 
     ValueType type;
-    union
-    {
+    union {
         int64_t int_t;
         bool    bool_t;
         double  double_t;
@@ -42,8 +38,10 @@ struct Value
     bool operator==(const Value& value) const;
 };
 
-static const std::unordered_map<ValueType, std::string> STACK_VALUE_TYPE2STRING = {
-    { ValueType::INT, T_INT },       { ValueType::BOOL, T_BOOL },    { ValueType::DOUBLE, T_FLOAT },
-    { ValueType::STRING, T_STRING }, { ValueType::OBJECT, T_MIXED },
+static const std::unordered_map<ValueType, std::string>
+    STACK_VALUE_TYPE2STRING = {
+        {ValueType::INT, T_INT},      {ValueType::BOOL, T_BOOL},
+        {ValueType::DOUBLE, T_FLOAT}, {ValueType::STRING, T_STRING},
+        {ValueType::OBJECT, T_MIXED},
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

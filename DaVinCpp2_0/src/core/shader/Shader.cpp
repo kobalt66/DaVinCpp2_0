@@ -1,28 +1,28 @@
 #include "Shader.h"
-#include <DaVinCppFileSystem.h>
+
 #include <DaVinCppExceptions.h>
+#include <DaVinCppFileSystem.h>
 
-namespace davincpp
-{
-Shader::Shader(ShaderProfile&& profile)
-: m_Profile(profile)
-{
-}
+namespace davincpp {
+Shader::Shader(ShaderProfile&& profile) : m_Profile(profile) {}
 
-Shader::~Shader()
-{
+Shader::~Shader() {
     unbind();
     GLCall(glDeleteProgram(m_ProgramID));
 }
 
-void Shader::loadShader(std::string_view vertexShaderPath, std::string_view fragmentShaderPath)
-{
+void Shader::loadShader(std::string_view vertexShaderPath,
+                        std::string_view fragmentShaderPath) {
     GLCall(m_ProgramID = glCreateProgram());
-    std::string vertexShaderCode   = DaVinCppFileSystem::readFile(vertexShaderPath);
-    std::string fragmentShaderCode = DaVinCppFileSystem::readFile(fragmentShaderPath);
+    std::string vertexShaderCode =
+        DaVinCppFileSystem::readFile(vertexShaderPath);
+    std::string fragmentShaderCode =
+        DaVinCppFileSystem::readFile(fragmentShaderPath);
 
-    int vertexShaderID   = compileShader(vertexShaderCode.c_str(), GL_VERTEX_SHADER);
-    int fragmentShaderID = compileShader(fragmentShaderCode.c_str(), GL_FRAGMENT_SHADER);
+    int vertexShaderID =
+        compileShader(vertexShaderCode.c_str(), GL_VERTEX_SHADER);
+    int fragmentShaderID =
+        compileShader(fragmentShaderCode.c_str(), GL_FRAGMENT_SHADER);
 
     linkShader(vertexShaderID, fragmentShaderID);
     finalizeShader(vertexShaderID, fragmentShaderID);
@@ -32,31 +32,23 @@ void Shader::bind() const { GLCall(glUseProgram(m_ProgramID)); }
 
 void Shader::unbind() { GLCall(glUseProgram(0)); }
 
-template<class T>
-void Shader::setup()
-{
-    m_Profile.setAttributes<T>();
-}
+template <class T> void Shader::setup() { m_Profile.setAttributes<T>(); }
 
 const ShaderProfile& Shader::getShaderProfile() const { return m_Profile; }
 
-void Shader::setUniform1i(std::string_view uniform, int integer)
-{
+void Shader::setUniform1i(std::string_view uniform, int integer) {
     int location = getUniformLocation(uniform);
     GLCall(glUniform1i(location, integer));
 }
 
-int Shader::getUniformLocation(std::string_view uniform)
-{
-    if (m_UniformLocationCache.find(uniform) != m_UniformLocationCache.end())
-    {
+int Shader::getUniformLocation(std::string_view uniform) {
+    if (m_UniformLocationCache.find(uniform) != m_UniformLocationCache.end()) {
         return m_UniformLocationCache.at(uniform);
     }
 
     int location = glGetUniformLocation(m_ProgramID, uniform.data());
 
-    if (location == -1)
-    {
+    if (location == -1) {
         Console::err("The uniform ", uniform, " does not exit");
         throw opengl_error();
     }
@@ -65,8 +57,7 @@ int Shader::getUniformLocation(std::string_view uniform)
     return location;
 }
 
-uint32_t Shader::compileShader(const char* shaderCode, GLenum shaderType)
-{
+uint32_t Shader::compileShader(const char* shaderCode, GLenum shaderType) {
     uint32_t shaderId = glCreateShader(shaderType);
     GLCall(glShaderSource(shaderId, 1, &shaderCode, nullptr));
     GLCall(glCompileShader(shaderId));
@@ -74,8 +65,7 @@ uint32_t Shader::compileShader(const char* shaderCode, GLenum shaderType)
     int result, length;
     GLCall(glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result));
 
-    if (result == GL_TRUE)
-    {
+    if (result == GL_TRUE) {
         return shaderId;
     }
 
@@ -98,8 +88,8 @@ uint32_t Shader::compileShader(const char* shaderCode, GLenum shaderType)
     throw opengl_error();
 }
 
-void Shader::linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) const
-{
+void Shader::linkShader(uint32_t vertexShaderID,
+                        uint32_t fragmentShaderID) const {
     GLCall(glAttachShader(m_ProgramID, vertexShaderID));
     GLCall(glAttachShader(m_ProgramID, fragmentShaderID));
     GLCall(glLinkProgram(m_ProgramID));
@@ -107,8 +97,7 @@ void Shader::linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) cons
     int linkStatus, length;
     glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &linkStatus);
 
-    if (linkStatus == GL_TRUE)
-    {
+    if (linkStatus == GL_TRUE) {
         return;
     }
 
@@ -127,10 +116,10 @@ void Shader::linkShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) cons
     throw opengl_error();
 }
 
-void Shader::finalizeShader(uint32_t vertexShaderID, uint32_t fragmentShaderID) const
-{
+void Shader::finalizeShader(uint32_t vertexShaderID,
+                            uint32_t fragmentShaderID) const {
     GLCall(glValidateProgram(m_ProgramID));
     GLCall(glDeleteShader(vertexShaderID));
     GLCall(glDeleteShader(fragmentShaderID));
 }
-}  // namespace davincpp
+} // namespace davincpp

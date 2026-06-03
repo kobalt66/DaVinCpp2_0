@@ -3,11 +3,9 @@
 #include <opengl.h>
 #include <vector>
 
-namespace davincpp
-{
-class Vbo
-{
-public:
+namespace davincpp {
+class Vbo {
+  public:
     Vbo() = default;
     ~Vbo();
 
@@ -16,12 +14,12 @@ public:
     void unbind();
     bool bound() const;
 
-    template<class T>
+    template <class T>
     void bindData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW);
 
-private:
+  private:
     uint32_t m_ID    = 0;
     bool     m_Bound = false;
     GLenum   m_Usage = GL_STATIC_DRAW;
 };
-}  // namespace davincpp
+} // namespace davincpp

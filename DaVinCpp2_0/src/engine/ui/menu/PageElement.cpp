@@ -1,25 +1,18 @@
 #include "PageElement.h"
 
-namespace davincpp
-{
+namespace davincpp {
 PageElement::PageElement(const std::string& displayText,
-                         std::string_view   pagePointer,
-                         bool               gotoPreviousPage,
+                         std::string_view pagePointer, bool gotoPreviousPage,
                          const std::string& uniqueTag)
-: MenuElement(displayText, uniqueTag)
-, m_PagePointer(pagePointer)
-, m_GotoPreviousPage(gotoPreviousPage)
-{
-}
+    : MenuElement(displayText, uniqueTag), m_PagePointer(pagePointer),
+      m_GotoPreviousPage(gotoPreviousPage) {}
 
-void PageElement::onInteraction(SelectionMenu* selectionMenu)
-{
-    if (m_GotoPreviousPage)
-    {
+void PageElement::onInteraction(SelectionMenu* selectionMenu) {
+    if (m_GotoPreviousPage) {
         selectionMenu->gotoPreviousPage();
         return;
     }
 
     selectionMenu->switchPage(m_PagePointer);
 }
-}  // namespace davincpp
+} // namespace davincpp

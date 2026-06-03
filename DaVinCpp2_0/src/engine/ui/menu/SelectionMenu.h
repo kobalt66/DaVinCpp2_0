@@ -1,16 +1,15 @@
 #pragma once
-#include <ui/menu/MenuPage.h>
-#include <ui/menu/ActionButton.h>
 #include <gameprojects/ProjectManager.h>
+#include <ui/menu/ActionButton.h>
+#include <ui/menu/MenuPage.h>
 #include <unordered_map>
 
-namespace davincpp
-{
-class SelectionMenu
-{
-public:
+namespace davincpp {
+class SelectionMenu {
+  public:
     SelectionMenu() = default;
-    explicit SelectionMenu(const std::shared_ptr<ProjectManager>& projectManager);
+    explicit SelectionMenu(
+        const std::shared_ptr<ProjectManager>& projectManager);
 
     void onLoad();
     void onExecute();
@@ -22,7 +21,7 @@ public:
     void setInputControl(bool enableInput);
     void setSelectedProjectIdx(int projectIdx);
     int  getSelectedProjectIdx() const;
-    template<class T = MenuPage>
+    template <class T = MenuPage>
     std::shared_ptr<T> getMenuPage(std::string_view pageTag) const;
 
 #ifndef _WIN32
@@ -32,13 +31,14 @@ public:
     void clearCurrentMenuPage() const;
 #endif
 
-private:
+  private:
     void onRender() const;
     void onUpdate(int input);
 
-    static void actionCreateProject(SelectionMenu* selectionMenu, ActionButton* buttonRef);
+    static void actionCreateProject(SelectionMenu* selectionMenu,
+                                    ActionButton*  buttonRef);
 
-public:
+  public:
     static const char* PAGE_UNDEFINED;
     static const char* PAGE_MAIN;
     static const char* PAGE_SELECT_PROJECT;
@@ -50,16 +50,16 @@ public:
 
     static const char* WRN_INVALID_INPUT;
 
-private:
+  private:
     std::shared_ptr<ProjectManager> m_ProjectManager;
 
     std::unordered_map<std::string, std::shared_ptr<MenuPage>> m_MenuPages;
-    std::vector<std::shared_ptr<MenuPage>>                     m_PageInvocationHistory;
-    std::shared_ptr<MenuPage>                                  m_CurrentPage = nullptr;
+    std::vector<std::shared_ptr<MenuPage>> m_PageInvocationHistory;
+    std::shared_ptr<MenuPage>              m_CurrentPage = nullptr;
 
     bool m_ShouldShutdown = false;
     bool m_InputEnabled   = true;
 
     int m_SelectedProjectIdx = 0;
 };
-}  // namespace davincpp
+} // namespace davincpp

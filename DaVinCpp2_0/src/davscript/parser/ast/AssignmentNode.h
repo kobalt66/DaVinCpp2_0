@@ -1,16 +1,13 @@
 #pragma once
+#include <memory>
 #include <parser/ast/AstNode.h>
 #include <parser/ast/ValueTypeNode.h>
 #include <tokens/Token.h>
-#include <memory>
 
-namespace davincpp::davscript
-{
-class AssignmentNode final : public AstNode
-{
-public:
-    AssignmentNode(Token                          variableType,
-                   Token                          identifier,
+namespace davincpp::davscript {
+class AssignmentNode final : public AstNode {
+  public:
+    AssignmentNode(Token variableType, Token identifier,
                    std::shared_ptr<ValueTypeNode> type,
                    std::shared_ptr<AstNode>       value);
 
@@ -21,12 +18,13 @@ public:
     [[nodiscard]] std::shared_ptr<ValueTypeNode> getType() const;
     [[nodiscard]] std::shared_ptr<AstNode>       getValue() const;
 
-    std::vector<uint8_t> generateByteCode(DavScriptCompiler* interpreter) override;
+    std::vector<uint8_t>
+    generateByteCode(DavScriptCompiler* interpreter) override;
 
-private:
+  private:
     Token                          m_VariableType;
     Token                          m_Identifier;
     std::shared_ptr<AstNode>       m_Value;
     std::shared_ptr<ValueTypeNode> m_Type;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

@@ -2,11 +2,9 @@
 #include <filesystem>
 #include <ui/menu/MenuElement.h>
 
-namespace davincpp
-{
-class SelectFilepathButton : public MenuElement
-{
-public:
+namespace davincpp {
+class SelectFilepathButton : public MenuElement {
+  public:
     SelectFilepathButton(const std::string& displayText,
                          bool               showOnlyDirectories,
                          const std::string& uniqueTag = "");
@@ -14,11 +12,11 @@ public:
     void onRender(bool selected) override;
     void onInteraction(SelectionMenu* selectionMenu) override;
 
-    void                                setFilePath(std::filesystem::path filePath);
+    void setFilePath(std::filesystem::path filePath);
     [[nodiscard]] std::filesystem::path getFilePath() const;
 
-private:
+  private:
     std::filesystem::path m_FilePath;
     bool                  m_ShowOnlyDirectories;
 };
-}  // namespace davincpp
+} // namespace davincpp

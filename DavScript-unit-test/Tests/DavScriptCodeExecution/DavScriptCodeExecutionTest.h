@@ -1,18 +1,16 @@
 #pragma once
 #include <UnitTest.h>
 
-namespace davincpp::davscript
-{
-class DavScriptCodeExecutionTest final : public unittest::UnitTest
-{
-public:
+namespace davincpp::davscript {
+class DavScriptCodeExecutionTest final : public unittest::UnitTest {
+  public:
     explicit DavScriptCodeExecutionTest();
 
     void onSetup() noexcept override;
 
-private:
+  private:
     static void testVariableAssignment();
     void        testSimplePrintFunctionCall();
     void        testUsingVariable();
 };
-}
+} // namespace davincpp::davscript

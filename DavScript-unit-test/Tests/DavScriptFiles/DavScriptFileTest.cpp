@@ -1,23 +1,18 @@
 #include "DavScriptFileTest.h"
+
 #include <DavScript.h>
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 DavScriptFileTest::DavScriptFileTest()
-: UnitTest("DavScript script file loading test")
-{
-}
+    : UnitTest("DavScript script file loading test") {}
 
+void DavScriptFileTest::onSetup() noexcept {
+    registerTestStep({"DavScript: loading script file", [] {
+                          DavScript davScript(
+                              "../Tests/DavScriptFiles/TestFiles/test.dav");
+                          davScript.loadFile();
 
-void DavScriptFileTest::onSetup() noexcept
-{
-    registerTestStep({ "DavScript: loading script file",
-                       []
-                       {
-                           DavScript davScript("../Tests/DavScriptFiles/TestFiles/test.dav");
-                           davScript.loadFile();
-
-                           assertEquals(false, davScript.isEmpty());
-                       } });
+                          assertEquals(false, davScript.isEmpty());
+                      }});
 }
-}
+} // namespace davincpp::davscript

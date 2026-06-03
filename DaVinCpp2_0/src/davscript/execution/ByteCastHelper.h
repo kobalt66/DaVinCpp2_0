@@ -3,12 +3,10 @@
 #include <string>
 #include <vector>
 
-namespace davincpp::davscript
-{
-class ByteCastHelper final
-{
-public:
-    template<typename T>
+namespace davincpp::davscript {
+class ByteCastHelper final {
+  public:
+    template <typename T>
     static std::vector<uint8_t> nativeToBytes(const T& value);
     static std::vector<uint8_t> stringToBytes(const std::string& str);
 
@@ -18,4 +16,4 @@ public:
     static double      bytesToFloat(const uint8_t* bytePtr);
     static std::string bytesToString(const uint8_t* bytePtr);
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

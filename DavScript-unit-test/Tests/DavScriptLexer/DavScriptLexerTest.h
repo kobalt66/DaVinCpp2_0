@@ -2,16 +2,14 @@
 #include <UnitTest.h>
 #include <lexer/DavScriptLexer.h>
 
-namespace davincpp::davscript
-{
-class DavScriptLexerTest : public unittest::UnitTest
-{
-public:
+namespace davincpp::davscript {
+class DavScriptLexerTest : public unittest::UnitTest {
+  public:
     explicit DavScriptLexerTest();
 
     void onSetup() noexcept override;
 
-private:
+  private:
     static void testSingleCharTokens();
     static void testComments();
     static void testVariableType();
@@ -24,14 +22,14 @@ private:
     static void testWrongFunctionDoc();
     static void testBulk();
 
-    static int getTokenCountByTokenRole(TokenRole role, const std::vector<Token>& tokens);
+    static int getTokenCountByTokenRole(TokenRole                 role,
+                                        const std::vector<Token>& tokens);
     static int getTokenCountByTokenRoles(std::vector<TokenRole>&&  roles,
                                          const std::vector<Token>& tokens);
-    static std::vector<Token> getTokensByTokenRole(TokenRole                 role,
-                                                   const std::vector<Token>& tokens);
-    static bool               findTokenInWhiteListExept(
-                      const std::unordered_map<std::string, TokenType>& whiteList,
-                      std::vector<TokenType>&&                          exept,
-                      const Token&                                      token);
+    static std::vector<Token>
+    getTokensByTokenRole(TokenRole role, const std::vector<Token>& tokens);
+    static bool findTokenInWhiteListExept(
+        const std::unordered_map<std::string, TokenType>& whiteList,
+        std::vector<TokenType>&& exept, const Token& token);
 };
-}
+} // namespace davincpp::davscript

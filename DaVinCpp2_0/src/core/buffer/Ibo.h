@@ -3,11 +3,9 @@
 #include <opengl.h>
 #include <vector>
 
-namespace davincpp
-{
-class Ibo
-{
-public:
+namespace davincpp {
+class Ibo {
+  public:
     Ibo() = default;
     ~Ibo();
 
@@ -16,13 +14,14 @@ public:
     void unbind();
     bool bound() const;
 
-    void bindData(const std::vector<uint32_t>& data, GLenum usage = GL_STATIC_DRAW);
+    void bindData(const std::vector<uint32_t>& data,
+                  GLenum                       usage = GL_STATIC_DRAW);
     int  getIndicesCount();
 
-private:
+  private:
     uint32_t m_ID           = 0;
     int      m_IndicesCount = 0;
     bool     m_Bound        = false;
     GLenum   m_UsageType    = GL_STATIC_DRAW;
 };
-}  // namespace davincpp
+} // namespace davincpp

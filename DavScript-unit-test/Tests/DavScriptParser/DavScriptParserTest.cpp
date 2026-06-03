@@ -1,31 +1,32 @@
 #include "DavScriptParserTest.h"
+
 #include <DavScript.h>
-#include <parser/ast/AssignmentNode.h>
-#include <parser/ast/Ast.h>
-#include <parser/ast/ValueNode.h>
 #include <lexer/DavScriptLexer.h>
 #include <parser/DavScriptParser.h>
+#include <parser/ast/AssignmentNode.h>
+#include <parser/ast/Ast.h>
 #include <parser/ast/FunctionCallNode.h>
 #include <parser/ast/UseNode.h>
+#include <parser/ast/ValueNode.h>
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 DavScriptParserTest::DavScriptParserTest()
-: UnitTest("Testing the functionality of the DavScript parser")
-{
+    : UnitTest("Testing the functionality of the DavScript parser") {}
+
+void DavScriptParserTest::onSetup() noexcept {
+    registerTestStep(
+        {"parsing assignments: success", [] { testAssignmentNodeSuccess(); }});
+    registerTestStep({"parsing assignments: failure",
+                      [this] { testAssignmentNodeFailure(); }});
+    registerTestStep({"parsing function call: success",
+                      [] { testFunctionCallNodeSuccess(); }});
+    registerTestStep(
+        {"parsing project: success", [] { testProjectParsing(); }});
 }
 
-void DavScriptParserTest::onSetup() noexcept
-{
-    registerTestStep({ "parsing assignments: success", [] { testAssignmentNodeSuccess(); } });
-    registerTestStep({ "parsing assignments: failure", [this] { testAssignmentNodeFailure(); } });
-    registerTestStep({ "parsing function call: success", [] { testFunctionCallNodeSuccess(); } });
-    registerTestStep({ "parsing project: success", [] { testProjectParsing(); } });
-}
-
-void DavScriptParserTest::testAssignmentNodeSuccess()
-{
-    DavScript davScript("../Tests/DavScriptParser/TestFiles/AssignmentSuccess.dav");
+void DavScriptParserTest::testAssignmentNodeSuccess() {
+    DavScript davScript(
+        "../Tests/DavScriptParser/TestFiles/AssignmentSuccess.dav");
 
     auto expectedAst = std::make_shared<Ast>();
     expectedAst->addNode(std::make_shared<AssignmentNode>(
@@ -47,12 +48,12 @@ void DavScriptParserTest::testAssignmentNodeSuccess()
     assertTrue(*expectedAst == *ast);
 }
 
-void DavScriptParserTest::testAssignmentNodeFailure()
-{
+void DavScriptParserTest::testAssignmentNodeFailure() {
     expectException(std::filesystem::path(
         "../Tests/DavScriptParser/TestFiles/AssignmentExpectedException.txt"));
 
-    DavScript davScript("../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav");
+    DavScript davScript(
+        "../Tests/DavScriptParser/TestFiles/AssignmentFailure.dav");
 
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -61,17 +62,18 @@ void DavScriptParserTest::testAssignmentNodeFailure()
     parser.generateAst();
 }
 
-void DavScriptParserTest::testFunctionCallNodeSuccess()
-{
-    DavScript davScript("../Tests/DavScriptParser/TestFiles/FunctionCallSuccess.dav");
+void DavScriptParserTest::testFunctionCallNodeSuccess() {
+    DavScript davScript(
+        "../Tests/DavScriptParser/TestFiles/FunctionCallSuccess.dav");
 
     auto expectedAst = std::make_shared<Ast>();
-    expectedAst->addNode(std::make_shared<UseNode>(std::make_shared<IdentifierNode>(
-        Token(davScript, CharPosition(0, 4), "std.io", NONE, IDENTIFIER))));
+    expectedAst->addNode(
+        std::make_shared<UseNode>(std::make_shared<IdentifierNode>(
+            Token(davScript, CharPosition(0, 4), "std.io", NONE, IDENTIFIER))));
     expectedAst->addNode(std::make_shared<FunctionCallNode>(
         Token(davScript, CharPosition(2, 0), "std.io.print", NONE, IDENTIFIER),
-        std::vector<std::shared_ptr<AstNode>>{ std::make_shared<ValueNode>(
-            Token(davScript, CharPosition(2, 6), "1", NUMBERINT, DATAVALUE)) }));
+        std::vector<std::shared_ptr<AstNode>>{std::make_shared<ValueNode>(
+            Token(davScript, CharPosition(2, 6), "1", NUMBERINT, DATAVALUE))}));
 
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -84,10 +86,11 @@ void DavScriptParserTest::testFunctionCallNodeSuccess()
     assertTrue(*expectedAst == *ast);
 }
 
-void DavScriptParserTest::testProjectParsing()
-{
-    std::filesystem::path projectPath = "../Tests/DavScriptParser/TestFiles/ProjectParsing";
-    DavScript             davScript("../Tests/DavScriptParser/TestFiles/ProjectParsing/main.dav");
+void DavScriptParserTest::testProjectParsing() {
+    std::filesystem::path projectPath =
+        "../Tests/DavScriptParser/TestFiles/ProjectParsing";
+    DavScript davScript(
+        "../Tests/DavScriptParser/TestFiles/ProjectParsing/main.dav");
 
     DavScriptLexer lexer(davScript);
     lexer.generateTokens();
@@ -96,4 +99,4 @@ void DavScriptParserTest::testProjectParsing()
     parser.mapScriptsToModules(projectPath);
     parser.generateAst();
 };
-}
+} // namespace davincpp::davscript

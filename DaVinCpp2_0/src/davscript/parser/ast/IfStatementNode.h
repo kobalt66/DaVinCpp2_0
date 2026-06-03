@@ -1,14 +1,12 @@
 #pragma once
+#include <memory>
 #include <parser/ast/AstNode.h>
 #include <parser/ast/CallStackNode.h>
 #include <parser/ast/ExpressionNode.h>
-#include <memory>
 
-namespace davincpp::davscript
-{
-class IfStatementNode final : AstNode
-{
-public:
+namespace davincpp::davscript {
+class IfStatementNode final : AstNode {
+  public:
     IfStatementNode(std::shared_ptr<AstNode>         condition,
                     std::shared_ptr<CallStackNode>   callStackNode,
                     std::shared_ptr<IfStatementNode> fallback);
@@ -19,9 +17,9 @@ public:
 
     std::vector<char> generateByteCode() override { return {}; }
 
-private:
+  private:
     std::shared_ptr<AstNode>         m_Condition;
     std::shared_ptr<CallStackNode>   m_CallStackNode;
     std::shared_ptr<IfStatementNode> m_Fallback;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

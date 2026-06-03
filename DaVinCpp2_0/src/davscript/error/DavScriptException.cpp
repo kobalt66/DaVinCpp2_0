@@ -1,9 +1,6 @@
 #include "DavScriptException.h"
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 DavScriptException::DavScriptException(const std::string& message)
-: std::runtime_error(message)
-{
-}
-}  // namespace davincpp::davscript
+    : std::runtime_error(message) {}
+} // namespace davincpp::davscript

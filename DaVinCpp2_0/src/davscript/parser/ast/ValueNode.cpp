@@ -1,22 +1,17 @@
 #include "ValueNode.h"
-#include <utility>
+
 #include <execution/ByteCastHelper.h>
 #include <execution/ByteOperations.h>
 #include <execution/DavScriptCompiler.h>
 #include <execution/dto/Value.h>
+#include <utility>
 
-namespace davincpp::davscript
-{
-ValueNode::ValueNode(Token value)
-: m_Value(std::move(value))
-{
-}
+namespace davincpp::davscript {
+ValueNode::ValueNode(Token value) : m_Value(std::move(value)) {}
 
-bool ValueNode::operator==(const AstNode& other) const
-{
+bool ValueNode::operator==(const AstNode& other) const {
     const auto* otherNode = dynamic_cast<const ValueNode*>(&other);
-    if (otherNode == nullptr)
-    {
+    if (otherNode == nullptr) {
         return false;
     }
 
@@ -25,13 +20,11 @@ bool ValueNode::operator==(const AstNode& other) const
 
 Token ValueNode::getValue() const { return m_Value; }
 
-Token ValueNode::getValueType() const
-{
+Token ValueNode::getValueType() const {
     Token valueType = m_Value;
     valueType.setTokenRole(VALUETYPE);
 
-    switch (m_Value.getTokenType())
-    {
+    switch (m_Value.getTokenType()) {
         case NUMBERINT:
             valueType.setTokenType(INTTYPE);
             break;
@@ -54,30 +47,24 @@ Token ValueNode::getValueType() const
 }
 
 std::vector<uint8_t> ValueNode::generateByteCode(DavScriptCompiler* compiler,
-                                                 const Token&       valueType) const
-{
+                                                 const Token& valueType) const {
     std::vector<uint8_t> valueBytes;
     std::string          actualValue = m_Value.getActualValue();
 
-    switch (valueType.getTokenType())
-    {
-        case INTTYPE:
-        {
+    switch (valueType.getTokenType()) {
+        case INTTYPE: {
             valueBytes = ByteCastHelper::nativeToBytes(std::stol(actualValue));
             break;
         }
-        case BOOLTYPE:
-        {
+        case BOOLTYPE: {
             valueBytes = ByteCastHelper::nativeToBytes(actualValue == T_TRUE);
             break;
         }
-        case FLOATTYPE:
-        {
+        case FLOATTYPE: {
             valueBytes = ByteCastHelper::nativeToBytes(std::stod(actualValue));
             break;
         }
-        case STRINGTYPE:
-        {
+        case STRINGTYPE: {
             valueBytes = ByteCastHelper::stringToBytes(actualValue);
             valueBytes.push_back(NUL);
             break;
@@ -89,4 +76,4 @@ std::vector<uint8_t> ValueNode::generateByteCode(DavScriptCompiler* compiler,
 
     return valueBytes;
 }
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

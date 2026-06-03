@@ -1,13 +1,12 @@
 #pragma once
+#include <execution/ByteOperations.h>
+#include <execution/dto/Value.h>
 #include <filesystem>
 #include <functional>
 #include <memory>
 #include <stack>
-#include <execution/ByteOperations.h>
-#include <execution/dto/Value.h>
 
-namespace davincpp::davscript
-{
+namespace davincpp::davscript {
 static constexpr uint8_t ZERO          = NUL;
 static constexpr uint8_t ERROR         = 1;
 static constexpr uint8_t FATAL_ERROR   = 2;
@@ -15,9 +14,8 @@ static constexpr uint8_t CMD_NOT_FOUND = 127;
 
 static auto PTR_CONTEXT_FUNCTION = "function";
 
-class DavScriptVirtualMachine final
-{
-public:
+class DavScriptVirtualMachine final {
+  public:
     explicit DavScriptVirtualMachine(std::filesystem::path projectDirectory);
 
     void reset();
@@ -31,7 +29,7 @@ public:
     void                writeMemory(uint32_t ptr, const Value& value);
     void                allocateMemory(uint8_t variablePtr);
 
-private:
+  private:
     bool interpretOperation();
 
     void processLoadLibraryOperation();
@@ -62,7 +60,7 @@ private:
     void logRuntimeErrorInvalidOperation(uint8_t operation);
     void checkForCompilationErrors() const;
 
-private:
+  private:
     std::filesystem::path m_ProjectDirectory;
 
     uint8_t*             m_OperationPtr = nullptr;
@@ -79,4 +77,4 @@ private:
 
     std::vector<std::string> m_RuntimeErrorMessages;
 };
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript

@@ -1,12 +1,10 @@
 #pragma once
-#include <opengl.h>
 #include <memory>
+#include <opengl.h>
 
-namespace davincpp
-{
-class Texture
-{
-public:
+namespace davincpp {
+class Texture {
+  public:
     Texture() = default;
     Texture(uint32_t textureSlot);
     ~Texture();
@@ -20,11 +18,12 @@ public:
     void bind();
     void unbind();
 
-    void     updateTexture(const std::shared_ptr<GLubyte[]> pixelBuffer, glm::uvec2 textureSize);
+    void     updateTexture(const std::shared_ptr<GLubyte[]> pixelBuffer,
+                           glm::uvec2                       textureSize);
     uint32_t getTextureSlot() const;
 
-private:
+  private:
     uint32_t m_TextureID   = 0;
     uint32_t m_TextureSlot = -1;
 };
-}  // namespace davincpp
+} // namespace davincpp

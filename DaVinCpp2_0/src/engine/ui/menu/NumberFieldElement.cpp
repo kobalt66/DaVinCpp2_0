@@ -1,61 +1,51 @@
 #include "NumberFieldElement.h"
-#include <ui/menu/SelectionMenu.h>
-#include <DaVinCppNumeric.h>
-#include <Console.h>
-#include <numeric>
 
-namespace davincpp
-{
+#include <Console.h>
+#include <DaVinCppNumeric.h>
+#include <numeric>
+#include <ui/menu/SelectionMenu.h>
+
+namespace davincpp {
 NumberFieldElement::NumberFieldElement(const std::string& displayText,
-                                       int                minValue,
-                                       int                maxValue,
+                                       int minValue, int maxValue,
                                        const std::string& uniqueTag)
-: MenuElement(displayText, uniqueTag)
-, m_MinValue(minValue)
-, m_MaxValue(maxValue)
-{
+    : MenuElement(displayText, uniqueTag), m_MinValue(minValue),
+      m_MaxValue(maxValue) {}
+
+void NumberFieldElement::onSwitchPage(SelectionMenu* selectionMenu) {
+    m_Value = 0;
 }
 
-void NumberFieldElement::onSwitchPage(SelectionMenu* selectionMenu) { m_Value = 0; }
-
-void NumberFieldElement::onRender(bool selected)
-{
+void NumberFieldElement::onRender(bool selected) {
 #ifdef _WIN32
     throw not_implemented(__LINE__, __FILE__);
 #else
-    Console::printTextMarginLR(Console::fmtTxt(m_DisplayText, " > "),
-                               m_EnteredTextBuffer.empty()
-                                   ? Console::fmtTxt("- ", m_Value, " + ")
-                                   : Console::fmtTxt("(Press enter to verfiy number...)      - ",
-                                                     m_EnteredTextBuffer,
-                                                     " + "),
-                               selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR,
-                               m_CliY,
-                               (stdscr->_maxx - 2) / 8,
-                               (stdscr->_maxx - 2) / 8);
+    Console::printTextMarginLR(
+        Console::fmtTxt(m_DisplayText, " > "),
+        m_EnteredTextBuffer.empty()
+            ? Console::fmtTxt("- ", m_Value, " + ")
+            : Console::fmtTxt("(Press enter to verfiy number...)      - ",
+                              m_EnteredTextBuffer, " + "),
+        selected ? Console::BLACK_GREEN_PAIR : Console::GREEN_BLACK_PAIR,
+        m_CliY, (stdscr->_maxx - 2) / 8, (stdscr->_maxx - 2) / 8);
 #endif
 }
 
-void NumberFieldElement::onUpdate(SelectionMenu* selectionMenu, int input)
-{
-    if (input == Console::KEY_ARROW_LEFT)
-    {
+void NumberFieldElement::onUpdate(SelectionMenu* selectionMenu, int input) {
+    if (input == Console::KEY_ARROW_LEFT) {
         m_Value -= static_cast<int>(m_Value - 1 >= m_MinValue);
         return;
     }
 
-    if (input == Console::KEY_ARROW_RIGHT)
-    {
+    if (input == Console::KEY_ARROW_RIGHT) {
         m_Value += static_cast<int>(m_Value + 1 <= m_MaxValue);
         return;
     }
 
-    if (input == Console::KEY_ERASE)
-    {
+    if (input == Console::KEY_ERASE) {
         SelectionMenu::resetDescription();
 
-        if (m_EnteredTextBuffer.empty())
-        {
+        if (m_EnteredTextBuffer.empty()) {
             return;
         }
 
@@ -66,22 +56,18 @@ void NumberFieldElement::onUpdate(SelectionMenu* selectionMenu, int input)
     m_EnteredTextBuffer += static_cast<char>(input);
 }
 
-void NumberFieldElement::onInteraction(SelectionMenu* selectionMenu)
-{
+void NumberFieldElement::onInteraction(SelectionMenu* selectionMenu) {
     setValue(DaVinCppNumeric::convertStringToInteger(m_EnteredTextBuffer, 0));
     m_EnteredTextBuffer.clear();
 }
 
-void NumberFieldElement::setValue(int value)
-{
-    if (value < m_MinValue)
-    {
+void NumberFieldElement::setValue(int value) {
+    if (value < m_MinValue) {
         m_Value = m_MinValue;
         return;
     }
 
-    if (value > m_MaxValue)
-    {
+    if (value > m_MaxValue) {
         m_Value = m_MaxValue;
         return;
     }
@@ -90,4 +76,4 @@ void NumberFieldElement::setValue(int value)
 }
 
 int NumberFieldElement::getValue() const { return m_Value; }
-}  // namespace davincpp
+} // namespace davincpp

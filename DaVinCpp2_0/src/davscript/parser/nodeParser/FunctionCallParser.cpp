@@ -1,4 +1,5 @@
 #include "FunctionCallParser.h"
+
 #include <parser/DavScriptParser.h>
 #include <parser/ast/FunctionCallNode.h>
 #include <parser/ast/IdentifierNode.h>
@@ -6,40 +7,36 @@
 #include <parser/ast/VariableAccessNode.h>
 #include <parser/nodeParser/IdentifierParser.h>
 
-namespace davincpp::davscript
-{
-std::shared_ptr<AstNode> FunctionCallParser::parseNode(DavScriptParser* scriptParser)
-{
-    auto functionName
-        = std::dynamic_pointer_cast<IdentifierNode>(m_IdentifierParser.parseNode(scriptParser));
+namespace davincpp::davscript {
+std::shared_ptr<AstNode>
+FunctionCallParser::parseNode(DavScriptParser* scriptParser) {
+    auto functionName = std::dynamic_pointer_cast<IdentifierNode>(
+        m_IdentifierParser.parseNode(scriptParser));
     assert(assertValidNode(functionName));
 
-    if (!scriptParser->validateSymbol(functionName, SymbolType::FUNCTION))
-    {
+    if (!scriptParser->validateSymbol(functionName, SymbolType::FUNCTION)) {
         return std::make_shared<InvalidNode>();
     }
 
-    assert(assertSymbolAccess(scriptParser, functionName, SymbolType::FUNCTION));
+    assert(
+        assertSymbolAccess(scriptParser, functionName, SymbolType::FUNCTION));
 
-    assert(assertTokenType(scriptParser, scriptParser->advanceToken(), Token(LPARAN)));
+    assert(assertTokenType(scriptParser, scriptParser->advanceToken(),
+                           Token(LPARAN)));
 
     std::vector<std::shared_ptr<AstNode>> parameters;
 
-    while (true)
-    {
+    while (true) {
         Token nextToken = scriptParser->peakNextToken();
 
-        if (nextToken.getTokenType() == RPARAN)
-        {
+        if (nextToken.getTokenType() == RPARAN) {
             break;
         }
 
-        if (parameters.empty())
-        {
-            assert(assertNotTokenType(scriptParser, nextToken, Token(COMMA, OPERATOR)));
-        }
-        else
-        {
+        if (parameters.empty()) {
+            assert(assertNotTokenType(scriptParser, nextToken,
+                                      Token(COMMA, OPERATOR)));
+        } else {
             assert(assertTokenType(scriptParser, nextToken, Token(COMMA)));
             scriptParser->advanceToken();
         }
@@ -48,28 +45,33 @@ std::shared_ptr<AstNode> FunctionCallParser::parseNode(DavScriptParser* scriptPa
 
         Token parameterValue = scriptParser->advanceToken();
 
-        if (checkTokenRole(parameterValue, Token(NONE, IDENTIFIER)))
-        {
+        if (checkTokenRole(parameterValue, Token(NONE, IDENTIFIER))) {
             assert(assertSymbolAccess(
-                scriptParser, functionName, { SymbolType::VARIABLE, SymbolType::CONSTANT }));
-            parameters.emplace(parameters.begin(),
-                               std::make_shared<VariableAccessNode>(parameterValue));
+                scriptParser, functionName,
+                {SymbolType::VARIABLE, SymbolType::CONSTANT}));
+            parameters.emplace(
+                parameters.begin(),
+                std::make_shared<VariableAccessNode>(parameterValue));
             continue;
         }
 
-        if (checkTokenRole(parameterValue, Token(NONE, DATAVALUE)))
-        {
-            parameters.emplace(parameters.begin(), std::make_shared<ValueNode>(parameterValue));
+        if (checkTokenRole(parameterValue, Token(NONE, DATAVALUE))) {
+            parameters.emplace(parameters.begin(),
+                               std::make_shared<ValueNode>(parameterValue));
             continue;
         }
 
         scriptParser->logUnexpectedTokenError(
-            parameterValue, Token(NONE, NORMAL, "[\"abc\", 123, 1.23, true, {expression}, ...]"));
+            parameterValue,
+            Token(NONE, NORMAL,
+                  "[\"abc\", 123, 1.23, true, {expression}, ...]"));
         assert(true);
     }
 
-    assert(assertTokenRole(scriptParser, scriptParser->advanceToken(), Token(RPARAN)));
+    assert(assertTokenRole(scriptParser, scriptParser->advanceToken(),
+                           Token(RPARAN)));
 
-    return std::make_shared<FunctionCallNode>(functionName->getName(), parameters);
+    return std::make_shared<FunctionCallNode>(functionName->getName(),
+                                              parameters);
 }
-}  // namespace davincpp::davscript
+} // namespace davincpp::davscript
